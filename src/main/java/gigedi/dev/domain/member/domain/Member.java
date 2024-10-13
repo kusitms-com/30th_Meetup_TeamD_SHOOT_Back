@@ -26,7 +26,8 @@ public class Member extends BaseTimeEntity {
 
     @Embedded private ExternalId externalId;
 
-    @Builder(access = AccessLevel.PRIVATE)
+    //@Builder(access = AccessLevel.PRIVATE)
+    @Builder
     private Member(
             String username, ExternalId externalId
     ) {
