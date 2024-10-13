@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.4'
 	id 'io.spring.dependency-management' version '1.1.6'
+	id 'jacoco'
+	id 'org.sonarqube' version '4.4.1.3373'
 }
 
 group = 'gigedi'
@@ -32,21 +34,94 @@ dependencies {
 	//queryDSL
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 
-
-
-
-
 	compileOnly 'org.projectlombok:lombok'
 
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	annotationProcessor 'org.projectlombok:lombok'
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
+	// Test
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'com.h2database:h2'
+}
+
+jacoco {
+	toolVersion = "0.8.12"
+}
+
+def jacocoDir = layout.buildDirectory.dir("reports/")
+
+def QDomains = []
+for (qPattern in '*.QA'..'*.QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
+	QDomains.add(qPattern + '*')
+}
+
+def jacocoExcludePatterns = [
+		// 측정 안하고 싶은 패턴
+		"**/*Application*",
+		"**/*Config*",
+		"**/*Exception*",
+		"**/*Request*",
+		"**/*Response*",
+		"**/*Dto*",
+		"**/*Interceptor*",
+		"**/*Filter*",
+		"**/*Resolver*",
+		"**/*Entity*",
+		"**/*Error*/**",
+		"**/test/**",
+		"**/global/**",
+		"**/resources/**"
+]
+
+sonar {
+	properties {
+		property "sonar.projectKey", "GIGEDI_GIGEDI-BE"
+		property "sonar.organization", "gigedi"
+		property "sonar.host.url", "https://sonarcloud.io"
+		property 'sonar.sources', 'src'
+		property 'sonar.language', 'java'
+		property 'sonar.sourceEncoding', 'UTF-8'
+		property 'sonar.test.exclusions', jacocoExcludePatterns.join(',')
+		property 'sonar.test.inclusions', '**/*Test.java'
+		property 'sonar.java.coveragePlugin', 'jacoco'
+		property 'sonar.coverage.jacoco.xmlReportPaths', jacocoDir.get().file("jacoco/index.xml").asFile
+	}
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			enabled = true
+			element = 'CLASS'
+			excludes = jacocoExcludePatterns + QDomains
+		}
+	}
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+	finalizedBy 'jacocoTestReport'
+}
+
+jacocoTestReport {
+	dependsOn test	// 테스트가 수행되어야만 report를 생성할 수 있도록 설정
+	reports {
+		html.required.set(true)
+		xml.required.set(true)
+		csv.required.set(true)
+		html.destination jacocoDir.get().file("jacoco/index.html").asFile
+		xml.destination jacocoDir.get().file("jacoco/index.xml").asFile
+		csv.destination jacocoDir.get().file("jacoco/index.csv").asFile
+	}
+
+	afterEvaluate {
+		classDirectories.setFrom(
+				files(classDirectories.files.collect {
+					fileTree(dir: it, excludes: jacocoExcludePatterns + QDomains) // Querydsl 관련 제거
+				})
+		)
+	}
+	finalizedBy jacocoTestCoverageVerification
 }
