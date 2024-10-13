@@ -50,6 +50,8 @@ jacoco {
 	toolVersion = "0.8.12"
 }
 
+def jacocoDir = layout.buildDirectory.dir("reports/")
+
 def QDomains = []
 for (qPattern in '*.QA'..'*.QZ') { // qPattern = '*.QA', '*.QB', ... '*.QZ'
 	QDomains.add(qPattern + '*')
@@ -102,8 +104,6 @@ tasks.named('test') {
 	useJUnitPlatform()
 	finalizedBy 'jacocoTestReport'
 }
-
-def jacocoDir = layout.buildDirectory.dir("reports/")
 
 jacocoTestReport {
 	dependsOn test	// 테스트가 수행되어야만 report를 생성할 수 있도록 설정
