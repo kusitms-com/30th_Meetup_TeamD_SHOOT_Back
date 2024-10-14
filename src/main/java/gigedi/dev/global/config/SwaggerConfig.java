@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
                 description = "큐시즘 30기 밋업 프로젝트 기개디 API 문서",
                 version = "v1"),
         servers = {
-                @Server(url = "https://localhost:8080",
+                @Server(url = "http://localhost:8080",
                         description = "서버 local URL"),
         }
 )
