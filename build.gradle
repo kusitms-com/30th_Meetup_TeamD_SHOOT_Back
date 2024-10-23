@@ -44,6 +44,10 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'com.h2database:h2'
+
+	// Sentry
+	implementation 'io.sentry:sentry-spring-boot-starter:6.27.0'
+	implementation 'io.sentry:sentry-logback:6.27.0'
 }
 
 jacoco {
