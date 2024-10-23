@@ -1,17 +1,17 @@
 spring:
-    config:
-        activate:
-            on-profile: local
-    datasource:
-        url: jdbc:mysql://localhost:3306/gigedi
-        username: ${LOCAL_DB_USER}
-        password: ${LOCAL_DB_PW}
-        driver-class-name: com.mysql.cj.jdbc.Driver
-    jpa:
-        hibernate:
-            ddl-auto: update
-        properties:
-            hibernate:
-                format_sql: true
-                dialect: org.hibernate.dialect.MySQLDialect
+  config:
+    activate:
+      on-profile: "local"
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+logging:
+  level:
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.transaction: DEBUG
 
