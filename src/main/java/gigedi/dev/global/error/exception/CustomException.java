@@ -1,6 +1,5 @@
 package gigedi.dev.global.error.exception;
 
-
 import lombok.Getter;
 
 @Getter
