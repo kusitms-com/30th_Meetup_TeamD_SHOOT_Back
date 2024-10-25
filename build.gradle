@@ -4,6 +4,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.6'
 	id 'jacoco'
 	id 'org.sonarqube' version '4.4.1.3373'
+	id 'com.diffplug.spotless' version '6.21.0'
 }
 
 group = 'gigedi'
@@ -129,3 +130,39 @@ jacocoTestReport {
 	}
 	finalizedBy jacocoTestCoverageVerification
 }
+
+spotless {
+	java {
+		// Google Java 포맷 적용
+		googleJavaFormat().aosp()
+		// 아래 순서로 import문 정렬
+		importOrder("java", "javax", "jakarta", "org", "com")
+		// 사용하지 않는 import 제거
+		removeUnusedImports()
+		// 각 라인 끝에 있는 공백을 제거
+		trimTrailingWhitespace()
+		// 파일 끝에 새로운 라인 추가
+		endWithNewline()
+	}
+}
+
+// git commit시 자동으로 spotless 적용되도록 설정
+// 최초 적용시 && script 변경시 ./gradlew compileJava 한번 실행해주세요
+tasks.register("updateGitHooks", Copy) {
+	from(file("${rootProject.rootDir}/scripts/pre-commit"))
+	into(file("${rootProject.rootDir}/.git/hooks"))
+}
+
+tasks.register('makeGitHooksExecutable', Exec) {
+	if (System.getProperty("os.name").contains("Windows")) {
+		commandLine("attrib", "+x", "${rootProject.rootDir}/.git/hooks/pre-commit")
+	} else {
+		commandLine("chmod", "+x", "${rootProject.rootDir}/.git/hooks/pre-commit")
+	}
+	dependsOn("updateGitHooks")
+}
+
+tasks.withType(JavaCompile) {
+	dependsOn("makeGitHooksExecutable")
+}
+

@@ -15,6 +15,4 @@ public class MemberInfoResponse {
         this.id = member.getId();
         this.username = member.getUsername();
     }
-
-
 }

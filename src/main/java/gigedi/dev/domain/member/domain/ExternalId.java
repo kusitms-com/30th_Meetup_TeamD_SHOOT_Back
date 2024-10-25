@@ -1,6 +1,7 @@
 package gigedi.dev.domain.member.domain;
 
 import jakarta.persistence.Embeddable;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,11 +21,7 @@ public class ExternalId {
         this.discordId = discordId;
     }
 
-    public static ExternalId createExternalId(
-            String slackId, String discordId) {
-        return ExternalId.builder()
-                .slackId(slackId)
-                .discordId(discordId)
-                .build();
+    public static ExternalId createExternalId(String slackId, String discordId) {
+        return ExternalId.builder().slackId(slackId).discordId(discordId).build();
     }
 }

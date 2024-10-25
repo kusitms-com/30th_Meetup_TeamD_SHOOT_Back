@@ -1,9 +1,9 @@
 package gigedi.dev.global.error.exception;
 
+import org.springframework.http.HttpStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
@@ -31,7 +31,7 @@ public enum ErrorCode {
     PASSWORD_NOT_MATCHES(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
     ID_TOKEN_VERIFICATION_FAILED(HttpStatus.UNAUTHORIZED, "ID 토큰 검증에 실패했습니다.");
 
-    //추가
+    // 추가
 
     private final HttpStatus status;
     private final String message;
