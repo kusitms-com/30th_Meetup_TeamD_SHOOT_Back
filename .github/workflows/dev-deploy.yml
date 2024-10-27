@@ -68,6 +68,7 @@ jobs:
           key: ${{ secrets.NCP_SERVER_SSH_KEY }}
           source: "docker-compose.yml"
           target: "/home/ncp-user/"
+          debug: true
 
       - name: Deploy to NCP server
         uses: appleboy/ssh-action@v1.0.3
