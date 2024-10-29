@@ -13,6 +13,6 @@ public class MemberInfoResponse {
 
     public MemberInfoResponse(Member member) {
         this.id = member.getId();
-        this.username = member.getUsername();
+        this.username = member.getOauthInfo().getUsername();
     }
 }
