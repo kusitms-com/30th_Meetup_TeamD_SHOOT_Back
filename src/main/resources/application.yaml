@@ -3,3 +3,5 @@ spring:
     group:
       test: "test"
       local: "local, datasource"
+    include:
+      - security
