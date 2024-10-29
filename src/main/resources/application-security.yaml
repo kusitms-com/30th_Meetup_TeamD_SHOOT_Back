@@ -9,6 +9,7 @@ oauth:
       id: ${GOOGLE_CLIENT_ID}
       secret: ${GOOGLE_CLIENT_SECRET}
       redirectUri: ${GOOGLE_REDIRECT_URI}
+      grantType: ${GOOGLE_GRANT_TYPE}
 
 jwt:
   access-token-secret: ${JWT_ACCESS_TOKEN}

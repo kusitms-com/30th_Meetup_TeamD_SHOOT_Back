@@ -12,4 +12,5 @@ public class GoogleProperties {
     private String id;
     private String secret;
     private String redirectUri;
+    private String grantType;
 }

@@ -1,6 +1,6 @@
 package gigedi.dev.domain.auth.application;
 
-import static gigedi.dev.global.common.constants.SecurityConstants.GET_ID_TOKEN_URL;
+import static gigedi.dev.global.common.constants.SecurityConstants.*;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -28,11 +28,11 @@ public class GoogleService {
     public GoogleLoginResponse getIdTokenByGoogleLogin(String code) {
         try {
             MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-            formData.add("code", code);
-            formData.add("client_id", googleProperties.getId());
-            formData.add("client_secret", googleProperties.getSecret());
-            formData.add("redirect_uri", googleProperties.getRedirectUri());
-            formData.add("grant_type", "authorization_code");
+            formData.add(CODE_KEY, code);
+            formData.add(CLIENT_ID_KEY, googleProperties.getId());
+            formData.add(CLIENT_ID_SECRET, googleProperties.getSecret());
+            formData.add(REDIRECT_URI_KEY, googleProperties.getRedirectUri());
+            formData.add(GRANT_TYPE_KEY, googleProperties.getGrantType());
 
             return restClient
                     .post()
