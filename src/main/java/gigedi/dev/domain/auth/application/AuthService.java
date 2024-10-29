@@ -34,13 +34,17 @@ public class AuthService {
     private Member getOrCreateMember(OidcUser user) {
         OauthInfo oauthInfo = createOauthInfo(user);
         return memberRepository
-                .findByOauthInfo(oauthInfo)
+                .findByOauthInfoGoogleId(oauthInfo.getGoogleId())
+                .filter(member -> member.getDeletedAt() == null)
                 .orElseGet(() -> memberRepository.save(Member.createMember(oauthInfo)));
     }
 
     private OauthInfo createOauthInfo(OidcUser user) {
         return OauthInfo.of(
-                user.getSubject(), user.getClaim("name"), user.getAttribute("picture").toString());
+                user.getSubject(),
+                user.getEmail(),
+                user.getClaim("name"),
+                user.getAttribute("picture").toString());
     }
 
     private TokenPairResponse createTokenPair(Member member) {

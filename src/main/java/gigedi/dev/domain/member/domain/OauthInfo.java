@@ -2,6 +2,7 @@ package gigedi.dev.domain.member.domain;
 
 import jakarta.persistence.Embeddable;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,18 +11,26 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @NoArgsConstructor
 public class OauthInfo {
-    private String oauthId;
+    private String googleId;
+    private String googleEmail;
     private String username;
-    private String profile;
+    private String profileImg;
 
-    @Builder
-    private OauthInfo(String oauthId, String username, String profile) {
-        this.oauthId = oauthId;
+    @Builder(access = AccessLevel.PRIVATE)
+    private OauthInfo(String googleId, String googleEmail, String username, String profileImg) {
+        this.googleId = googleId;
+        this.googleEmail = googleEmail;
         this.username = username;
-        this.profile = profile;
+        this.profileImg = profileImg;
     }
 
-    public static OauthInfo of(String oauthId, String username, String profile) {
-        return OauthInfo.builder().oauthId(oauthId).username(username).profile(profile).build();
+    public static OauthInfo of(
+            String googleId, String googleEmail, String username, String profileImg) {
+        return OauthInfo.builder()
+                .googleId(googleId)
+                .googleEmail(googleEmail)
+                .username(username)
+                .profileImg(profileImg)
+                .build();
     }
 }

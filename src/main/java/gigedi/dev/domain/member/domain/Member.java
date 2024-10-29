@@ -28,16 +28,11 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
-    @Enumerated(EnumType.STRING)
-    private MemberStatus memberStatus;
-
     @Builder(access = AccessLevel.PRIVATE)
-    private Member(
-            OauthInfo oauthInfo, LocalDateTime lastLoginAt, MemberRole role, MemberStatus status) {
+    private Member(OauthInfo oauthInfo, LocalDateTime lastLoginAt, MemberRole role) {
         this.oauthInfo = oauthInfo;
         this.lastLoginAt = lastLoginAt;
         this.memberRole = role;
-        this.memberStatus = status;
     }
 
     public static Member createMember(OauthInfo oauthInfo) {
@@ -45,7 +40,6 @@ public class Member extends BaseTimeEntity {
                 .oauthInfo(oauthInfo)
                 .lastLoginAt(LocalDateTime.now())
                 .role(MemberRole.USER)
-                .status(MemberStatus.NORMAL)
                 .build();
     }
 }
