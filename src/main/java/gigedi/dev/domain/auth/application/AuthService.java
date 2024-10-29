@@ -40,11 +40,10 @@ public class AuthService {
     }
 
     private OauthInfo createOauthInfo(OidcUser user) {
-        return OauthInfo.of(
-                user.getSubject(),
-                user.getEmail(),
-                user.getClaim("name"),
-                user.getAttribute("picture").toString());
+        Object picture = user.getAttribute("picture");
+        String profileImg = picture != null ? picture.toString() : null;
+
+        return OauthInfo.of(user.getSubject(), user.getEmail(), user.getClaim("name"), profileImg);
     }
 
     private TokenPairResponse createTokenPair(Member member) {

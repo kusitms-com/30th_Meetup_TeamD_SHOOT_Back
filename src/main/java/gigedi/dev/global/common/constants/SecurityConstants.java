@@ -12,4 +12,8 @@ public final class SecurityConstants {
     public static final String GOOGLE_JWK_SET_URL = "https://www.googleapis.com/oauth2/v3/certs";
 
     public static final String TOKEN_ROLE_NAME = "role";
+
+    private SecurityConstants() {
+        throw new AssertionError();
+    }
 }

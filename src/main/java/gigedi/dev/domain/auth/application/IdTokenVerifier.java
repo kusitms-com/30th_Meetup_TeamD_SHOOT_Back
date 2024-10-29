@@ -45,7 +45,7 @@ public class IdTokenVerifier {
 
     private void validateExpired(OidcIdToken oidcIdToken) {
         Instant expiration = oidcIdToken.getExpiresAt();
-        if (expiration.isBefore(Instant.now())) {
+        if (expiration != null && expiration.isBefore(Instant.now())) {
             throw new CustomException(ErrorCode.EXPIRED_JWT_TOKEN);
         }
     }

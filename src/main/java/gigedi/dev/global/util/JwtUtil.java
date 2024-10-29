@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 
 import gigedi.dev.domain.member.domain.MemberRole;
 import gigedi.dev.infra.config.jwt.JwtProperties;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -62,13 +60,5 @@ public class JwtUtil {
 
     private Key getRefreshTokenKey() {
         return Keys.hmacShaKeyFor(jwtProperties.getRefreshTokenSecret().getBytes());
-    }
-
-    private Jws<Claims> getClaims(String token, Key key) {
-        return Jwts.parserBuilder()
-                .requireIssuer(jwtProperties.getIssuer())
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token);
     }
 }

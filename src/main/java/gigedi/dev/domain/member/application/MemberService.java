@@ -1,7 +1,6 @@
 package gigedi.dev.domain.member.application;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -19,6 +18,6 @@ public class MemberService {
 
     public List<MemberInfoResponse> findMemberInfo() {
         List<Member> members = memberRepository.findAll();
-        return members.stream().map(MemberInfoResponse::new).collect(Collectors.toList());
+        return members.stream().map(MemberInfoResponse::new).toList();
     }
 }
