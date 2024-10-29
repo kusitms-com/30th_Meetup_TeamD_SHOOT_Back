@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import gigedi.dev.domain.auth.application.AuthService;
 import gigedi.dev.domain.auth.dto.response.TokenPairResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
     private final AuthService authService;
 
+    @Operation(summary = "구글 소셜 로그인", description = "회원가입 및 로그인을 진행하는 API")
     @GetMapping("/code/google")
     public TokenPairResponse googleSocialLogin(@RequestParam String code) {
         return authService.googleSocialLogin(code);
