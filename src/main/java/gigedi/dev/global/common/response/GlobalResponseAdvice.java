@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 @RestControllerAdvice(basePackages = "gigedi.dev")
-public class GlobalResponseAdvice implements ResponseBodyAdvice {
+public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class converterType) {
         return true;
