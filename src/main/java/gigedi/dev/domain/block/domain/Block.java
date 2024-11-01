@@ -25,7 +25,7 @@ public class Block extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long blockId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private String title;
 
     @Column(nullable = false)
@@ -70,6 +70,9 @@ public class Block extends BaseTimeEntity {
     }
 
     public static Block createBlock(String title, Float xCoordinate, Float yCoordinate, Float height, Float width, Archive archive, Figma figma) {
+        if (title == null) {
+            title = "New Block";
+        }
         return Block.builder()
                 .title(title)
                 .shootCount(0)
