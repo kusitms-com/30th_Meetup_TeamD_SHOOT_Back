@@ -1,11 +1,9 @@
 package gigedi.dev.domain.auth.api;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import gigedi.dev.domain.auth.application.AuthService;
+import gigedi.dev.domain.auth.dto.request.TokenRefreshRequest;
 import gigedi.dev.domain.auth.dto.response.TokenPairResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,5 +20,11 @@ public class AuthController {
     @GetMapping("/code/google")
     public TokenPairResponse googleSocialLogin(@RequestParam String code) {
         return authService.googleSocialLogin(code);
+    }
+
+    @Operation(summary = "토큰 재발급", description = "엑세스 토큰 및 리프테시 토큰을 모두 재발급합니다.")
+    @PostMapping("/refresh")
+    public TokenPairResponse refreshToken(@RequestBody TokenRefreshRequest request) {
+        return authService.refreshToken(request);
     }
 }

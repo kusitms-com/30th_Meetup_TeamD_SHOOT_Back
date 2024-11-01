@@ -4,11 +4,16 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import gigedi.dev.domain.auth.dto.AccessTokenDto;
+import gigedi.dev.domain.auth.dto.RefreshTokenDto;
+import gigedi.dev.domain.auth.dto.request.TokenRefreshRequest;
 import gigedi.dev.domain.auth.dto.response.GoogleLoginResponse;
 import gigedi.dev.domain.auth.dto.response.TokenPairResponse;
 import gigedi.dev.domain.member.dao.MemberRepository;
 import gigedi.dev.domain.member.domain.Member;
 import gigedi.dev.domain.member.domain.OauthInfo;
+import gigedi.dev.global.error.exception.CustomException;
+import gigedi.dev.global.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,6 +29,26 @@ public class AuthService {
         OidcUser user = getOidcUserFromGoogle(code);
         Member member = getOrCreateMember(user);
         return createTokenPair(member);
+    }
+
+    public TokenPairResponse refreshToken(TokenRefreshRequest request) {
+        RefreshTokenDto oldRefreshTokenDto =
+                jwtTokenService.validateRefreshToken(request.getRefreshToken());
+
+        if (oldRefreshTokenDto == null) {
+            throw new CustomException(ErrorCode.EXPIRED_JWT_TOKEN);
+        }
+        RefreshTokenDto newRefreshTokenDto =
+                jwtTokenService.refreshRefreshToken(oldRefreshTokenDto);
+        AccessTokenDto accessTokenDto =
+                jwtTokenService.refreshAccessToken(getMember(newRefreshTokenDto));
+        return new TokenPairResponse(accessTokenDto.getToken(), newRefreshTokenDto.getToken());
+    }
+
+    private Member getMember(RefreshTokenDto refreshTokenDto) {
+        return memberRepository
+                .findById(refreshTokenDto.getMemberId())
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     private OidcUser getOidcUserFromGoogle(String code) {
@@ -47,8 +72,7 @@ public class AuthService {
     }
 
     private TokenPairResponse createTokenPair(Member member) {
-        String accessToken =
-                jwtTokenService.createAccessToken(member.getId(), member.getMemberRole());
+        String accessToken = jwtTokenService.createAccessToken(member.getId(), member.getRole());
         String refreshToken = jwtTokenService.createRefreshToken(member.getId());
         return new TokenPairResponse(accessToken, refreshToken);
     }

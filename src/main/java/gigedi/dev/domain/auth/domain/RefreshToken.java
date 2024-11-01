@@ -23,4 +23,8 @@ public class RefreshToken {
     public static RefreshToken of(Long memberId, String token) {
         return RefreshToken.builder().memberId(memberId).token(token).build();
     }
+
+    public void updateRefreshToken(String newToken) {
+        this.token = newToken;
+    }
 }
