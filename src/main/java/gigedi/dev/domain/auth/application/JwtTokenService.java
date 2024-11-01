@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import gigedi.dev.domain.auth.dao.RefreshTokenRepository;
 import gigedi.dev.domain.auth.domain.RefreshToken;
 import gigedi.dev.domain.member.domain.MemberRole;
+import gigedi.dev.domain.member.dto.AccessTokenDto;
 import gigedi.dev.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 
@@ -41,5 +42,13 @@ public class JwtTokenService {
                 new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(token);
+    }
+
+    public AccessTokenDto retrieveAccessToken(String accessTokenValue) {
+        try {
+            return jwtUtil.parseAccessToken(accessTokenValue);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
