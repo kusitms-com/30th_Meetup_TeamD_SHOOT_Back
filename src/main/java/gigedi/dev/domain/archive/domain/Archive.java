@@ -52,9 +52,6 @@ public class Archive extends BaseTimeEntity {
     }
 
     public static Archive createArchive(String title, File file, Figma figma) {
-        if (title == null) {
-            title = "New Archive";
-        }
         return Archive.builder().title(title).blockCount(0).file(file).figma(figma).build();
     }
 }

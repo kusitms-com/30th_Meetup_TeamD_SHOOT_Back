@@ -33,12 +33,10 @@ public class Shoot extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(name = "figma_id")
-    @Column(nullable = false)
     private Figma figma;
 
     @ManyToOne
     @JoinColumn(name = "block_id")
-    @Column(nullable = false)
     private Block block;
 
     @Builder(access = AccessLevel.PRIVATE)

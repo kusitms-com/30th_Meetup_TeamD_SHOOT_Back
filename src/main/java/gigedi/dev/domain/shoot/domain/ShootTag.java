@@ -24,26 +24,24 @@ public class ShootTag extends BaseTimeEntity {
     private Long shootTagId;
 
     @Column(nullable = false)
-    private boolean is_read;
+    private boolean isRead;
 
     @ManyToOne
     @JoinColumn(name = "shoot_id")
-    @Column(nullable = false)
     private Shoot shoot;
 
     @ManyToOne
     @JoinColumn(name = "figma_id")
-    @Column(nullable = false)
     private Figma figma;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private ShootTag(boolean is_read, Shoot shoot, Figma figma) {
-        this.is_read = is_read;
+    private ShootTag(boolean isRead, Shoot shoot, Figma figma) {
+        this.isRead = isRead;
         this.shoot = shoot;
         this.figma = figma;
     }
 
     public static ShootTag createShootTag(Shoot shoot, Figma figma) {
-        return ShootTag.builder().is_read(false).shoot(shoot).figma(figma).build();
+        return ShootTag.builder().isRead(false).shoot(shoot).figma(figma).build();
     }
 }

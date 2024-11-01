@@ -50,12 +50,10 @@ public class Block extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(name = "archive_id", nullable = false)
-    @Column(nullable = false)
     private Archive archive;
 
     @ManyToOne
     @JoinColumn(name = "figma_id", nullable = false)
-    @Column(nullable = false)
     private Figma figma;
 
     @Builder(access = AccessLevel.PRIVATE)
@@ -86,9 +84,6 @@ public class Block extends BaseTimeEntity {
             Float width,
             Archive archive,
             Figma figma) {
-        if (title == null) {
-            title = "New Block";
-        }
         return Block.builder()
                 .title(title)
                 .shootCount(0)

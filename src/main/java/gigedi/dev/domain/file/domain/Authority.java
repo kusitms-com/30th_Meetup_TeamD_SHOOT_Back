@@ -27,12 +27,10 @@ public class Authority {
 
     @ManyToOne
     @JoinColumn(name = "figma_id")
-    @Column(nullable = false)
     private Figma figma;
 
     @ManyToOne
     @JoinColumn(name = "file_id", nullable = false)
-    @Column(nullable = false)
     private File file;
 
     @Builder(access = AccessLevel.PRIVATE)
