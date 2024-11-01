@@ -1,7 +1,5 @@
 package gigedi.dev.domain.auth.domain;
 
-import gigedi.dev.domain.member.domain.Member;
-import gigedi.dev.global.common.model.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +7,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
+import gigedi.dev.domain.member.domain.Member;
+import gigedi.dev.global.common.model.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,7 +43,14 @@ public class Figma extends BaseTimeEntity {
     private Member member;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Figma(String figmaName, String email, String figmaProfile, String figmaUserId, String accessToken, String refreshToken, Member member) {
+    private Figma(
+            String figmaName,
+            String email,
+            String figmaProfile,
+            String figmaUserId,
+            String accessToken,
+            String refreshToken,
+            Member member) {
         this.figmaName = figmaName;
         this.email = email;
         this.figmaProfile = figmaProfile;
@@ -52,7 +60,12 @@ public class Figma extends BaseTimeEntity {
         this.member = member;
     }
 
-    public static Figma createFigma(String figmaName, String email, String figmaProfile, String figmaUserId, Member member) {
+    public static Figma createFigma(
+            String figmaName,
+            String email,
+            String figmaProfile,
+            String figmaUserId,
+            Member member) {
         return Figma.builder()
                 .figmaName(figmaName)
                 .email(email)

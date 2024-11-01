@@ -1,7 +1,5 @@
 package gigedi.dev.domain.shoot.domain;
 
-import gigedi.dev.domain.auth.domain.Figma;
-import gigedi.dev.global.common.model.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +7,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
+import gigedi.dev.domain.auth.domain.Figma;
+import gigedi.dev.global.common.model.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,7 +36,6 @@ public class ShootTag extends BaseTimeEntity {
     @Column(nullable = false)
     private Figma figma;
 
-
     @Builder(access = AccessLevel.PRIVATE)
     private ShootTag(boolean is_read, Shoot shoot, Figma figma) {
         this.is_read = is_read;
@@ -44,11 +44,6 @@ public class ShootTag extends BaseTimeEntity {
     }
 
     public static ShootTag createShootTag(Shoot shoot, Figma figma) {
-        return ShootTag.builder()
-                .is_read(false)
-                .shoot(shoot)
-                .figma(figma)
-                .build();
+        return ShootTag.builder().is_read(false).shoot(shoot).figma(figma).build();
     }
-
 }

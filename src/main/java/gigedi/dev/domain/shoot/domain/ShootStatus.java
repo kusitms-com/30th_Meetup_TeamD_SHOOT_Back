@@ -1,7 +1,5 @@
 package gigedi.dev.domain.shoot.domain;
 
-import gigedi.dev.domain.auth.domain.Figma;
-import gigedi.dev.global.common.model.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,6 +9,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
+import gigedi.dev.domain.auth.domain.Figma;
+import gigedi.dev.global.common.model.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,10 +47,6 @@ public class ShootStatus extends BaseTimeEntity {
     }
 
     public static ShootStatus createShootStatus(Status status, Figma figma, Shoot shoot) {
-        return ShootStatus.builder()
-                .status(status)
-                .figma(figma)
-                .shoot(shoot)
-                .build();
+        return ShootStatus.builder().status(status).figma(figma).shoot(shoot).build();
     }
 }

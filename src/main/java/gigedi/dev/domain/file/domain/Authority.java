@@ -1,6 +1,5 @@
 package gigedi.dev.domain.file.domain;
 
-import gigedi.dev.domain.auth.domain.Figma;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
+import gigedi.dev.domain.auth.domain.Figma;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,11 +43,6 @@ public class Authority {
     }
 
     public static Authority createAuthority(Figma figma, File file) {
-        return Authority.builder()
-                .alarm(true)
-                .figma(figma)
-                .file(file)
-                .build();
+        return Authority.builder().alarm(true).figma(figma).file(file).build();
     }
-
 }

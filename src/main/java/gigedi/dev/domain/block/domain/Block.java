@@ -1,8 +1,7 @@
 package gigedi.dev.domain.block.domain;
 
-import gigedi.dev.domain.archive.domain.Archive;
-import gigedi.dev.domain.auth.domain.Figma;
-import gigedi.dev.global.common.model.BaseTimeEntity;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,7 +9,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
+
+import gigedi.dev.domain.archive.domain.Archive;
+import gigedi.dev.domain.auth.domain.Figma;
+import gigedi.dev.global.common.model.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,7 +46,6 @@ public class Block extends BaseTimeEntity {
     private Float width;
 
     @Column(nullable = false)
-
     private LocalDateTime deletedAt;
 
     @ManyToOne
@@ -58,7 +59,15 @@ public class Block extends BaseTimeEntity {
     private Figma figma;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Block(String title, Integer shootCount, Float xCoordinate, Float yCoordinate, Float height, Float width, Archive archive, Figma figma) {
+    private Block(
+            String title,
+            Integer shootCount,
+            Float xCoordinate,
+            Float yCoordinate,
+            Float height,
+            Float width,
+            Archive archive,
+            Figma figma) {
         this.title = title;
         this.shootCount = shootCount;
         this.xCoordinate = xCoordinate;
@@ -69,7 +78,14 @@ public class Block extends BaseTimeEntity {
         this.figma = figma;
     }
 
-    public static Block createBlock(String title, Float xCoordinate, Float yCoordinate, Float height, Float width, Archive archive, Figma figma) {
+    public static Block createBlock(
+            String title,
+            Float xCoordinate,
+            Float yCoordinate,
+            Float height,
+            Float width,
+            Archive archive,
+            Figma figma) {
         if (title == null) {
             title = "New Block";
         }

@@ -1,7 +1,7 @@
 package gigedi.dev.domain.auth.domain;
 
-import gigedi.dev.domain.member.domain.Member;
-import gigedi.dev.global.common.model.BaseTimeEntity;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,7 +9,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
+
+import gigedi.dev.domain.member.domain.Member;
+import gigedi.dev.global.common.model.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,9 +46,6 @@ public class Discord extends BaseTimeEntity {
     }
 
     public static Discord createDiscord(String email, Member member) {
-        return Discord.builder()
-                .email(email)
-                .member(member)
-                .build();
+        return Discord.builder().email(email).member(member).build();
     }
 }
