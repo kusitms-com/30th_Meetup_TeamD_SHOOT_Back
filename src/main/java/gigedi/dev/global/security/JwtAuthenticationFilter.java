@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import gigedi.dev.domain.auth.application.JwtTokenService;
-import gigedi.dev.domain.member.dto.AccessTokenDto;
+import gigedi.dev.domain.auth.dto.AccessTokenDto;
 import lombok.RequiredArgsConstructor;
 
 @Component
