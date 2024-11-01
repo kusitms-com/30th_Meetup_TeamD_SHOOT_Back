@@ -17,16 +17,19 @@ public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
-    private Long id;
+    private Long memberId;
 
-    @Embedded private OauthInfo oauthInfo;
-
-    private LocalDateTime deletedAt;
-    private LocalDateTime lastLoginAt;
+    @Embedded
+    private OauthInfo oauthInfo;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private MemberRole role;
+
+    @Column(nullable = false)
+    private LocalDateTime lastLoginAt;
+
+    private LocalDateTime deletedAt;
 
     @Builder(access = AccessLevel.PRIVATE)
     private Member(OauthInfo oauthInfo, LocalDateTime lastLoginAt, MemberRole role) {

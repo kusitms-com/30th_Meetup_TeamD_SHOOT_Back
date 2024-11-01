@@ -1,5 +1,6 @@
 package gigedi.dev.domain.member.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import lombok.AccessLevel;
@@ -11,9 +12,16 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @NoArgsConstructor
 public class OauthInfo {
+    @Column(nullable = false)
     private String googleId;
+
+    @Column(nullable = false)
     private String googleEmail;
+
+    @Column(nullable = false)
     private String username;
+
+    @Column(nullable = false)
     private String profileImg;
 
     @Builder(access = AccessLevel.PRIVATE)
