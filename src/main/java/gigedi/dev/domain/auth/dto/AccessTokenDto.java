@@ -1,4 +1,4 @@
-package gigedi.dev.domain.member.dto;
+package gigedi.dev.domain.auth.dto;
 
 import gigedi.dev.domain.member.domain.MemberRole;
 import lombok.AllArgsConstructor;
