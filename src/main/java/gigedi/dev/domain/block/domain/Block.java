@@ -34,16 +34,16 @@ public class Block extends BaseTimeEntity {
     private Integer shootCount;
 
     @Column(nullable = false)
-    private Float xCoordinate;
+    private double xCoordinate;
 
     @Column(nullable = false)
-    private Float yCoordinate;
+    private double yCoordinate;
 
     @Column(nullable = false)
-    private Float height;
+    private double height;
 
     @Column(nullable = false)
-    private Float width;
+    private double width;
 
     @Column(nullable = false)
     private LocalDateTime deletedAt;
@@ -60,10 +60,10 @@ public class Block extends BaseTimeEntity {
     private Block(
             String title,
             Integer shootCount,
-            Float xCoordinate,
-            Float yCoordinate,
-            Float height,
-            Float width,
+            double xCoordinate,
+            double yCoordinate,
+            double height,
+            double width,
             Archive archive,
             Figma figma) {
         this.title = title;
@@ -78,10 +78,10 @@ public class Block extends BaseTimeEntity {
 
     public static Block createBlock(
             String title,
-            Float xCoordinate,
-            Float yCoordinate,
-            Float height,
-            Float width,
+            double xCoordinate,
+            double yCoordinate,
+            double height,
+            double width,
             Archive archive,
             Figma figma) {
         return Block.builder()
