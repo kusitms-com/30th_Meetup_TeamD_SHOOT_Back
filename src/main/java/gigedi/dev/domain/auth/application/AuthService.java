@@ -28,8 +28,10 @@ public class AuthService {
     private final MemberUtil memberUtil;
 
     public TokenPairResponse googleSocialLogin(String code) {
-        OidcUser user = getOidcUserFromGoogle(code);
+        GoogleLoginResponse response = googleService.getIdTokenByGoogleLogin(code);
+        OidcUser user = idTokenVerifier.getOidcUser(response.getIdToken());
         Member member = getOrCreateMember(user);
+        googleService.saveGoogleRefreshToken(member.getId(), response.getRefreshToken());
         return createTokenPair(member);
     }
 
@@ -56,11 +58,6 @@ public class AuthService {
         return memberRepository
                 .findById(refreshTokenDto.getMemberId())
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-    }
-
-    private OidcUser getOidcUserFromGoogle(String code) {
-        GoogleLoginResponse response = googleService.getIdTokenByGoogleLogin(code);
-        return idTokenVerifier.getOidcUser(response.getIdToken());
     }
 
     private Member getOrCreateMember(OidcUser user) {

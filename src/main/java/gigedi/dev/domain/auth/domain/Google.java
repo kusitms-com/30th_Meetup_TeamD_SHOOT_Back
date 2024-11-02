@@ -1,6 +1,7 @@
 package gigedi.dev.domain.auth.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,21 +11,17 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RefreshToken {
+public class Google {
     @Id private Long memberId;
     private String token;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private RefreshToken(Long memberId, String token) {
+    private Google(Long memberId, String token) {
         this.memberId = memberId;
         this.token = token;
     }
 
-    public static RefreshToken of(Long memberId, String token) {
-        return RefreshToken.builder().memberId(memberId).token(token).build();
-    }
-
-    public void updateRefreshToken(String newToken) {
-        this.token = newToken;
+    public static Google of(Long memberId, String token) {
+        return Google.builder().memberId(memberId).token(token).build();
     }
 }

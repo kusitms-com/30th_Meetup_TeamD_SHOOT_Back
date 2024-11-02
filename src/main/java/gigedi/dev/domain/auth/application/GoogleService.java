@@ -10,6 +10,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 
+import gigedi.dev.domain.auth.dao.GoogleRepository;
+import gigedi.dev.domain.auth.domain.Google;
 import gigedi.dev.domain.auth.dto.response.GoogleLoginResponse;
 import gigedi.dev.global.error.exception.CustomException;
 import gigedi.dev.global.error.exception.ErrorCode;
@@ -23,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class GoogleService {
     private final GoogleProperties googleProperties;
+    private final GoogleRepository googleRepository;
     private final RestClient restClient;
 
     public GoogleLoginResponse getIdTokenByGoogleLogin(String code) {
@@ -51,5 +54,9 @@ public class GoogleService {
             log.error("Google 로그인 중 예외 발생 : {}", e.getMessage(), e);
             throw new CustomException(ErrorCode.GOOGLE_LOGIN_FAILED);
         }
+    }
+
+    public void saveGoogleRefreshToken(Long memberId, String token) {
+        googleRepository.save(Google.of(memberId, token));
     }
 }
