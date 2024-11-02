@@ -33,7 +33,10 @@ public enum ErrorCode {
     ID_TOKEN_VERIFICATION_FAILED(HttpStatus.UNAUTHORIZED, "ID 토큰 검증에 실패했습니다."),
 
     // 추가
-    GOOGLE_LOGIN_FAILED(HttpStatus.BAD_REQUEST, "구글 로그인 과정에서 오류가 발생했습니다.");
+    GOOGLE_LOGIN_FAILED(HttpStatus.BAD_REQUEST, "구글 로그인 과정에서 오류가 발생했습니다."),
+    GOOGLE_AUTH_NOT_FOUND(HttpStatus.BAD_REQUEST, "구글 리프레시 토큰이 존재하지 않습니다."),
+    GOOGLE_TOKEN_REISSUE_FAILED(HttpStatus.BAD_REQUEST, "구글 토큰 재발급에 실패했습니다."),
+    GOOGLE_WITHDRAWAL_FAILED(HttpStatus.BAD_REQUEST, "구글 회원탈퇴에 실패했습니다.");
 
     private final HttpStatus status;
     private final String message;

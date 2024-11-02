@@ -1,5 +1,6 @@
 package gigedi.dev.domain.auth.api;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import gigedi.dev.domain.auth.application.AuthService;
@@ -26,5 +27,19 @@ public class AuthController {
     @PostMapping("/refresh")
     public TokenPairResponse refreshToken(@RequestBody TokenRefreshRequest request) {
         return authService.refreshToken(request);
+    }
+
+    @Operation(summary = "로그아웃", description = "로그아웃을 진행하는 API")
+    @PostMapping("/logout")
+    public ResponseEntity<Void> memberLogout() {
+        authService.memberLogout();
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "회원탈퇴", description = "회원탈퇴를 진행하는 API")
+    @GetMapping("/withdrawal")
+    public ResponseEntity<Void> memberWithdrawal() {
+        authService.memberWithdrawal();
+        return ResponseEntity.ok().build();
     }
 }

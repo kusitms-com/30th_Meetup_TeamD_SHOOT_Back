@@ -14,6 +14,7 @@ import gigedi.dev.domain.member.domain.Member;
 import gigedi.dev.domain.member.domain.OauthInfo;
 import gigedi.dev.global.error.exception.CustomException;
 import gigedi.dev.global.error.exception.ErrorCode;
+import gigedi.dev.global.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,10 +25,13 @@ public class AuthService {
     private final IdTokenVerifier idTokenVerifier;
     private final MemberRepository memberRepository;
     private final JwtTokenService jwtTokenService;
+    private final MemberUtil memberUtil;
 
     public TokenPairResponse googleSocialLogin(String code) {
-        OidcUser user = getOidcUserFromGoogle(code);
+        GoogleLoginResponse response = googleService.getIdTokenByGoogleLogin(code);
+        OidcUser user = idTokenVerifier.getOidcUser(response.getIdToken());
         Member member = getOrCreateMember(user);
+        googleService.saveGoogleRefreshToken(member.getId(), response.getRefreshToken());
         return createTokenPair(member);
     }
 
@@ -45,22 +49,28 @@ public class AuthService {
         return new TokenPairResponse(accessTokenDto.getToken(), newRefreshTokenDto.getToken());
     }
 
+    public void memberLogout() {
+        final Member currentMember = memberUtil.getCurrentMember();
+        jwtTokenService.deleteRefreshToken(currentMember);
+    }
+
+    public void memberWithdrawal() {
+        final Member currentMember = memberUtil.getCurrentMember();
+        jwtTokenService.deleteRefreshToken(currentMember);
+        googleService.googleWithdrawal(currentMember.getId());
+        currentMember.memberWithdrawal();
+    }
+
     private Member getMember(RefreshTokenDto refreshTokenDto) {
         return memberRepository
                 .findById(refreshTokenDto.getMemberId())
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
-    private OidcUser getOidcUserFromGoogle(String code) {
-        GoogleLoginResponse response = googleService.getIdTokenByGoogleLogin(code);
-        return idTokenVerifier.getOidcUser(response.getIdToken());
-    }
-
     private Member getOrCreateMember(OidcUser user) {
         OauthInfo oauthInfo = createOauthInfo(user);
         return memberRepository
-                .findByOauthInfoGoogleId(oauthInfo.getGoogleId())
-                .filter(member -> member.getDeletedAt() == null)
+                .findByOauthInfoGoogleIdAndDeletedAtIsNull(oauthInfo.getGoogleId())
                 .orElseGet(() -> memberRepository.save(Member.createMember(oauthInfo)));
     }
 
