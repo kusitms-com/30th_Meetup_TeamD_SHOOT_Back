@@ -14,6 +14,7 @@ import gigedi.dev.domain.member.domain.Member;
 import gigedi.dev.domain.member.domain.OauthInfo;
 import gigedi.dev.global.error.exception.CustomException;
 import gigedi.dev.global.error.exception.ErrorCode;
+import gigedi.dev.global.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,6 +25,7 @@ public class AuthService {
     private final IdTokenVerifier idTokenVerifier;
     private final MemberRepository memberRepository;
     private final JwtTokenService jwtTokenService;
+    private final MemberUtil memberUtil;
 
     public TokenPairResponse googleSocialLogin(String code) {
         OidcUser user = getOidcUserFromGoogle(code);
@@ -43,6 +45,11 @@ public class AuthService {
         AccessTokenDto accessTokenDto =
                 jwtTokenService.refreshAccessToken(getMember(newRefreshTokenDto));
         return new TokenPairResponse(accessTokenDto.getToken(), newRefreshTokenDto.getToken());
+    }
+
+    public void memberLogout() {
+        final Member currentMember = memberUtil.getCurrentMember();
+        jwtTokenService.deleteRefreshToken(currentMember);
     }
 
     private Member getMember(RefreshTokenDto refreshTokenDto) {

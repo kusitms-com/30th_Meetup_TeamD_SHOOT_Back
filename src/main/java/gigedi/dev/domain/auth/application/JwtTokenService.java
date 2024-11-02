@@ -75,4 +75,8 @@ public class JwtTokenService {
         refreshTokenRepository.save(refreshToken);
         return refreshTokenDto;
     }
+
+    public void deleteRefreshToken(Member member) {
+        refreshTokenRepository.findById(member.getId()).ifPresent(refreshTokenRepository::delete);
+    }
 }
