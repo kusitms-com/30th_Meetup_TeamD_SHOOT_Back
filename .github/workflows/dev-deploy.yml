@@ -2,7 +2,7 @@ name: Dev Deploy to NCP
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "cicd/#21" ]
 
 env:
   DOCKERHUB_IMAGE_NAME: gigedi-server
@@ -60,7 +60,7 @@ jobs:
 
       - name: Create .env file from GitHub Secrets
         run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
+          echo "${{ secrets.ENV_FILE }}" | tr '\n' '\n' > .env
 
       - name: Copy docker-compose file and .env file to NCP
         uses: appleboy/scp-action@master
