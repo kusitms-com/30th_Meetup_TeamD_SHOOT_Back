@@ -1,7 +1,5 @@
 package gigedi.dev.domain.auth.application;
 
-import static gigedi.dev.global.common.constants.SecurityConstants.NONE;
-
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -42,7 +40,7 @@ public class JwtTokenService {
         UserDetails userDetails =
                 User.withUsername(memberId.toString())
                         .authorities(role.toString())
-                        .password(NONE)
+                        .password("")
                         .build();
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(
