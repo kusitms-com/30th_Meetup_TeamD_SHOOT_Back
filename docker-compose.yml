@@ -5,6 +5,8 @@ services:
     image: ${IMAGE_FULL_URL}
     container_name: ${DOCKERHUB_IMAGE_NAME}
     restart: always
+    ports:
+      - "8080:8080"
     environment:
       - TZ=Asia/Seoul
     env_file:
