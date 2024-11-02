@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class TokenPairResponse {
-    private final String refreshToken;
     private final String accessToken;
+    private final String refreshToken;
 }
