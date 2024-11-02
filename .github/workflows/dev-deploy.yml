@@ -2,7 +2,7 @@ name: Dev Deploy to NCP
 
 on:
   push:
-    branches: [ "cicd/#21" ]
+    branches: [ "develop" ]
 
 env:
   DOCKERHUB_IMAGE_NAME: gigedi-server
