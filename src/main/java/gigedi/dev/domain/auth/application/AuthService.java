@@ -54,6 +54,13 @@ public class AuthService {
         jwtTokenService.deleteRefreshToken(currentMember);
     }
 
+    public void memberWithdrawal() {
+        final Member currentMember = memberUtil.getCurrentMember();
+        jwtTokenService.deleteRefreshToken(currentMember);
+        googleService.googleWithdrawal(currentMember.getId());
+        currentMember.memberWithdrawal();
+    }
+
     private Member getMember(RefreshTokenDto refreshTokenDto) {
         return memberRepository
                 .findById(refreshTokenDto.getMemberId())

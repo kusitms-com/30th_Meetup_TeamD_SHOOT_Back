@@ -35,4 +35,11 @@ public class AuthController {
         authService.memberLogout();
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "회원탈퇴", description = "회원탈퇴를 진행하는 API")
+    @GetMapping("/withdrawal")
+    public ResponseEntity<Void> memberWithdrawal() {
+        authService.memberWithdrawal();
+        return ResponseEntity.ok().build();
+    }
 }
