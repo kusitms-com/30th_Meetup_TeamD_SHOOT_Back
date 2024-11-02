@@ -2,12 +2,7 @@ package gigedi.dev.domain.member.domain;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import gigedi.dev.global.common.model.BaseTimeEntity;
 import lombok.AccessLevel;
@@ -23,22 +18,31 @@ public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
-    private Long id;
+    private Long Id;
 
-    private String username;
+    @Embedded private OauthInfo oauthInfo;
 
-    @Embedded private ExternalId externalId;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MemberRole role;
+
+    @Column(nullable = false)
+    private LocalDateTime lastLoginAt;
 
     private LocalDateTime deletedAt;
 
-    // @Builder(access = AccessLevel.PRIVATE)
-    @Builder
-    private Member(String username, ExternalId externalId) {
-        this.username = username;
-        this.externalId = externalId;
+    @Builder(access = AccessLevel.PRIVATE)
+    private Member(OauthInfo oauthInfo, LocalDateTime lastLoginAt, MemberRole role) {
+        this.oauthInfo = oauthInfo;
+        this.lastLoginAt = lastLoginAt;
+        this.role = role;
     }
 
-    public static Member createMember(String username, ExternalId externalId) {
-        return Member.builder().username(username).externalId(externalId).build();
+    public static Member createMember(OauthInfo oauthInfo) {
+        return Member.builder()
+                .oauthInfo(oauthInfo)
+                .lastLoginAt(LocalDateTime.now())
+                .role(MemberRole.USER)
+                .build();
     }
 }
