@@ -58,13 +58,19 @@ jobs:
           push: true
           tags: ${{ steps.metadata.outputs.tags }}
 
-      - name: Copy docker-compose file to NCP
+      - name: Create .env file from GitHub Secrets
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+
+      - name: Copy docker-compose file and .env file to NCP
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.NCP_SERVER_IP }}
           username: ${{ secrets.NCP_SERVER_USER }}
           password: ${{ secrets.NCP_PASSWORD }}
-          source: "docker-compose.yml"
+          source: |
+            docker-compose.yml
+            .env
           target: "/root/"
           port: 22
           debug: true
@@ -77,5 +83,6 @@ jobs:
           password: ${{ secrets.NCP_PASSWORD }}
           port: 22
           script: |
-            docker-compose down
-            docker-compose -f /root/docker-compose.yml up -d
+            cd /root
+            docker-compose --env-file .env down
+            docker-compose --env-file .env up -d
