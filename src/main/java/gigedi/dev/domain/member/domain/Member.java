@@ -45,4 +45,8 @@ public class Member extends BaseTimeEntity {
                 .role(MemberRole.USER)
                 .build();
     }
+
+    public void memberWithdrawal() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }

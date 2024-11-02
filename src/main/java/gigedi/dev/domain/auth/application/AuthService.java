@@ -70,8 +70,7 @@ public class AuthService {
     private Member getOrCreateMember(OidcUser user) {
         OauthInfo oauthInfo = createOauthInfo(user);
         return memberRepository
-                .findByOauthInfoGoogleId(oauthInfo.getGoogleId())
-                .filter(member -> member.getDeletedAt() == null)
+                .findByOauthInfoGoogleIdAndDeletedAtIsNull(oauthInfo.getGoogleId())
                 .orElseGet(() -> memberRepository.save(Member.createMember(oauthInfo)));
     }
 
