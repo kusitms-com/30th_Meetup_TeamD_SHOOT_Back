@@ -2,7 +2,7 @@ name: Dev Deploy to NCP
 
 on:
   push:
-    branches: [ "cicd/#10" ]
+    branches: [ "develop" ]
 
 env:
   DOCKERHUB_IMAGE_NAME: gigedi-server
@@ -68,6 +68,7 @@ jobs:
           key: ${{ secrets.NCP_SERVER_SSH_KEY }}
           source: "docker-compose.yml"
           target: "/home/ncp-user/"
+          port: 22
           debug: true
 
       - name: Deploy to NCP server
