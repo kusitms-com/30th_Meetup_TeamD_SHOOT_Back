@@ -82,9 +82,6 @@ jobs:
           port: 22
           script: |
             cd /root
-            docker-compose --env-file /dev/stdin down <<EOF
-            $(cat .env)
-            EOF
-            docker-compose --env-file /dev/stdin up -d <<EOF
-            $(cat .env)
-            EOF
+            export $(cat /github/workspace/.env | xargs)
+            docker-compose down
+            docker-compose up -d
