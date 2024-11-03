@@ -53,8 +53,8 @@ class SecurityUtilTest {
         }
 
         @Test
-        @DisplayName("실패한다")
-        void getCurrentMemberId_Failure() {
+        @DisplayName("인증이 존재하지 않아 실패한다")
+        void getCurrentMemberId_Failure_AUTH_NOT_FOUND() {
             // given
             when(securityContext.getAuthentication()).thenReturn(null);
 

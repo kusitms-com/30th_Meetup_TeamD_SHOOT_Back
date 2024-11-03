@@ -55,8 +55,8 @@ class MemberUtilTest {
         }
 
         @Test
-        @DisplayName("실패한다")
-        void getCurrentMember_Failure() {
+        @DisplayName("사용자가 존재하지 않아 실패한다")
+        void getCurrentMember_Failure_MEMBER_NOT_FOUND() {
             // given
             Long memberId = 1L;
             when(securityUtil.getCurrentMemberId()).thenReturn(memberId);
