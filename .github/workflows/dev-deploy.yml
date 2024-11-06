@@ -62,11 +62,6 @@ jobs:
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
 
-  run-docker-image-on-ec2:
-    needs: build-deploy
-    runs-on: self-hosted
-
-    steps:
       - name: Copy .env and docker-compose.yml to EC2
         uses: appleboy/scp-action@latest
         with:
