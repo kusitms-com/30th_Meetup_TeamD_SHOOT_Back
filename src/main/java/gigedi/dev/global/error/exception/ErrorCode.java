@@ -32,6 +32,17 @@ public enum ErrorCode {
     PASSWORD_NOT_MATCHES(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
     ID_TOKEN_VERIFICATION_FAILED(HttpStatus.UNAUTHORIZED, "ID 토큰 검증에 실패했습니다."),
 
+    // Archive
+    ARCHIVE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 아카이브를 찾을 수 없습니다."),
+    ARCHIVE_ALREADY_DELETED(HttpStatus.NOT_FOUND, "이미 삭제된 아카이브입니다."),
+    ARCHIVE_INVALID_MEMBER(HttpStatus.FORBIDDEN, "해당 아카이브에 접근할 수 없는 회원입니다."),
+
+    // Block
+    BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 블록을 찾을 수 없습니다."),
+
+    // Figma
+    FIGMA_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 Figma 정보를 찾을 수 없습니다."),
+
     // 추가
     GOOGLE_LOGIN_FAILED(HttpStatus.BAD_REQUEST, "구글 로그인 과정에서 오류가 발생했습니다."),
     GOOGLE_AUTH_NOT_FOUND(HttpStatus.BAD_REQUEST, "구글 리프레시 토큰이 존재하지 않습니다."),
