@@ -75,14 +75,29 @@ jobs:
 #          port: 22
 #          debug: true
 
-      - name: Deploy to AWS EC2 server
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.AWS_EC2_IP }}
-          username: ${{ secrets.AWS_EC2_USER }}
-          key: ${{ secrets.AWS_EC2_SSH_KEY }}
-          port: 22
-          script: |
-            cd /home/ubuntu
-            docker-compose --env-file .env down
-            docker-compose --env-file .env up -d
+#      - name: Deploy to AWS EC2 server
+#        uses: appleboy/ssh-action@v1.0.3
+#        with:
+#          host: ${{ secrets.AWS_EC2_IP }}
+#          username: ${{ secrets.AWS_EC2_USER }}
+#          key: ${{ secrets.AWS_EC2_SSH_KEY }}
+#          port: 22
+#          script: |
+#            cd /home/ubuntu
+#            docker-compose --env-file .env down
+#            docker-compose --env-file .env up -d
+      # push 한 이미지를 ec2에서 pull 받아서 실행
+
+  run-docker-image-on-ec2:
+    needs: build
+    runs-on: self-hosted
+
+    steps:
+      - name: docker pull
+        run: sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shoot:latest
+
+      - name: docker stop container
+        run: |
+          docker-compose --env-file .env down
+      - name: docker run new container
+        run: docker-compose --env-file .env up -d
