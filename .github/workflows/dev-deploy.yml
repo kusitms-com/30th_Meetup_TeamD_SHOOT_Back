@@ -1,4 +1,4 @@
-name: Dev Deploy to NCP
+name: Dev Deploy to AWS
 
 on:
   push:
@@ -62,42 +62,18 @@ jobs:
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
 
-#      - name: Copy docker-compose file and .env file to AWS EC2
-#        uses: appleboy/scp-action@master
-#        with:
-#          host: ${{ secrets.AWS_EC2_IP }}
-#          username: ${{ secrets.AWS_EC2_USER }}
-#          key: ${{ secrets.AWS_EC2_SSH_KEY }}
-#          source: |
-#            docker-compose.yml
-#            .env
-#          target: "/home/ubuntu/"
-#          port: 22
-#          debug: true
-
-#      - name: Deploy to AWS EC2 server
-#        uses: appleboy/ssh-action@v1.0.3
-#        with:
-#          host: ${{ secrets.AWS_EC2_IP }}
-#          username: ${{ secrets.AWS_EC2_USER }}
-#          key: ${{ secrets.AWS_EC2_SSH_KEY }}
-#          port: 22
-#          script: |
-#            cd /home/ubuntu
-#            docker-compose --env-file .env down
-#            docker-compose --env-file .env up -d
-      # push 한 이미지를 ec2에서 pull 받아서 실행
-
   run-docker-image-on-ec2:
-    needs: build
+    needs: build-deploy
     runs-on: self-hosted
 
     steps:
-      - name: docker pull
+      - name: Docker Pull
         run: sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shoot:latest
 
-      - name: docker stop container
+      - name: Stop and Remove Existing Container
         run: |
           docker-compose --env-file .env down
-      - name: docker run new container
-        run: docker-compose --env-file .env up -d
+
+      - name: Run New Docker Container
+        run: |
+          docker-compose --env-file .env up -d
