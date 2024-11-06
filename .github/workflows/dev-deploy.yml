@@ -83,6 +83,6 @@ jobs:
           port: 22
           script: |
             cd /home/ubuntu
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKERHUB_IMAGE_NAME }}:latest
+            sudo docker pull cowboysj/shoot:latest
             docker-compose down
             docker-compose -d
