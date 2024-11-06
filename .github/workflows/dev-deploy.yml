@@ -68,12 +68,12 @@ jobs:
 
     steps:
       - name: Docker Pull
-        run: sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shoot:latest
+        run: sudo sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shoot:latest
 
       - name: Stop and Remove Existing Container
         run: |
-          docker-compose --env-file .env down
+          sudo docker-compose --env-file .env down
 
       - name: Run New Docker Container
         run: |
-          docker-compose --env-file .env up -d
+          sudo docker-compose --env-file .env up -d
