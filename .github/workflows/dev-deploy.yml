@@ -1,4 +1,4 @@
-name: Dev Deploy to NCP
+name: Dev Deploy to AWS
 
 on:
   push:
@@ -58,31 +58,31 @@ jobs:
           push: true
           tags: ${{ steps.metadata.outputs.tags }}
 
-      - name: Create .env file from GitHub Secrets
-        run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
+#      - name: Create .env file from GitHub Secrets
+#        run: |
+#          echo "${{ secrets.ENV_FILE }}" > .env
+#
+#      - name: Copy .env and docker-compose.yml to EC2
+#        uses: appleboy/scp-action@master
+#        with:
+#          host: ${{ secrets.AWS_EC2_IP }}
+#          username: ${{ secrets.AWS_EC2_USER }}
+#          key: ${{ secrets.AWS_EC2_SSH_KEY }}
+#          source: |
+#            .env
+#            docker-compose.yml
+#          target: "/home/ubuntu/"
+#          port: 22
 
-      - name: Copy docker-compose file and .env file to NCP
-        uses: appleboy/scp-action@master
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.NCP_SERVER_IP }}
-          username: ${{ secrets.NCP_SERVER_USER }}
-          password: ${{ secrets.NCP_PASSWORD }}
-          source: |
-            docker-compose.yml
-            .env
-          target: "/root/"
-          port: 22
-          debug: true
-
-      - name: Deploy to NCP server
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.NCP_SERVER_IP }}
-          username: root
-          password: ${{ secrets.NCP_PASSWORD }}
+          host: ${{ secrets.AWS_EC2_IP }}
+          username: ${{ secrets.AWS_EC2_USER }}
+          key: ${{ secrets.AWS_EC2_SSH_KEY }}
           port: 22
           script: |
-            cd /root
-            docker-compose --env-file .env down
-            docker-compose --env-file .env up -d
+            cd /home/ubuntu
+            sudo docker pull cowboysj/shoot:latest
+            docker-compose down
+            docker-compose up -d
