@@ -2,7 +2,7 @@ name: Dev Deploy to NCP
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "cicd/#27" ]
 
 env:
   DOCKERHUB_IMAGE_NAME: gigedi-server
@@ -62,27 +62,27 @@ jobs:
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
 
-      - name: Copy docker-compose file and .env file to NCP
+      - name: Copy docker-compose file and .env file to AWS EC2
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.NCP_SERVER_IP }}
-          username: ${{ secrets.NCP_SERVER_USER }}
-          password: ${{ secrets.NCP_PASSWORD }}
+          host: ${{ secrets.AWS_EC2_IP }}
+          username: ${{ secrets.AWS_EC2_USER }}
+          key: ${{ secrets.AWS_EC2_SSH_KEY }}
           source: |
             docker-compose.yml
             .env
-          target: "/root/"
+          target: "/home/ubuntu/"
           port: 22
           debug: true
 
-      - name: Deploy to NCP server
+      - name: Deploy to AWS EC2 server
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.NCP_SERVER_IP }}
-          username: root
-          password: ${{ secrets.NCP_PASSWORD }}
+          host: ${{ secrets.AWS_EC2_IP }}
+          username: ${{ secrets.AWS_EC2_USER }}
+          key: ${{ secrets.AWS_EC2_SSH_KEY }}
           port: 22
           script: |
-            cd /root
+            cd /home/ec2-user
             docker-compose --env-file .env down
             docker-compose --env-file .env up -d
