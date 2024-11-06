@@ -1,8 +1,8 @@
-name: Dev Deploy to NCP
+name: Dev Deploy to AWS
 
 on:
   push:
-    branches: [ "cicd/#27" ]
+    branches: [ "develop" ]
 
 env:
   DOCKERHUB_IMAGE_NAME: gigedi-server
