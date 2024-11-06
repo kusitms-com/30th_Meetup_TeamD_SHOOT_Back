@@ -85,4 +85,4 @@ jobs:
             cd /home/ubuntu
             sudo docker pull cowboysj/shoot:latest
             docker-compose down
-            docker-compose -d
+            docker-compose up -d
