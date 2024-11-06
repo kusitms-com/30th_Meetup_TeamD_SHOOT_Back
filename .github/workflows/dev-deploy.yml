@@ -83,6 +83,6 @@ jobs:
           key: ${{ secrets.AWS_EC2_SSH_KEY }}
           port: 22
           script: |
-            cd /home/ec2-user
+            cd /home/ubuntu
             docker-compose --env-file .env down
             docker-compose --env-file .env up -d
