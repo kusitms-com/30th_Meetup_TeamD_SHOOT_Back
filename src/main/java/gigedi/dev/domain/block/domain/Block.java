@@ -47,7 +47,7 @@ public class Block extends BaseTimeEntity {
     @Column(nullable = false)
     private double width;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDateTime deletedAt;
 
     @ManyToOne
