@@ -52,23 +52,23 @@ public class BlockService {
                 block.getWidth());
     }
 
-    public BlockCreateResponse getBlock(Long archiveId) {
-        final Figma figma = figmaUtil.getCurrentFigma();
-        Archive archive = getArchiveById(archiveId);
-
-        Block block =
-                blockRepository
-                        .findByArchiveAndFigma(archive, figma)
-                        .orElseThrow(() -> new CustomException(ErrorCode.BLOCK_NOT_FOUND));
-
-        return new BlockCreateResponse(
-                block.getBlockId(),
-                block.getTitle(),
-                block.getXCoordinate(),
-                block.getYCoordinate(),
-                block.getHeight(),
-                block.getWidth());
-    }
+    //    public BlockCreateResponse getBlock(Long archiveId) {
+    //        final Figma figma = figmaUtil.getCurrentFigma();
+    //        Archive archive = getArchiveById(archiveId);
+    //
+    //        Block block =
+    //                blockRepository
+    //                        .findByArchiveAndFigma(archive, figma)
+    //                        .orElseThrow(() -> new CustomException(ErrorCode.BLOCK_NOT_FOUND));
+    //
+    //        return new BlockCreateResponse(
+    //                block.getBlockId(),
+    //                block.getTitle(),
+    //                block.getXCoordinate(),
+    //                block.getYCoordinate(),
+    //                block.getHeight(),
+    //                block.getWidth());
+    //    }
 
     public BlockCreateResponse updateBlockTitle(Long blockId, BlockUpdateRequest request) {
         final Figma figma = figmaUtil.getCurrentFigma();
