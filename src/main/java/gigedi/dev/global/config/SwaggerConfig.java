@@ -15,6 +15,7 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
         info = @Info(title = "GIGEDI", description = "큐시즘 30기 밋업 프로젝트 기개디 API 문서", version = "v1"),
         servers = {
             @Server(url = "http://localhost:8080", description = "서버 local URL"),
+            @Server(url = "https://api.gigedi.com", description = "서버 배포 URL")
         })
 @Configuration
 public class SwaggerConfig {
