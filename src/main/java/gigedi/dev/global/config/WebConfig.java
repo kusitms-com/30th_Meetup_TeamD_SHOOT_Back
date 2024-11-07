@@ -10,7 +10,10 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://localhost:3000", "http://localhost:3000")
+                .allowedOriginPatterns(
+                        "https://localhost:3000",
+                        "http://localhost:3000",
+                        "https://www.figma.com/**")
                 .allowedMethods("GET", "POST", "PATCH", "DELETE")
                 .allowedHeaders("*")
                 .allowCredentials(true)
