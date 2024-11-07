@@ -12,9 +12,9 @@ import gigedi.dev.domain.block.domain.Block;
 import gigedi.dev.domain.block.dto.request.BlockCreateRequest;
 import gigedi.dev.domain.block.dto.request.BlockUpdateRequest;
 import gigedi.dev.domain.block.dto.response.BlockCreateResponse;
-import gigedi.dev.domain.member.domain.Member;
 import gigedi.dev.global.error.exception.CustomException;
 import gigedi.dev.global.error.exception.ErrorCode;
+import gigedi.dev.global.util.FigmaUtil;
 import gigedi.dev.global.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 
@@ -26,18 +26,11 @@ public class BlockService {
     private final ArchiveRepository archiveRepository;
     private final BlockRepository blockRepository;
     private final FigmaRepository figmaRepository;
+    private final FigmaUtil figmaUtil;
 
     public BlockCreateResponse createBlock(Long archiveId, BlockCreateRequest request) {
-        final Member currentMember = memberUtil.getCurrentMember();
-        Figma figma =
-                figmaRepository
-                        .findByMemberId(currentMember.getId())
-                        .orElseThrow(() -> new CustomException(ErrorCode.FIGMA_NOT_FOUND));
-
-        Archive archive =
-                archiveRepository
-                        .findById(archiveId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.ARCHIVE_NOT_FOUND));
+        final Figma figma = figmaUtil.getCurrentFigma();
+        Archive archive = getArchiveById(archiveId);
 
         Block block =
                 blockRepository.save(
@@ -60,16 +53,8 @@ public class BlockService {
     }
 
     public BlockCreateResponse getBlock(Long archiveId) {
-        final Member currentMember = memberUtil.getCurrentMember();
-        Figma figma =
-                figmaRepository
-                        .findByMemberId(currentMember.getId())
-                        .orElseThrow(() -> new CustomException(ErrorCode.FIGMA_NOT_FOUND));
-
-        Archive archive =
-                archiveRepository
-                        .findById(archiveId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.ARCHIVE_NOT_FOUND));
+        final Figma figma = figmaUtil.getCurrentFigma();
+        Archive archive = getArchiveById(archiveId);
 
         Block block =
                 blockRepository
@@ -86,11 +71,7 @@ public class BlockService {
     }
 
     public BlockCreateResponse updateBlockTitle(Long blockId, BlockUpdateRequest request) {
-        final Member currentMember = memberUtil.getCurrentMember();
-        Figma figma =
-                figmaRepository
-                        .findByMemberId(currentMember.getId())
-                        .orElseThrow(() -> new CustomException(ErrorCode.FIGMA_NOT_FOUND));
+        final Figma figma = figmaUtil.getCurrentFigma();
 
         Block block =
                 blockRepository
@@ -109,11 +90,7 @@ public class BlockService {
     }
 
     public void deleteBlock(Long blockId) {
-        final Member currentMember = memberUtil.getCurrentMember();
-        Figma figma =
-                figmaRepository
-                        .findByMemberId(currentMember.getId())
-                        .orElseThrow(() -> new CustomException(ErrorCode.FIGMA_NOT_FOUND));
+        final Figma figma = figmaUtil.getCurrentFigma();
 
         Block block =
                 blockRepository
@@ -121,5 +98,11 @@ public class BlockService {
                         .orElseThrow(() -> new CustomException(ErrorCode.BLOCK_NOT_FOUND));
 
         blockRepository.delete(block);
+    }
+
+    public Archive getArchiveById(Long archiveId) {
+        return archiveRepository
+                .findById(archiveId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ARCHIVE_NOT_FOUND));
     }
 }
