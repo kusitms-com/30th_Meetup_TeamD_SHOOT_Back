@@ -31,14 +31,12 @@ public class BlockController {
         return blockService.createBlock(archiveId, request);
     }
 
-    // 블록 조회 API
     @Operation(summary = "블록 조회 API", description = "블록을 조회하는 API")
     @GetMapping("/{archiveId}")
     public BlockCreateResponse getBlock(@PathVariable Long archiveId) {
         return blockService.getBlock(archiveId);
     }
 
-    // 블록 제목 수정 API
     @Operation(summary = "블록 제목 수정 API", description = "블록의 제목을 수정하는 API")
     @PatchMapping("/title/{blockId}")
     public BlockCreateResponse updateBlockTitle(
@@ -46,7 +44,6 @@ public class BlockController {
         return blockService.updateBlockTitle(blockId, request);
     }
 
-    // 블록 삭제 API
     @Operation(summary = "블록 삭제 API", description = "블록을 삭제하는 API")
     @DeleteMapping("/{blockId}")
     public void deleteBlock(@PathVariable Long blockId) {
