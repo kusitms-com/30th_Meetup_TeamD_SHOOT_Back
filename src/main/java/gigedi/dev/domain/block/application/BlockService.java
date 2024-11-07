@@ -59,7 +59,7 @@ public class BlockService {
 
     public List<GetBlockResponse> getBlock(Long archiveId) {
         List<GetBlockResponse> blocks =
-                blockRepository.findByArchive_ArchiveId(archiveId).stream()
+                blockRepository.findByArchive_ArchiveIdAndDeletedAtIsNull(archiveId).stream()
                         .map(
                                 block ->
                                         new GetBlockResponse(
@@ -71,12 +71,7 @@ public class BlockService {
     }
 
     public CreateBlockResponse updateBlockTitle(Long blockId, UpdateBlockRequest request) {
-
-        Block block =
-                blockRepository
-                        .findById(blockId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.BLOCK_NOT_FOUND));
-
+        Block block = getBlockById(blockId);
         block.setTitle(request.getTitle());
 
         return new CreateBlockResponse(
@@ -89,17 +84,21 @@ public class BlockService {
     }
 
     public void deleteBlock(Long blockId) {
-        Block block =
-                blockRepository
-                        .findById(blockId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.BLOCK_NOT_FOUND));
-
+        Block block = getBlockById(blockId);
+        Archive archive = block.getArchive();
+        archive.decreaseBlockCount();
         block.deleteBlock();
     }
 
     public Archive getArchiveById(Long archiveId) {
         return archiveRepository
-                .findById(archiveId)
+                .findByArchiveIdAndDeletedAtIsNull(archiveId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ARCHIVE_NOT_FOUND));
+    }
+
+    public Block getBlockById(Long blockId) {
+        return blockRepository
+                .findByBlockIdAndDeletedAtIsNull(blockId)
+                .orElseThrow(() -> new CustomException(ErrorCode.BLOCK_NOT_FOUND));
     }
 }

@@ -47,6 +47,10 @@ public class Archive extends BaseTimeEntity {
         this.blockCount++;
     }
 
+    public void decreaseBlockCount() {
+        this.blockCount--;
+    }
+
     @Builder(access = AccessLevel.PRIVATE)
     private Archive(String title, Integer blockCount, File file, Figma figma) {
         this.title = title;
