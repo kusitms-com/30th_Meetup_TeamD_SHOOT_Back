@@ -28,18 +28,14 @@ public class FigmaUtil {
     private final MemberUtil memberUtil;
 
     public Figma getCurrentFigma() {
-        String figmaId = getCurrentFigmaId();
-        if (figmaId == null || figmaId.trim().isEmpty()) {
-            throw new CustomException(ErrorCode.FIGMA_INFO_NOT_FOUND);
-        }
+        String figmaId = getCurrentAttribute(FIGMA_ID_ATTRIBUTE);
+        validateId(figmaId);
         return findAndValidateFigmaId(figmaId);
     }
 
     public File getCurrentFile() {
-        String fileId = getCurrentFileId();
-        if (fileId == null || fileId.trim().isEmpty()) {
-            throw new CustomException(ErrorCode.FIGMA_INFO_NOT_FOUND);
-        }
+        String fileId = getCurrentAttribute(FILE_ID_ATTRIBUTE);
+        validateId(fileId);
         Figma currentFigma = getCurrentFigma();
 
         File currentFile =
@@ -54,23 +50,19 @@ public class FigmaUtil {
         return currentFile;
     }
 
-    private String getCurrentFigmaId() {
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes == null) {
+    private void validateId(String id) {
+        if (id == null || id.trim().isEmpty()) {
             throw new CustomException(ErrorCode.FIGMA_INFO_NOT_FOUND);
         }
-        ServletRequestAttributes attributes = (ServletRequestAttributes) requestAttributes;
-        return (String)
-                attributes.getAttribute(FIGMA_ID_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST);
     }
 
-    private String getCurrentFileId() {
+    private String getCurrentAttribute(String attributeName) {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
             throw new CustomException(ErrorCode.FIGMA_INFO_NOT_FOUND);
         }
         ServletRequestAttributes attributes = (ServletRequestAttributes) requestAttributes;
-        return (String) attributes.getAttribute(FILE_ID_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST);
+        return (String) attributes.getAttribute(attributeName, RequestAttributes.SCOPE_REQUEST);
     }
 
     private Figma findAndValidateFigmaId(String figmaId) {
