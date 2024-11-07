@@ -1,5 +1,8 @@
 package gigedi.dev.global.util;
 
+import static gigedi.dev.global.common.constants.FigmaConstants.FIGMA_ID_ATTRIBUTE;
+import static gigedi.dev.global.common.constants.FigmaConstants.FILE_ID_ATTRIBUTE;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -57,7 +60,8 @@ public class FigmaUtil {
             throw new CustomException(ErrorCode.FIGMA_INFO_NOT_FOUND);
         }
         ServletRequestAttributes attributes = (ServletRequestAttributes) requestAttributes;
-        return (String) attributes.getAttribute("FIGMA_ID", RequestAttributes.SCOPE_REQUEST);
+        return (String)
+                attributes.getAttribute(FIGMA_ID_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST);
     }
 
     private String getCurrentFileId() {
@@ -66,7 +70,7 @@ public class FigmaUtil {
             throw new CustomException(ErrorCode.FIGMA_INFO_NOT_FOUND);
         }
         ServletRequestAttributes attributes = (ServletRequestAttributes) requestAttributes;
-        return (String) attributes.getAttribute("FILE_ID", RequestAttributes.SCOPE_REQUEST);
+        return (String) attributes.getAttribute(FILE_ID_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST);
     }
 
     private Figma findAndValidateFigmaId(String figmaId) {

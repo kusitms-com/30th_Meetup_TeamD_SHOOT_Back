@@ -1,5 +1,7 @@
 package gigedi.dev.global.interceptor;
 
+import static gigedi.dev.global.common.constants.FigmaConstants.*;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -9,10 +11,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 public class FigmaInfoInterceptor implements HandlerInterceptor {
-    private static final String FIGMA_ID_HEADER = "Figma-Id";
-    private static final String FILE_ID_HEADER = "File-Id";
-    private static final String FIGMA_ID_ATTRIBUTE = "FIGMA_ID";
-    private static final String FILE_ID_ATTRIBUTE = "FILE_ID";
 
     @Override
     public boolean preHandle(
