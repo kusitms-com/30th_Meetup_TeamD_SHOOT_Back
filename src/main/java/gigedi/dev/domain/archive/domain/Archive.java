@@ -43,6 +43,10 @@ public class Archive extends BaseTimeEntity {
     @JoinColumn(name = "figma_id", nullable = false)
     private Figma figma;
 
+    public void increaseBlockCount() {
+        this.blockCount++;
+    }
+
     @Builder(access = AccessLevel.PRIVATE)
     private Archive(String title, Integer blockCount, File file, Figma figma) {
         this.title = title;

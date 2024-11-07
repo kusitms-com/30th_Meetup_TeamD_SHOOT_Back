@@ -1,5 +1,8 @@
 package gigedi.dev.domain.block.application;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +15,7 @@ import gigedi.dev.domain.block.domain.Block;
 import gigedi.dev.domain.block.dto.request.BlockCreateRequest;
 import gigedi.dev.domain.block.dto.request.BlockUpdateRequest;
 import gigedi.dev.domain.block.dto.response.BlockCreateResponse;
+import gigedi.dev.domain.block.dto.response.GetBlockResponse;
 import gigedi.dev.global.error.exception.CustomException;
 import gigedi.dev.global.error.exception.ErrorCode;
 import gigedi.dev.global.util.FigmaUtil;
@@ -31,6 +35,7 @@ public class BlockService {
     public BlockCreateResponse createBlock(Long archiveId, BlockCreateRequest request) {
         final Figma figma = figmaUtil.getCurrentFigma();
         Archive archive = getArchiveById(archiveId);
+        archive.increaseBlockCount();
 
         Block block =
                 blockRepository.save(
@@ -52,23 +57,18 @@ public class BlockService {
                 block.getWidth());
     }
 
-    //    public BlockCreateResponse getBlock(Long archiveId) {
-    //        final Figma figma = figmaUtil.getCurrentFigma();
-    //        Archive archive = getArchiveById(archiveId);
-    //
-    //        Block block =
-    //                blockRepository
-    //                        .findByArchiveAndFigma(archive, figma)
-    //                        .orElseThrow(() -> new CustomException(ErrorCode.BLOCK_NOT_FOUND));
-    //
-    //        return new BlockCreateResponse(
-    //                block.getBlockId(),
-    //                block.getTitle(),
-    //                block.getXCoordinate(),
-    //                block.getYCoordinate(),
-    //                block.getHeight(),
-    //                block.getWidth());
-    //    }
+    public List<GetBlockResponse> getBlock(Long archiveId) {
+        List<GetBlockResponse> blocks =
+                blockRepository.findByArchive_ArchiveId(archiveId).stream()
+                        .map(
+                                block ->
+                                        new GetBlockResponse(
+                                                block.getBlockId(),
+                                                block.getTitle(),
+                                                block.getShootCount()))
+                        .collect(Collectors.toList());
+        return blocks;
+    }
 
     public BlockCreateResponse updateBlockTitle(Long blockId, BlockUpdateRequest request) {
         final Figma figma = figmaUtil.getCurrentFigma();

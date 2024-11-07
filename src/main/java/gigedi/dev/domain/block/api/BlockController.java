@@ -1,6 +1,9 @@
 package gigedi.dev.domain.block.api;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +15,7 @@ import gigedi.dev.domain.block.application.BlockService;
 import gigedi.dev.domain.block.dto.request.BlockCreateRequest;
 import gigedi.dev.domain.block.dto.request.BlockUpdateRequest;
 import gigedi.dev.domain.block.dto.response.BlockCreateResponse;
+import gigedi.dev.domain.block.dto.response.GetBlockResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -30,11 +34,11 @@ public class BlockController {
         return blockService.createBlock(archiveId, request);
     }
 
-    //    @Operation(summary = "아카이브 별 블록 조회 API", description = "아카이브 별 블록을 조회하는 API")
-    //    @GetMapping("/{archiveId}")
-    //    public BlockCreateResponse getBlock(@PathVariable Long archiveId) {
-    //        return blockService.getBlock(archiveId);
-    //    }
+    @Operation(summary = "아카이브 별 블록 조회 API", description = "아카이브 별 블록을 조회하는 API")
+    @GetMapping("/{archiveId}")
+    public List<GetBlockResponse> getBlocksByArchiveId(@PathVariable Long archiveId) {
+        return blockService.getBlock(archiveId);
+    }
 
     @Operation(summary = "블록 제목 수정 API", description = "블록의 제목을 수정하는 API")
     @PatchMapping("/title/{blockId}")

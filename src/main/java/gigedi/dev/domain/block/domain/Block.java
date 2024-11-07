@@ -58,6 +58,10 @@ public class Block extends BaseTimeEntity {
     @JoinColumn(name = "figma_id", nullable = false)
     private Figma figma;
 
+    public void increaseShootCount() {
+        this.shootCount++;
+    }
+
     @Builder(access = AccessLevel.PRIVATE)
     private Block(
             String title,
