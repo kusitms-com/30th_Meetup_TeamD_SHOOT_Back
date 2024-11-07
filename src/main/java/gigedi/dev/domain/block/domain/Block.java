@@ -62,6 +62,10 @@ public class Block extends BaseTimeEntity {
         this.shootCount++;
     }
 
+    public void deleteBlock() {
+        this.deletedAt = LocalDateTime.now();
+    }
+
     @Builder(access = AccessLevel.PRIVATE)
     private Block(
             String title,

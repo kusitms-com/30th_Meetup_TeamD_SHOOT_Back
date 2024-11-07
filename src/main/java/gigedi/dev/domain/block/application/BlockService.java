@@ -89,14 +89,12 @@ public class BlockService {
     }
 
     public void deleteBlock(Long blockId) {
-        final Figma figma = figmaUtil.getCurrentFigma();
-
         Block block =
                 blockRepository
                         .findById(blockId)
                         .orElseThrow(() -> new CustomException(ErrorCode.BLOCK_NOT_FOUND));
 
-        blockRepository.delete(block);
+        block.deleteBlock();
     }
 
     public Archive getArchiveById(Long archiveId) {
