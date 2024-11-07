@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class BlockCreateResponse {
+public class CreateBlockResponse {
     private Long blockId;
     private String title;
     private double xCoordinate;

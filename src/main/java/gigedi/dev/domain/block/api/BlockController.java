@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gigedi.dev.domain.block.application.BlockService;
-import gigedi.dev.domain.block.dto.request.BlockCreateRequest;
-import gigedi.dev.domain.block.dto.request.BlockUpdateRequest;
-import gigedi.dev.domain.block.dto.response.BlockCreateResponse;
+import gigedi.dev.domain.block.dto.request.CreateBlockRequest;
+import gigedi.dev.domain.block.dto.request.UpdateBlockRequest;
+import gigedi.dev.domain.block.dto.response.CreateBlockResponse;
 import gigedi.dev.domain.block.dto.response.GetBlockResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,8 +29,8 @@ public class BlockController {
 
     @Operation(summary = "블록 생성 API", description = "새로운 블록을 생성하는 API")
     @PostMapping("/{archiveId}")
-    public BlockCreateResponse createBlock(
-            @PathVariable Long archiveId, @RequestBody BlockCreateRequest request) {
+    public CreateBlockResponse createBlock(
+            @PathVariable Long archiveId, @RequestBody CreateBlockRequest request) {
         return blockService.createBlock(archiveId, request);
     }
 
@@ -42,8 +42,8 @@ public class BlockController {
 
     @Operation(summary = "블록 제목 수정 API", description = "블록의 제목을 수정하는 API")
     @PatchMapping("/title/{blockId}")
-    public BlockCreateResponse updateBlockTitle(
-            @PathVariable Long blockId, @RequestBody BlockUpdateRequest request) {
+    public CreateBlockResponse updateBlockTitle(
+            @PathVariable Long blockId, @RequestBody UpdateBlockRequest request) {
         return blockService.updateBlockTitle(blockId, request);
     }
 

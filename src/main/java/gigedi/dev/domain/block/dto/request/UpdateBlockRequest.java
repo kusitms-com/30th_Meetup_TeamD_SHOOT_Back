@@ -7,10 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BlockCreateRequest {
+public class UpdateBlockRequest {
     private String title;
-    private double xCoordinate;
-    private double yCoordinate;
-    private double height;
-    private double width;
 }

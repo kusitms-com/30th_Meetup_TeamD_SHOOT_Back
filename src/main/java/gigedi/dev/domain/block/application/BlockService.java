@@ -12,9 +12,9 @@ import gigedi.dev.domain.auth.dao.FigmaRepository;
 import gigedi.dev.domain.auth.domain.Figma;
 import gigedi.dev.domain.block.dao.BlockRepository;
 import gigedi.dev.domain.block.domain.Block;
-import gigedi.dev.domain.block.dto.request.BlockCreateRequest;
-import gigedi.dev.domain.block.dto.request.BlockUpdateRequest;
-import gigedi.dev.domain.block.dto.response.BlockCreateResponse;
+import gigedi.dev.domain.block.dto.request.CreateBlockRequest;
+import gigedi.dev.domain.block.dto.request.UpdateBlockRequest;
+import gigedi.dev.domain.block.dto.response.CreateBlockResponse;
 import gigedi.dev.domain.block.dto.response.GetBlockResponse;
 import gigedi.dev.global.error.exception.CustomException;
 import gigedi.dev.global.error.exception.ErrorCode;
@@ -32,7 +32,7 @@ public class BlockService {
     private final FigmaRepository figmaRepository;
     private final FigmaUtil figmaUtil;
 
-    public BlockCreateResponse createBlock(Long archiveId, BlockCreateRequest request) {
+    public CreateBlockResponse createBlock(Long archiveId, CreateBlockRequest request) {
         final Figma figma = figmaUtil.getCurrentFigma();
         Archive archive = getArchiveById(archiveId);
         archive.increaseBlockCount();
@@ -48,7 +48,7 @@ public class BlockService {
                                 archive,
                                 figma));
 
-        return new BlockCreateResponse(
+        return new CreateBlockResponse(
                 block.getBlockId(),
                 block.getTitle(),
                 block.getXCoordinate(),
@@ -70,8 +70,7 @@ public class BlockService {
         return blocks;
     }
 
-    public BlockCreateResponse updateBlockTitle(Long blockId, BlockUpdateRequest request) {
-        final Figma figma = figmaUtil.getCurrentFigma();
+    public CreateBlockResponse updateBlockTitle(Long blockId, UpdateBlockRequest request) {
 
         Block block =
                 blockRepository
@@ -80,7 +79,7 @@ public class BlockService {
 
         block.setTitle(request.getTitle());
 
-        return new BlockCreateResponse(
+        return new CreateBlockResponse(
                 block.getBlockId(),
                 block.getTitle(),
                 block.getXCoordinate(),
