@@ -46,41 +46,19 @@ public class BlockService {
                                 archive,
                                 figma));
 
-        return new CreateBlockResponse(
-                block.getBlockId(),
-                block.getTitle(),
-                block.getXCoordinate(),
-                block.getYCoordinate(),
-                block.getHeight(),
-                block.getWidth());
+        return new CreateBlockResponse(block);
     }
 
     public List<GetBlockResponse> getBlock(Long archiveId) {
         return blockRepository.findByArchive_ArchiveIdAndDeletedAtIsNull(archiveId).stream()
-                .map(
-                        block ->
-                                new GetBlockResponse(
-                                        block.getBlockId(),
-                                        block.getTitle(),
-                                        block.getShootCount(),
-                                        block.getXCoordinate(),
-                                        block.getYCoordinate(),
-                                        block.getHeight(),
-                                        block.getWidth()))
+                .map(GetBlockResponse::new)
                 .collect(Collectors.toList());
     }
 
     public CreateBlockResponse updateBlockTitle(Long blockId, UpdateBlockRequest request) {
         Block block = getBlockById(blockId);
         block.setTitle(request.getTitle());
-
-        return new CreateBlockResponse(
-                block.getBlockId(),
-                block.getTitle(),
-                block.getXCoordinate(),
-                block.getYCoordinate(),
-                block.getHeight(),
-                block.getWidth());
+        return new CreateBlockResponse(block);
     }
 
     public void deleteBlock(Long blockId) {
