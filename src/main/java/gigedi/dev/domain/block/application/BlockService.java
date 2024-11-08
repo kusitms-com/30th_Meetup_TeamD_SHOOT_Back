@@ -58,16 +58,18 @@ public class BlockService {
     }
 
     public List<GetBlockResponse> getBlock(Long archiveId) {
-        List<GetBlockResponse> blocks =
-                blockRepository.findByArchive_ArchiveIdAndDeletedAtIsNull(archiveId).stream()
-                        .map(
-                                block ->
-                                        new GetBlockResponse(
-                                                block.getBlockId(),
-                                                block.getTitle(),
-                                                block.getShootCount()))
-                        .collect(Collectors.toList());
-        return blocks;
+        return blockRepository.findByArchive_ArchiveIdAndDeletedAtIsNull(archiveId).stream()
+                .map(
+                        block ->
+                                new GetBlockResponse(
+                                        block.getBlockId(),
+                                        block.getTitle(),
+                                        block.getShootCount(),
+                                        block.getXCoordinate(),
+                                        block.getYCoordinate(),
+                                        block.getHeight(),
+                                        block.getWidth()))
+                .collect(Collectors.toList());
     }
 
     public CreateBlockResponse updateBlockTitle(Long blockId, UpdateBlockRequest request) {
