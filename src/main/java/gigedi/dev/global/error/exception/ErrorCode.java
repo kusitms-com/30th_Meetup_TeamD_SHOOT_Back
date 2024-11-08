@@ -39,6 +39,7 @@ public enum ErrorCode {
 
     // Block
     BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 블록을 찾을 수 없습니다."),
+    BLOCK_EXCEED_LIMIT(HttpStatus.BAD_REQUEST, "아카이브 내 블록 개수는 최대 20개입니다."),
 
     // Figma
     FIGMA_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 Figma 정보를 찾을 수 없습니다."),
