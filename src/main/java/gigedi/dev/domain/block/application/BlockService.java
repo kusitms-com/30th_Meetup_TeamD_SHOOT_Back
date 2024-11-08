@@ -6,9 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gigedi.dev.domain.archive.dao.ArchiveRepository;
+import gigedi.dev.domain.archive.application.ArchiveService;
 import gigedi.dev.domain.archive.domain.Archive;
-import gigedi.dev.domain.auth.dao.FigmaRepository;
 import gigedi.dev.domain.auth.domain.Figma;
 import gigedi.dev.domain.block.dao.BlockRepository;
 import gigedi.dev.domain.block.domain.Block;
@@ -27,14 +26,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BlockService {
     private final MemberUtil memberUtil;
-    private final ArchiveRepository archiveRepository;
     private final BlockRepository blockRepository;
-    private final FigmaRepository figmaRepository;
+    private final ArchiveService archiveService;
     private final FigmaUtil figmaUtil;
 
     public CreateBlockResponse createBlock(Long archiveId, CreateBlockRequest request) {
         final Figma figma = figmaUtil.getCurrentFigma();
-        Archive archive = getArchiveById(archiveId);
+        Archive archive = archiveService.getArchiveById(archiveId);
         archive.increaseBlockCount();
 
         Block block =
@@ -90,12 +88,6 @@ public class BlockService {
         Archive archive = block.getArchive();
         archive.decreaseBlockCount();
         block.deleteBlock();
-    }
-
-    public Archive getArchiveById(Long archiveId) {
-        return archiveRepository
-                .findByArchiveIdAndDeletedAtIsNull(archiveId)
-                .orElseThrow(() -> new CustomException(ErrorCode.ARCHIVE_NOT_FOUND));
     }
 
     public Block getBlockById(Long blockId) {
