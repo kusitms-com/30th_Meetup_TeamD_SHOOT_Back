@@ -35,7 +35,7 @@ public class BlockService {
         Archive archive = archiveService.getArchiveById(archiveId);
 
         int blockCount = archive.getBlockCount();
-        if (blockCount >= 20) {
+        if (blockCount >= FigmaConstants.MaxCount) {
             throw new CustomException(ErrorCode.BLOCK_EXCEED_LIMIT);
         }
 
