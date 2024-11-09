@@ -1,4 +1,4 @@
-package gigedi.dev.global.common.model;
+package gigedi.dev.domain.config;
 
 import java.time.LocalDateTime;
 

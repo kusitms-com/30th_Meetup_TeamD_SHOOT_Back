@@ -13,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 
 import gigedi.dev.domain.archive.domain.Archive;
 import gigedi.dev.domain.auth.domain.Figma;
-import gigedi.dev.global.common.model.BaseTimeEntity;
+import gigedi.dev.domain.config.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
