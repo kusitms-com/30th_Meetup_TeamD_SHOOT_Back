@@ -23,6 +23,12 @@ public class AuthController {
         return authService.googleSocialLogin(code);
     }
 
+    @Operation(summary = "피그마 소셜 로그인", description = "회원가입 및 로그인을 진행하는 API")
+    @GetMapping("/code/figma")
+    public TokenPairResponse figmaSocialLogin(@RequestParam String code) {
+        return authService.figmaSocialLogin(code);
+    }
+
     @Operation(summary = "토큰 재발급", description = "엑세스 토큰 및 리프테시 토큰을 모두 재발급합니다.")
     @PostMapping("/refresh")
     public TokenPairResponse refreshToken(@RequestBody TokenRefreshRequest request) {

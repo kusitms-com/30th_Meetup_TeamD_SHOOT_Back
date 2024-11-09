@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import gigedi.dev.domain.auth.dto.AccessTokenDto;
 import gigedi.dev.domain.auth.dto.RefreshTokenDto;
 import gigedi.dev.domain.auth.dto.request.TokenRefreshRequest;
+import gigedi.dev.domain.auth.dto.response.FigmaLoginResponse;
 import gigedi.dev.domain.auth.dto.response.GoogleLoginResponse;
 import gigedi.dev.domain.auth.dto.response.TokenPairResponse;
 import gigedi.dev.domain.member.dao.MemberRepository;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService {
     private final GoogleService googleService;
+    private final FigmaService figmaService;
     private final IdTokenVerifier idTokenVerifier;
     private final MemberRepository memberRepository;
     private final JwtTokenService jwtTokenService;
@@ -33,6 +35,13 @@ public class AuthService {
         Member member = getOrCreateMember(user);
         googleService.saveGoogleRefreshToken(member.getId(), response.getRefreshToken());
         return createTokenPair(member);
+    }
+
+    public TokenPairResponse figmaSocialLogin(String code) {
+        FigmaLoginResponse response = figmaService.getAccessTokenByFigmaLogin(code);
+        Member member = getOrCreateMember(response);
+        figmaService.saveFigmaToken(member.getId(), response.getAccessToken());
+        return jwtTokenService.createTokenPair(member);
     }
 
     public TokenPairResponse refreshToken(TokenRefreshRequest request) {
