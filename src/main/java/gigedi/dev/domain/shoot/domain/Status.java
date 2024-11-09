@@ -6,9 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Status {
-    YET("YET"),
-    DOING("DOING"),
-    DONE("DONE");
-
-    private final String value;
+    YET,
+    DOING,
+    DONE;
 }
