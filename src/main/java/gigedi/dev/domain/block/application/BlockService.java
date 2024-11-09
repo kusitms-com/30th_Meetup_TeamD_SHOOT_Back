@@ -15,6 +15,7 @@ import gigedi.dev.domain.block.dto.request.CreateBlockRequest;
 import gigedi.dev.domain.block.dto.request.UpdateBlockRequest;
 import gigedi.dev.domain.block.dto.response.CreateBlockResponse;
 import gigedi.dev.domain.block.dto.response.GetBlockResponse;
+import gigedi.dev.global.common.constants.FigmaConstants;
 import gigedi.dev.global.error.exception.CustomException;
 import gigedi.dev.global.error.exception.ErrorCode;
 import gigedi.dev.global.util.FigmaUtil;
@@ -40,7 +41,7 @@ public class BlockService {
 
         String title = request.getTitle();
         if (title == null || title.trim().isEmpty()) {
-            title = "New Block";
+            title = FigmaConstants.NEW_BLOCK_NAME;
         }
 
         title = blockTitleService.generateUniqueTitle(title);

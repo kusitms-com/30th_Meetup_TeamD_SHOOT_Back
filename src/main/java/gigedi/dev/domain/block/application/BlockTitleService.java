@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import gigedi.dev.domain.block.dao.BlockRepository;
+import gigedi.dev.global.common.constants.FigmaConstants;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -30,7 +31,7 @@ public class BlockTitleService {
     }
 
     private String removeNumberSuffix(String title) {
-        Pattern pattern = Pattern.compile("(.*?)(\\(\\d+\\))?$");
+        Pattern pattern = Pattern.compile(FigmaConstants.TITLE_REGEX);
         Matcher matcher = pattern.matcher(title);
         if (matcher.matches()) {
             return matcher.group(1).trim();

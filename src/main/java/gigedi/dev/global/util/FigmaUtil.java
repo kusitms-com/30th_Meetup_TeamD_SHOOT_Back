@@ -1,7 +1,7 @@
 package gigedi.dev.global.util;
 
-import static gigedi.dev.global.common.constants.FigmaConstants.FIGMA_ID_ATTRIBUTE;
-import static gigedi.dev.global.common.constants.FigmaConstants.FILE_ID_ATTRIBUTE;
+import static gigedi.dev.global.common.constants.HeaderConstants.FIGMA_ID_ATTRIBUTE;
+import static gigedi.dev.global.common.constants.HeaderConstants.FILE_ID_ATTRIBUTE;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
