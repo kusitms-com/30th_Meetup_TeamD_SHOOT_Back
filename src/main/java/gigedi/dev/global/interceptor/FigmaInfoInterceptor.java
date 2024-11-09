@@ -1,6 +1,6 @@
 package gigedi.dev.global.interceptor;
 
-import static gigedi.dev.global.common.constants.FigmaConstants.*;
+import static gigedi.dev.global.common.constants.HeaderConstants.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

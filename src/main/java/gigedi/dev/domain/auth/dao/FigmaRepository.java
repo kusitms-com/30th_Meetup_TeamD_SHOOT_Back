@@ -9,5 +9,7 @@ import gigedi.dev.domain.auth.domain.Figma;
 
 @Repository
 public interface FigmaRepository extends JpaRepository<Figma, Long> {
+    Optional<Figma> findByMemberId(Long memberId);
+
     Optional<Figma> findByFigmaUserId(String figmaUserId);
 }
