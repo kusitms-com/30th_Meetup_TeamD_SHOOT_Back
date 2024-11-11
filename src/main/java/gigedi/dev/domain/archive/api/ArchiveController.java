@@ -1,5 +1,7 @@
 package gigedi.dev.domain.archive.api;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.*;
 
 import gigedi.dev.domain.archive.application.ArchiveService;
@@ -20,5 +22,11 @@ public class ArchiveController {
     @PostMapping
     public ArchiveInfoResponse createArchive(@RequestBody ArchiveCreateRequest request) {
         return archiveService.createArchive(request);
+    }
+
+    @Operation(summary = "아카이브 조회", description = "파일에 있는 모든 아카이브를 조회하는 API")
+    @GetMapping
+    public List<ArchiveInfoResponse> getArchiveList() {
+        return archiveService.getArchiveList();
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import gigedi.dev.domain.archive.domain.Archive;
+import gigedi.dev.domain.file.domain.File;
 
 @Repository
 public interface ArchiveRepository extends JpaRepository<Archive, Long> {
@@ -16,4 +17,6 @@ public interface ArchiveRepository extends JpaRepository<Archive, Long> {
     @Query(
             "SELECT a.title FROM Archive a WHERE a.title = :baseTitle OR a.title LIKE CONCAT(:baseTitle, '%')")
     List<String> findTitlesByBaseExact(String baseTitle);
+
+    List<Archive> findByFileAndDeletedAtIsNull(File file);
 }

@@ -1,5 +1,8 @@
 package gigedi.dev.domain.archive.application;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +46,13 @@ public class ArchiveService {
                         Archive.createArchive(archiveTitle, currentFile, currentFigma));
         currentFile.increaseArchiveCount();
         return ArchiveInfoResponse.from(createdArchive);
+    }
+
+    public List<ArchiveInfoResponse> getArchiveList() {
+        File currentFile = figmaUtil.getCurrentFile();
+        return archiveRepository.findByFileAndDeletedAtIsNull(currentFile).stream()
+                .map(ArchiveInfoResponse::from)
+                .collect(Collectors.toList());
     }
 
     public Archive getArchiveById(Long archiveId) {
