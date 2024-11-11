@@ -15,7 +15,7 @@ public interface ArchiveRepository extends JpaRepository<Archive, Long> {
     Optional<Archive> findByArchiveIdAndDeletedAtIsNull(Long archiveId);
 
     @Query(
-            "SELECT a.title FROM Archive a WHERE a.title = :baseTitle OR a.title LIKE CONCAT(:baseTitle, '%')")
+            "SELECT a.title FROM Archive a WHERE a.deletedAt IS NULL AND (a.title = :baseTitle OR a.title LIKE CONCAT(:baseTitle, '%'))")
     List<String> findTitlesByBaseExact(String baseTitle);
 
     List<Archive> findByFileAndDeletedAtIsNull(File file);

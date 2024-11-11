@@ -57,15 +57,23 @@ public class ArchiveService {
     }
 
     public ArchiveInfoResponse updateArchiveTitle(Long archiveId, UpdateArchiveRequest request) {
+        File currentFile = figmaUtil.getCurrentFile();
         String newTitle = archiveTitleService.generateUniqueTitle(request.archiveTitle());
         Archive archive = getArchiveById(archiveId);
-        validateArchiveExistInFile(archive);
+        validateArchiveExistInFile(archive, currentFile);
         archive.updateArchive(newTitle);
         return ArchiveInfoResponse.from(archive);
     }
 
-    private void validateArchiveExistInFile(Archive archive) {
+    public void deleteArchive(Long archiveId) {
         File currentFile = figmaUtil.getCurrentFile();
+        Archive archive = getArchiveById(archiveId);
+        validateArchiveExistInFile(archive, currentFile);
+        currentFile.decreaseArchiveCount();
+        archive.deleteArchive();
+    }
+
+    private void validateArchiveExistInFile(Archive archive, File currentFile) {
         if (!archive.getFile().equals(currentFile)) {
             throw new CustomException(ErrorCode.ARCHIVE_NOT_EXIST_IN_FILE);
         }

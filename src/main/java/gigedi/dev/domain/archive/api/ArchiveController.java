@@ -33,8 +33,14 @@ public class ArchiveController {
 
     @Operation(summary = "아카이브 제목 수정", description = "아카이브의 제목을 수정하는 API")
     @PatchMapping("/title/{archiveId}")
-    public ArchiveInfoResponse getArchiveList(
+    public ArchiveInfoResponse updateArchiveTitle(
             @PathVariable Long archiveId, @RequestBody UpdateArchiveRequest request) {
         return archiveService.updateArchiveTitle(archiveId, request);
+    }
+
+    @Operation(summary = "아카이브 삭제", description = "아카이브를 삭제하는 API")
+    @DeleteMapping("/{archiveId}")
+    public void deleteArchive(@PathVariable Long archiveId) {
+        archiveService.deleteArchive(archiveId);
     }
 }

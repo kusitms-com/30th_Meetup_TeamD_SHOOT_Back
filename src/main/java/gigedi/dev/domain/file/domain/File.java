@@ -38,4 +38,8 @@ public class File {
     public void increaseArchiveCount() {
         this.archiveCount++;
     }
+
+    public void decreaseArchiveCount() {
+        this.archiveCount--;
+    }
 }

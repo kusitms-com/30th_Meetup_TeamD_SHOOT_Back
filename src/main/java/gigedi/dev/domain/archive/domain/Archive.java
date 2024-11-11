@@ -67,4 +67,8 @@ public class Archive extends BaseTimeEntity {
     public void updateArchive(String newTitle) {
         this.title = newTitle;
     }
+
+    public void deleteArchive() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }
