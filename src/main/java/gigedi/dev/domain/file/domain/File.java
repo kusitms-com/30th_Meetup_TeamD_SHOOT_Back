@@ -34,4 +34,8 @@ public class File {
     public static File createFile(String fileKey) {
         return File.builder().fileKey(fileKey).archiveCount(0).build();
     }
+
+    public void increaseArchiveCount() {
+        this.archiveCount++;
+    }
 }
