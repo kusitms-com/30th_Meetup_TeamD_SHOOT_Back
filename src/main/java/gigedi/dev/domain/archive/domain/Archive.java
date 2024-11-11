@@ -63,4 +63,12 @@ public class Archive extends BaseTimeEntity {
     public static Archive createArchive(String title, File file, Figma figma) {
         return Archive.builder().title(title).blockCount(0).file(file).figma(figma).build();
     }
+
+    public void updateArchive(String newTitle) {
+        this.title = newTitle;
+    }
+
+    public void deleteArchive() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }

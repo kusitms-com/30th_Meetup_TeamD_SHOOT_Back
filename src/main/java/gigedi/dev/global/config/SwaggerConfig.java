@@ -19,14 +19,18 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
                         version = "v1"),
         servers = {
             @Server(url = "http://localhost:8080", description = "서버 local URL"),
-            @Server(url = "https://api.gigedi.com", description = "서버 배포 URL")
+            @Server(url = "https://api.shoot-manage.com", description = "서버 배포 URL")
         })
 @Configuration
 public class SwaggerConfig {
 
     @Bean
     public OpenAPI openAPI() {
-        SecurityRequirement securityRequirement = new SecurityRequirement().addList("bearerAuth");
+        SecurityRequirement securityRequirement =
+                new SecurityRequirement()
+                        .addList("bearerAuth")
+                        .addList("figmaId")
+                        .addList("fileId");
 
         Components components =
                 new Components()
@@ -37,7 +41,19 @@ public class SwaggerConfig {
                                         .scheme("bearer")
                                         .bearerFormat("JWT")
                                         .in(SecurityScheme.In.HEADER)
-                                        .name("Authorization"));
+                                        .name("Authorization"))
+                        .addSecuritySchemes(
+                                "figmaId",
+                                new SecurityScheme()
+                                        .type(SecurityScheme.Type.APIKEY)
+                                        .in(SecurityScheme.In.HEADER)
+                                        .name("Figma-Id"))
+                        .addSecuritySchemes(
+                                "fileId",
+                                new SecurityScheme()
+                                        .type(SecurityScheme.Type.APIKEY)
+                                        .in(SecurityScheme.In.HEADER)
+                                        .name("File-Id"));
 
         return new OpenAPI().components(components).addSecurityItem(securityRequirement);
     }
