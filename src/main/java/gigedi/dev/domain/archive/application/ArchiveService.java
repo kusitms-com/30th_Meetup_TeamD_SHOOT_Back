@@ -8,7 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import gigedi.dev.domain.archive.dao.ArchiveRepository;
 import gigedi.dev.domain.archive.domain.Archive;
-import gigedi.dev.domain.archive.dto.request.ArchiveCreateRequest;
+import gigedi.dev.domain.archive.dto.request.CreateArchiveRequest;
+import gigedi.dev.domain.archive.dto.request.UpdateArchiveRequest;
 import gigedi.dev.domain.archive.dto.response.ArchiveInfoResponse;
 import gigedi.dev.domain.auth.domain.Figma;
 import gigedi.dev.domain.file.domain.File;
@@ -26,7 +27,7 @@ public class ArchiveService {
     private final ArchiveTitleService archiveTitleService;
     private final FigmaUtil figmaUtil;
 
-    public ArchiveInfoResponse createArchive(ArchiveCreateRequest request) {
+    public ArchiveInfoResponse createArchive(CreateArchiveRequest request) {
         File currentFile = figmaUtil.getCurrentFile();
         Figma currentFigma = figmaUtil.getCurrentFigma();
 
@@ -53,6 +54,21 @@ public class ArchiveService {
         return archiveRepository.findByFileAndDeletedAtIsNull(currentFile).stream()
                 .map(ArchiveInfoResponse::from)
                 .collect(Collectors.toList());
+    }
+
+    public ArchiveInfoResponse updateArchiveTitle(Long archiveId, UpdateArchiveRequest request) {
+        String newTitle = archiveTitleService.generateUniqueTitle(request.archiveTitle());
+        Archive archive = getArchiveById(archiveId);
+        validateArchiveExistInFile(archive);
+        archive.updateArchive(newTitle);
+        return ArchiveInfoResponse.from(archive);
+    }
+
+    private void validateArchiveExistInFile(Archive archive) {
+        File currentFile = figmaUtil.getCurrentFile();
+        if (!archive.getFile().equals(currentFile)) {
+            throw new CustomException(ErrorCode.ARCHIVE_NOT_EXIST_IN_FILE);
+        }
     }
 
     public Archive getArchiveById(Long archiveId) {

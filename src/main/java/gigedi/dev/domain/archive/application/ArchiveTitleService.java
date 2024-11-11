@@ -1,8 +1,6 @@
 package gigedi.dev.domain.archive.application;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +21,9 @@ public class ArchiveTitleService {
     public String generateUniqueTitle(String newTitle) {
         validateTitleLength(newTitle);
         List<String> existingTitles = archiveRepository.findTitlesByBaseExact(newTitle);
+        if (!existingTitles.contains(newTitle)) {
+            return newTitle;
+        }
         return findUniqueTitle(newTitle, existingTitles);
     }
 
@@ -34,37 +35,37 @@ public class ArchiveTitleService {
 
     private String findUniqueTitle(String newTitle, List<String> existingTitles) {
         int maxNumber = findMaxNumber(newTitle, existingTitles);
-        String baseTitle = newTitle;
-        int nextNumber = maxNumber + 1;
+        String uniqueTitle = newTitle;
+        int suffixLength = String.valueOf(maxNumber + 1).length();
 
-        while (true) {
-            String suffix = String.valueOf(nextNumber);
-            int suffixLength = suffix.length();
-
-            while (baseTitle.length() + suffixLength > MAX_TITLE_LENGTH) {
-                baseTitle = baseTitle.substring(0, baseTitle.length() - 1);
-            }
-
-            String uniqueTitle = baseTitle + suffix;
-            if (!existingTitles.contains(uniqueTitle)) {
-                return uniqueTitle;
-            }
-
-            nextNumber++;
+        while (uniqueTitle.length() + suffixLength > MAX_TITLE_LENGTH) {
+            uniqueTitle = uniqueTitle.substring(0, uniqueTitle.length() - 1);
         }
+
+        return uniqueTitle + (maxNumber + 1);
     }
 
     private int findMaxNumber(String newTitle, List<String> existingTitles) {
         int maxNumber = 0;
-        Pattern pattern =
-                Pattern.compile(Pattern.quote(newTitle) + FigmaConstants.ARCHIVE_TITLE_REGEX);
         for (String title : existingTitles) {
-            Matcher matcher = pattern.matcher(title);
-            if (matcher.matches()) {
-                int number = Integer.parseInt(matcher.group(1));
-                maxNumber = Math.max(maxNumber, number);
+            if (!title.equals(newTitle)) {
+                int number = extractNumber(title, newTitle);
+                if (number > maxNumber) {
+                    maxNumber = number;
+                }
             }
         }
         return maxNumber;
+    }
+
+    private int extractNumber(String title, String newTitle) {
+        if (title.length() <= newTitle.length()) {
+            return 0;
+        }
+        String suffix = title.substring(newTitle.length());
+        if (suffix.matches(FigmaConstants.ARCHIVE_TITLE_REGEX)) {
+            return Integer.parseInt(suffix);
+        }
+        return 0;
     }
 }

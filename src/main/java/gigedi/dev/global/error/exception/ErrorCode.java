@@ -38,6 +38,7 @@ public enum ErrorCode {
     ARCHIVE_INVALID_MEMBER(HttpStatus.FORBIDDEN, "해당 아카이브에 접근할 수 없는 회원입니다."),
     ARCHIVE_EXCEED_LIMIT(HttpStatus.BAD_REQUEST, "파일 내 아카이브 개수는 최대 20개입니다."),
     ARCHIVE_TITLE_EXCEED_LIMIT(HttpStatus.BAD_REQUEST, "아카이브의 제목 최대 길이는 30입니다."),
+    ARCHIVE_NOT_EXIST_IN_FILE(HttpStatus.BAD_REQUEST, "파일에 해당 아카이브가 존재하지 않습니다."),
 
     // Block
     BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 블록을 찾을 수 없습니다."),

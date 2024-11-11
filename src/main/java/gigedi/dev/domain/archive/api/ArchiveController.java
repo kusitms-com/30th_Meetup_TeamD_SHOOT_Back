@@ -5,7 +5,8 @@ import java.util.List;
 import org.springframework.web.bind.annotation.*;
 
 import gigedi.dev.domain.archive.application.ArchiveService;
-import gigedi.dev.domain.archive.dto.request.ArchiveCreateRequest;
+import gigedi.dev.domain.archive.dto.request.CreateArchiveRequest;
+import gigedi.dev.domain.archive.dto.request.UpdateArchiveRequest;
 import gigedi.dev.domain.archive.dto.response.ArchiveInfoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,7 +21,7 @@ public class ArchiveController {
 
     @Operation(summary = "아카이브 생성", description = "아카이브 생성을 진행하는 API")
     @PostMapping
-    public ArchiveInfoResponse createArchive(@RequestBody ArchiveCreateRequest request) {
+    public ArchiveInfoResponse createArchive(@RequestBody CreateArchiveRequest request) {
         return archiveService.createArchive(request);
     }
 
@@ -28,5 +29,12 @@ public class ArchiveController {
     @GetMapping
     public List<ArchiveInfoResponse> getArchiveList() {
         return archiveService.getArchiveList();
+    }
+
+    @Operation(summary = "아카이브 제목 수정", description = "아카이브의 제목을 수정하는 API")
+    @PatchMapping("/title/{archiveId}")
+    public ArchiveInfoResponse getArchiveList(
+            @PathVariable Long archiveId, @RequestBody UpdateArchiveRequest request) {
+        return archiveService.updateArchiveTitle(archiveId, request);
     }
 }
