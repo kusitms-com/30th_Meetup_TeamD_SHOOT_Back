@@ -15,7 +15,7 @@ public class SecurityUtil {
         try {
             return Long.parseLong(authentication.getName());
         } catch (Exception e) {
-            throw new CustomException(ErrorCode.AUTH_NOT_FOUND);
+            throw new CustomException(ErrorCode.ACCESS_TOKEN_EXPIRED);
         }
     }
 }
