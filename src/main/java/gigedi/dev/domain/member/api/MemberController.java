@@ -26,4 +26,10 @@ public class MemberController {
     public List<MemberInfoResponse> memberInfo() {
         return memberService.findMemberInfo();
     }
+
+    @Operation(summary = "회원 개인 정보 조회", description = "회원 개인 정보를 조회하는 API")
+    @GetMapping
+    public MemberInfoResponse getMember() {
+        return memberService.findMember();
+    }
 }
