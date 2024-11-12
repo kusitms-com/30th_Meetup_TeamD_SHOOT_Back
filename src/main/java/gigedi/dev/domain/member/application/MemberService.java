@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import gigedi.dev.domain.member.dao.MemberRepository;
 import gigedi.dev.domain.member.domain.Member;
 import gigedi.dev.domain.member.dto.response.MemberInfoResponse;
+import gigedi.dev.global.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,9 +16,15 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final MemberUtil memberUtil;
 
     public List<MemberInfoResponse> findMemberInfo() {
         List<Member> members = memberRepository.findAll();
         return members.stream().map(MemberInfoResponse::new).toList();
+    }
+
+    public MemberInfoResponse findMember() {
+        Member currentMember = memberUtil.getCurrentMember();
+        return new MemberInfoResponse(currentMember);
     }
 }
