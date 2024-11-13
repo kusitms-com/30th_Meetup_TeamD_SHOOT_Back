@@ -50,15 +50,11 @@ jobs:
           tags: |
             type=sha,prefix=
             type=ref,event=branch
-
       - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags:
-            ${{ secrets.DOCKER_USERNAME }}/shoot:latest
-            ${{ secrets.DOCKER_USERNAME }}/shoot:${{ github.sha }}
+        run: |
+          docker build . -t ${{ secrets.DOCKER_USERNAME }}/shoot:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/shoot:latest
+
 
       - name: Deploy on EC2
         uses: appleboy/ssh-action@master
