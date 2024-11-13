@@ -4,6 +4,8 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import gigedi.dev.domain.auth.dao.FigmaRepository;
+import gigedi.dev.domain.auth.domain.Figma;
 import gigedi.dev.domain.auth.dto.AccessTokenDto;
 import gigedi.dev.domain.auth.dto.RefreshTokenDto;
 import gigedi.dev.domain.auth.dto.request.TokenRefreshRequest;
@@ -26,6 +28,7 @@ public class AuthService {
     private final FigmaService figmaService;
     private final IdTokenVerifier idTokenVerifier;
     private final MemberRepository memberRepository;
+    private final FigmaRepository figmaRepository;
     private final JwtTokenService jwtTokenService;
     private final MemberUtil memberUtil;
 
@@ -38,9 +41,22 @@ public class AuthService {
     }
 
     public UserInfoResponse figmaSocialLogin(String code) {
-        // final Member currentMember = memberUtil.getCurrentMember();
+        final Member currentMember = memberUtil.getCurrentMember();
         String accessToken = figmaService.getAccessToken(code);
-        return figmaService.getUserInfo(accessToken);
+        UserInfoResponse userInfo = figmaService.getUserInfo(accessToken);
+        saveFigmaAccountInfo(currentMember, userInfo);
+        return userInfo;
+    }
+
+    private void saveFigmaAccountInfo(Member member, UserInfoResponse userInfo) {
+        Figma figma =
+                Figma.createFigma(
+                        userInfo.getUserName(),
+                        userInfo.getEmail(),
+                        userInfo.getImgUrl(),
+                        userInfo.getUserId(),
+                        member);
+        figmaRepository.save(figma);
     }
 
     public TokenPairResponse refreshToken(TokenRefreshRequest request) {
