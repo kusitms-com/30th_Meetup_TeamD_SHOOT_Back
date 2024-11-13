@@ -14,6 +14,7 @@ import gigedi.dev.global.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class DiscordAuthService {
     private final MemberUtil memberUtil;
@@ -35,7 +36,6 @@ public class DiscordAuthService {
         return saveDiscord(loginResponse, userInfo, dmChannel);
     }
 
-    @Transactional
     private DiscordInfoResponse saveDiscord(
             DiscordLoginResponse loginResponse,
             DiscordUserResponse userInfo,
