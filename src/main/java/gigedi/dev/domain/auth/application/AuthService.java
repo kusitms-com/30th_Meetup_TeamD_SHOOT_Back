@@ -7,9 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import gigedi.dev.domain.auth.dto.AccessTokenDto;
 import gigedi.dev.domain.auth.dto.RefreshTokenDto;
 import gigedi.dev.domain.auth.dto.request.TokenRefreshRequest;
-import gigedi.dev.domain.auth.dto.response.FigmaLoginResponse;
 import gigedi.dev.domain.auth.dto.response.GoogleLoginResponse;
 import gigedi.dev.domain.auth.dto.response.TokenPairResponse;
+import gigedi.dev.domain.auth.dto.response.UserInfoResponse;
 import gigedi.dev.domain.member.dao.MemberRepository;
 import gigedi.dev.domain.member.domain.Member;
 import gigedi.dev.domain.member.domain.OauthInfo;
@@ -37,11 +37,9 @@ public class AuthService {
         return createTokenPair(member);
     }
 
-    public TokenPairResponse figmaSocialLogin(String code) {
-        FigmaLoginResponse response = figmaService.getAccessTokenByFigmaLogin(code);
-        Member member = getOrCreateMember(response);
-        figmaService.saveFigmaToken(member.getId(), response.getAccessToken());
-        return jwtTokenService.createTokenPair(member);
+    public UserInfoResponse figmaSocialLogin(String code) {
+        String accessToken = figmaService.getAccessToken(code);
+        return figmaService.getUserInfo(accessToken);
     }
 
     public TokenPairResponse refreshToken(TokenRefreshRequest request) {

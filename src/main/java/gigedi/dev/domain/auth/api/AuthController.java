@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import gigedi.dev.domain.auth.application.AuthService;
 import gigedi.dev.domain.auth.dto.request.TokenRefreshRequest;
 import gigedi.dev.domain.auth.dto.response.TokenPairResponse;
+import gigedi.dev.domain.auth.dto.response.UserInfoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class AuthController {
 
     @Operation(summary = "피그마 소셜 로그인", description = "회원가입 및 로그인을 진행하는 API")
     @GetMapping("/code/figma")
-    public TokenPairResponse figmaSocialLogin(@RequestParam String code) {
+    public UserInfoResponse figmaSocialLogin(@RequestParam String code) {
         return authService.figmaSocialLogin(code);
     }
 

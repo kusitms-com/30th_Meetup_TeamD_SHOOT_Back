@@ -1,60 +1,93 @@
 package gigedi.dev.domain.auth.application;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import java.time.Duration;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
-import gigedi.dev.domain.auth.dao.FigmaRepository;
-import gigedi.dev.domain.auth.domain.Figma;
-import gigedi.dev.domain.auth.dto.response.FigmaLoginResponse;
-import gigedi.dev.global.error.exception.CustomException;
-import gigedi.dev.global.error.exception.ErrorCode;
-import gigedi.dev.infra.config.oauth.FigmaProperties;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Slf4j
+import gigedi.dev.domain.auth.dto.response.FigmaTokenResponse;
+import gigedi.dev.domain.auth.dto.response.FigmaUserResponse;
+import gigedi.dev.domain.auth.dto.response.UserInfoResponse;
+
 @Service
-@Transactional
-@RequiredArgsConstructor
 public class FigmaService {
-    private final FigmaProperties figmaProperties;
-    private final FigmaRepository figmaRepository;
-    private final RestClient restClient;
 
-    public FigmaLoginResponse getAccessTokenByFigmaLogin(String code) {
+    @Value("${figma.client.id}")
+    private String clientId;
+
+    @Value("${figma.client.secret}")
+    private String clientSecret;
+
+    @Value("${figma.redirect.uri}")
+    private String redirectUri;
+
+    private final RestTemplate restTemplate = new RestTemplate();
+    private final WebClient webClient = WebClient.create();
+
+    public String getAccessToken(String code) {
+        String responseBody =
+                webClient
+                        .post()
+                        .uri("https://www.figma.com/api/oauth/token")
+                        .header("Content-Type", "application/x-www-form-urlencoded")
+                        .bodyValue(
+                                "client_id="
+                                        + "OSEOcfCVk52Uci4uNnFRb9"
+                                        + "&client_secret="
+                                        + "zCW4KZz6VnxAnqDdfrs7OdiMvzUHKo"
+                                        + "&redirect_uri="
+                                        + "http://localhost:3000"
+                                        + "&code="
+                                        + code
+                                        + "&grant_type=authorization_code")
+                        .retrieve()
+                        .bodyToMono(String.class)
+                        .timeout(Duration.ofSeconds(10))
+                        .doOnError(
+                                error ->
+                                        System.out.println(
+                                                "Error retrieving access token: "
+                                                        + error.getMessage()))
+                        .block();
+
+        System.out.println("Response Body: " + responseBody); // 응답 내용 확인
+
         try {
-            MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-            formData.add("client_id", figmaProperties.getClientId());
-            formData.add("client_secret", figmaProperties.getClientSecret());
-            formData.add("redirect_uri", figmaProperties.getRedirectUri());
-            formData.add("code", code);
-            formData.add("grant_type", "authorization_code");
+            // 응답 JSON을 FigmaTokenResponse로 파싱
+            ObjectMapper objectMapper = new ObjectMapper();
+            FigmaTokenResponse figmaTokenResponse =
+                    objectMapper.readValue(responseBody, FigmaTokenResponse.class);
 
-            return restClient
-                    .post()
-                    .uri(figmaProperties.getTokenUrl())
-                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                    .body(formData)
-                    .retrieve()
-                    .onStatus(
-                            status -> !status.is2xxSuccessful(),
-                            (request, response) -> {
-                                log.error("Figma OAuth 요청 실패: {}", response.getStatusCode());
-                                throw new CustomException(ErrorCode.FIGMA_LOGIN_FAILED);
-                            })
-                    .body(FigmaLoginResponse.class);
+            return figmaTokenResponse.getAccessToken();
         } catch (Exception e) {
-            log.error("Figma 로그인 중 예외 발생 : {}", e.getMessage(), e);
-            throw new CustomException(ErrorCode.FIGMA_LOGIN_FAILED);
+            System.out.println("Error parsing JSON to FigmaTokenResponse: " + e.getMessage());
+            throw new RuntimeException("Failed to parse response to FigmaTokenResponse", e);
         }
     }
 
-    public void saveFigmaToken(Long memberId, String accessToken) {
-        figmaRepository.save(Figma.of(memberId, accessToken));
+    public UserInfoResponse getUserInfo(String accessToken) {
+        return webClient
+                .get()
+                .uri("https://api.figma.com/v1/me")
+                .header("Authorization", "Bearer " + accessToken)
+                .retrieve()
+                .bodyToMono(FigmaUserResponse.class)
+                .map(
+                        figmaUserResponse ->
+                                new UserInfoResponse(
+                                        figmaUserResponse.getHandle(),
+                                        figmaUserResponse.getEmail(),
+                                        figmaUserResponse.getImg_url(),
+                                        figmaUserResponse.getId()))
+                .doOnError(
+                        error -> {
+                            System.out.println("Error retrieving user info: " + error.getMessage());
+                            throw new RuntimeException("Failed to retrieve user info", error);
+                        })
+                .block();
     }
 }
