@@ -2,7 +2,7 @@ name: Dev Deploy to AWS
 
 on:
   push:
-    branches: [ "cicd/#41" ]
+    branches: [ "develop" ]
 
 jobs:
 
