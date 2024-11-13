@@ -44,7 +44,7 @@ public class Discord extends BaseTimeEntity {
     private String guildId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memeber_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @Builder(access = AccessLevel.PRIVATE)
