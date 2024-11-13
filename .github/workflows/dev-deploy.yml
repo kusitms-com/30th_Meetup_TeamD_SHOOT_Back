@@ -46,7 +46,7 @@ jobs:
         id: metadata
         uses: docker/metadata-action@v4
         with:
-          images: ${{ secrets.DOCKER_USERNAME }}/shoot:latest
+          images: ${{ secrets.DOCKER_USERNAME }}/shoot
           tags: |
             type=sha,prefix=
             type=ref,event=branch
