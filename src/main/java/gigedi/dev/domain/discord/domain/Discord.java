@@ -1,4 +1,4 @@
-package gigedi.dev.domain.auth.domain;
+package gigedi.dev.domain.discord.domain;
 
 import java.time.LocalDateTime;
 
@@ -31,22 +31,52 @@ public class Discord extends BaseTimeEntity {
 
     private LocalDateTime deletedAt;
 
-    private String accessToken;
+    @Column(nullable = false)
+    private String dmChannel;
+
+    @Column(nullable = false)
     private String refreshToken;
+
+    @Column(nullable = false)
+    private String discordUserId;
+
+    @Column(nullable = false)
+    private String guildId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memeber_id")
     private Member member;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Discord(String email, String accessToken, String refreshToken, Member member) {
-        this.email = email;
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
+    private Discord(
+            Member member,
+            String email,
+            String refreshToken,
+            String discordUserId,
+            String dmChannel,
+            String guildId) {
         this.member = member;
+        this.email = email;
+        this.discordUserId = discordUserId;
+        this.refreshToken = refreshToken;
+        this.dmChannel = dmChannel;
+        this.guildId = guildId;
     }
 
-    public static Discord createDiscord(String email, Member member) {
-        return Discord.builder().email(email).member(member).build();
+    public static Discord createDiscord(
+            Member member,
+            String email,
+            String refreshToken,
+            String discordUserId,
+            String dmChannel,
+            String guildId) {
+        return Discord.builder()
+                .member(member)
+                .email(email)
+                .discordUserId(discordUserId)
+                .refreshToken(refreshToken)
+                .dmChannel(dmChannel)
+                .guildId(guildId)
+                .build();
     }
 }

@@ -1,0 +1,25 @@
+package gigedi.dev.domain.discord.api;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import gigedi.dev.domain.discord.application.DiscordAuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+
+@Tag(name = "Discord Auth", description = " Discord Auth 관련 API")
+@RestController
+@RequestMapping("/api/v1/auth/discord")
+@RequiredArgsConstructor
+public class DiscordAuthController {
+    private final DiscordAuthService discordAuthService;
+
+    @Operation(summary = "디스코드 소셜 로그인", description = "디스코드 연결을 진행하는 API")
+    @GetMapping("/code")
+    public void googleSocialLogin(@RequestParam String code) {
+        discordAuthService.discordConnect(code);
+    }
+}
