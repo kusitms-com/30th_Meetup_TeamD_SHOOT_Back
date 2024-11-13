@@ -65,9 +65,13 @@ jobs:
           username: ${{ secrets.AWS_EC2_USER }}
           key: ${{ secrets.AWS_EC2_SSH_KEY }}
           port: 22
-          script: |
+          script: |a
             cd /home/ubuntu
+            # 최신 이미지를 pull
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shoot:latest
+            # 기존 컨테이너 내리기
             docker-compose down
+            # 이미지 강제 빌드 (캐시 무효화)
             docker-compose build --no-cache
+            # 최신 이미지로 새 컨테이너 생성
             docker-compose up -d --force-recreate
