@@ -61,7 +61,7 @@ class SecurityUtilTest {
             // when & then
             CustomException exception =
                     assertThrows(CustomException.class, () -> securityUtil.getCurrentMemberId());
-            assertEquals(ErrorCode.AUTH_NOT_FOUND, exception.getErrorCode());
+            assertEquals(ErrorCode.ACCESS_TOKEN_EXPIRED, exception.getErrorCode());
         }
     }
 }
