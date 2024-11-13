@@ -14,7 +14,7 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 @OpenAPIDefinition(
         info =
                 @Info(
-                        title = "GIGEDI🚀🚀",
+                        title = "GIGEDI🚀",
                         description = "큐시즘 30기 밋업 프로젝트 기개디 API 문서",
                         version = "v1"),
         servers = {

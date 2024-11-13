@@ -67,5 +67,4 @@ jobs:
             cd /home/ubuntu
             docker pull ${{ secrets.DOCKER_USERNAME }}/shoot:latest
             docker-compose down
-            docker-compose build 
             docker-compose up -d 
