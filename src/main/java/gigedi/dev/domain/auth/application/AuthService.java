@@ -51,10 +51,10 @@ public class AuthService {
     private void saveFigmaAccountInfo(Member member, UserInfoResponse userInfo) {
         Figma figma =
                 Figma.createFigma(
-                        userInfo.getUserName(),
-                        userInfo.getEmail(),
-                        userInfo.getImgUrl(),
-                        userInfo.getUserId(),
+                        userInfo.userName(),
+                        userInfo.email(),
+                        userInfo.ImgUrl(),
+                        userInfo.userId(),
                         member);
         figmaRepository.save(figma);
     }
