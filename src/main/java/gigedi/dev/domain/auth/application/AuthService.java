@@ -1,5 +1,7 @@
 package gigedi.dev.domain.auth.application;
 
+import java.util.List;
+
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +11,7 @@ import gigedi.dev.domain.auth.domain.Figma;
 import gigedi.dev.domain.auth.dto.AccessTokenDto;
 import gigedi.dev.domain.auth.dto.RefreshTokenDto;
 import gigedi.dev.domain.auth.dto.request.TokenRefreshRequest;
+import gigedi.dev.domain.auth.dto.response.FigmaAccountResponse;
 import gigedi.dev.domain.auth.dto.response.GoogleLoginResponse;
 import gigedi.dev.domain.auth.dto.response.TokenPairResponse;
 import gigedi.dev.domain.auth.dto.response.UserInfoResponse;
@@ -57,6 +60,22 @@ public class AuthService {
                         userInfo.userId(),
                         member);
         figmaRepository.save(figma);
+    }
+
+    public List<FigmaAccountResponse> getFigmaAccount() {
+        final Member currentMember = memberUtil.getCurrentMember();
+        List<Figma> figmaList = figmaRepository.findByMember(currentMember);
+        if (figmaList.isEmpty()) {
+            throw new CustomException(ErrorCode.FIGMA_ACCOUNT_NOT_FOUND);
+        }
+        return figmaList.stream()
+                .map(figma -> new FigmaAccountResponse(figma.getFigmaUserId(), figma.getEmail()))
+                .toList();
+    }
+
+    public void disconnectFigmaAccount() {
+        final Member currentMember = memberUtil.getCurrentMember();
+        figmaRepository.deleteByMember(currentMember);
     }
 
     public TokenPairResponse refreshToken(TokenRefreshRequest request) {
