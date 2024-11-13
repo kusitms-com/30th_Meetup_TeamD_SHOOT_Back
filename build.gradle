@@ -53,6 +53,8 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'com.h2database:h2'
+
+	implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
 }
 
 def jacocoDir = layout.buildDirectory.dir("reports/")
