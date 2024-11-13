@@ -13,7 +13,9 @@ import gigedi.dev.domain.member.domain.Member;
 public interface FigmaRepository extends JpaRepository<Figma, Long> {
     Optional<Figma> findByMemberId(Long memberId);
 
-    List<Figma> findByMember(Member member);
+    List<Figma> findByMemberAndDeletedAtIsNull(Member member);
+
+    Optional<Figma> findByIdAndDeletedAtIsNull(Long figmaId);
 
     Optional<Figma> findByFigmaUserId(String figmaUserId);
 }

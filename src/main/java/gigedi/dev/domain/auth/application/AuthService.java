@@ -64,7 +64,7 @@ public class AuthService {
 
     public List<FigmaAccountResponse> getFigmaAccount() {
         final Member currentMember = memberUtil.getCurrentMember();
-        List<Figma> figmaList = figmaRepository.findByMember(currentMember);
+        List<Figma> figmaList = figmaRepository.findByMemberAndDeletedAtIsNull(currentMember);
         if (figmaList.isEmpty()) {
             throw new CustomException(ErrorCode.FIGMA_ACCOUNT_NOT_FOUND);
         }
@@ -73,9 +73,13 @@ public class AuthService {
                 .toList();
     }
 
-    public void disconnectFigmaAccount() {
-        final Member currentMember = memberUtil.getCurrentMember();
-        figmaRepository.deleteByMember(currentMember);
+    @Transactional
+    public void deleteFigmaAccount(Long figmaId) {
+        Figma figma =
+                figmaRepository
+                        .findByIdAndDeletedAtIsNull(figmaId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.FIGMA_ACCOUNT_NOT_FOUND));
+        figma.deleteFigmaAccount();
     }
 
     public TokenPairResponse refreshToken(TokenRefreshRequest request) {

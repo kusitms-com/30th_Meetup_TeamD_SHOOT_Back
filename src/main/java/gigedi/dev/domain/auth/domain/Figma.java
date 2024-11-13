@@ -1,5 +1,7 @@
 package gigedi.dev.domain.auth.domain;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -36,12 +38,19 @@ public class Figma extends BaseTimeEntity {
     @Column(nullable = false)
     private String figmaUserId;
 
+    @Column(nullable = true)
+    private LocalDateTime deletedAt;
+
     private String accessToken;
     private String refreshToken;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memeber_id")
     private Member member;
+
+    public void deleteFigmaAccount() {
+        this.deletedAt = LocalDateTime.now();
+    }
 
     @Builder(access = AccessLevel.PRIVATE)
     private Figma(

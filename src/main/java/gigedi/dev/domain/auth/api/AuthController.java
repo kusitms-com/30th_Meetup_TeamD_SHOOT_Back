@@ -41,8 +41,8 @@ public class AuthController {
 
     @Operation(summary = "연동된 피그마 계정 삭제", description = "연동된 피그마 계정을 삭제하는 API")
     @DeleteMapping("/figma/disconnect")
-    public ResponseEntity<Void> disconnectFigmaAccount() {
-        authService.disconnectFigmaAccount();
+    public ResponseEntity<Void> disconnectFigmaAccount(@RequestParam Long figmaId) {
+        authService.deleteFigmaAccount(figmaId);
         return ResponseEntity.ok().build();
     }
 
