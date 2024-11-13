@@ -38,6 +38,7 @@ public class AuthService {
     }
 
     public UserInfoResponse figmaSocialLogin(String code) {
+        // final Member currentMember = memberUtil.getCurrentMember();
         String accessToken = figmaService.getAccessToken(code);
         return figmaService.getUserInfo(accessToken);
     }

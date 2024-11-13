@@ -16,6 +16,9 @@ public final class SecurityConstants {
     public static final String GOOGLE_WITHDRAWAL_URL =
             "https://accounts.google.com/o/oauth2/revoke?token=";
 
+    public static final String FIGMA_GET_ID_TOKEN_URL = "https://www.figma.com/api/oauth/token";
+    public static final String FIGMA_GET_USER_INFO_URL = "https://api.figma.com/v1/me";
+
     public static final String TOKEN_ROLE_NAME = "role";
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String NONE = "";

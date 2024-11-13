@@ -10,6 +10,12 @@ oauth:
       secret: ${GOOGLE_CLIENT_SECRET}
       redirectUri: ${GOOGLE_REDIRECT_URI}
       grantType: ${GOOGLE_GRANT_TYPE}
+  figma:
+    client:
+      id: ${FIGMA_CLIENT_ID}
+      secret: ${FIGMA_CLIENT_SECRET}
+      redirectUri: ${FIGMA_REDIRECT_URI}
+      grantType: ${FIGMA_GRANT_TYPE}
 
 jwt:
   access-token-secret: ${JWT_ACCESS_TOKEN}
