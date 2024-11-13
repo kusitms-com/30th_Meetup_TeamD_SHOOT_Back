@@ -77,7 +77,7 @@ public class AuthService {
     public void deleteFigmaAccount(Long figmaId) {
         Figma figma =
                 figmaRepository
-                        .findByIdAndDeletedAtIsNull(figmaId)
+                        .findByFigmaIdAndDeletedAtIsNull(figmaId)
                         .orElseThrow(() -> new CustomException(ErrorCode.FIGMA_ACCOUNT_NOT_FOUND));
         figma.deleteFigmaAccount();
     }
