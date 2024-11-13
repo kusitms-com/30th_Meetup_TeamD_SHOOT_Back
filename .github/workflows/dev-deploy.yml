@@ -65,7 +65,7 @@ jobs:
           username: ${{ secrets.AWS_EC2_USER }}
           key: ${{ secrets.AWS_EC2_SSH_KEY }}
           port: 22
-          script: |a
+          script: |
             cd /home/ubuntu
             # 최신 이미지를 pull
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shoot:latest
