@@ -56,7 +56,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.metadata.outputs.tags }}
+          tags:
+            ${{ secrets.DOCKER_USERNAME }}/shoot:latest
+            ${{ secrets.DOCKER_USERNAME }}/shoot:${{ github.sha }}
 
       - name: Deploy on EC2
         uses: appleboy/ssh-action@master
@@ -67,11 +69,7 @@ jobs:
           port: 22
           script: |
             cd /home/ubuntu
-            # 최신 이미지를 pull
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/shoot:latest
-            # 기존 컨테이너 내리기
+            docker pull ${{ secrets.DOCKER_USERNAME }}/shoot:latest
             docker-compose down
-            # 이미지 강제 빌드 (캐시 무효화)
-            docker-compose build --no-cache
-            # 최신 이미지로 새 컨테이너 생성
-            docker-compose up -d --force-recreate
+            docker-compose build 
+            docker-compose up -d 
