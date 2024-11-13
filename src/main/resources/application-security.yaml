@@ -10,6 +10,12 @@ oauth:
       secret: ${GOOGLE_CLIENT_SECRET}
       redirectUri: ${GOOGLE_REDIRECT_URI}
       grantType: ${GOOGLE_GRANT_TYPE}
+  discord:
+    client:
+      id: ${DISCORD_CLIENT_ID}
+      secret: ${DISCORD_CLIENT_SECRET}
+      redirectUri: ${DISCORD_REDIRECT_URI}
+      botToken: ${DISCORD_BOT_TOKEN}
 
 jwt:
   access-token-secret: ${JWT_ACCESS_TOKEN}
