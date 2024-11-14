@@ -49,6 +49,7 @@ public enum ErrorCode {
     FIGMA_LOGIN_FAILED(HttpStatus.BAD_REQUEST, "Figma 로그인 과정에서 오류가 발생했습니다."),
     FIGMA_USER_INFO_FAILED(HttpStatus.BAD_REQUEST, "피그마 유저 정보를 불러오는 데 실패했습니다."),
     FIGMA_USER_INFO_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 피그마 유저 정보가 없습니다."),
+    FIGMA_ACCOUNT_NOT_FOUND(HttpStatus.BAD_REQUEST, "피그마 계정을 찾을 수 없습니다."),
 
     // Discord
     DISCORD_LOGIN_FAILED(HttpStatus.BAD_REQUEST, "디스코드 로그인에 실패하였습니다."),

@@ -1,10 +1,13 @@
 package gigedi.dev.domain.auth.api;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import gigedi.dev.domain.auth.application.AuthService;
 import gigedi.dev.domain.auth.dto.request.TokenRefreshRequest;
+import gigedi.dev.domain.auth.dto.response.FigmaAccountResponse;
 import gigedi.dev.domain.auth.dto.response.TokenPairResponse;
 import gigedi.dev.domain.auth.dto.response.UserInfoResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +31,19 @@ public class AuthController {
     @GetMapping("/code/figma")
     public UserInfoResponse figmaSocialLogin(@RequestParam String code) {
         return authService.figmaSocialLogin(code);
+    }
+
+    @Operation(summary = "연동된 피그마 계정 조회", description = "연동된 피그마 계정을 조회하는 API")
+    @GetMapping("/figma")
+    public List<FigmaAccountResponse> getFigmaAccount() {
+        return authService.getFigmaAccount();
+    }
+
+    @Operation(summary = "연동된 피그마 계정 삭제", description = "연동된 피그마 계정을 삭제하는 API")
+    @DeleteMapping("/figma/disconnect")
+    public ResponseEntity<Void> disconnectFigmaAccount(@RequestParam Long figmaId) {
+        authService.deleteFigmaAccount(figmaId);
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "토큰 재발급", description = "엑세스 토큰 및 리프테시 토큰을 모두 재발급합니다.")
