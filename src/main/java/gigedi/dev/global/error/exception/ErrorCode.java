@@ -50,6 +50,12 @@ public enum ErrorCode {
     FIGMA_USER_INFO_FAILED(HttpStatus.BAD_REQUEST, "피그마 유저 정보를 불러오는 데 실패했습니다."),
     FIGMA_USER_INFO_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 피그마 유저 정보가 없습니다."),
 
+    // Discord
+    DISCORD_LOGIN_FAILED(HttpStatus.BAD_REQUEST, "디스코드 로그인에 실패하였습니다."),
+    DISCORD_USER_INFO_FAILED(HttpStatus.BAD_REQUEST, "디스코드 사용자 정보 조회에 실패했습니다."),
+    DISCORD_DM_CHANNEL_CREATION_FAILED(HttpStatus.BAD_REQUEST, "디스코드 DM 채널 생성에 실패했습니다."),
+    DISCORD_GUILD_UPDATE_FAILED(HttpStatus.BAD_REQUEST, "디스코드 길드 설정에 실패했습니다."),
+
     // 추가
     GOOGLE_LOGIN_FAILED(HttpStatus.BAD_REQUEST, "구글 로그인 과정에서 오류가 발생했습니다."),
     GOOGLE_AUTH_NOT_FOUND(HttpStatus.BAD_REQUEST, "구글 리프레시 토큰이 존재하지 않습니다."),
@@ -58,7 +64,9 @@ public enum ErrorCode {
 
     FIGMA_INFO_NOT_FOUND(HttpStatus.BAD_REQUEST, "피그마 정보가 포함되지 않았습니다."),
     FIGMA_NOT_CONNECTED(HttpStatus.BAD_REQUEST, "피그마 계정이 연결되지 않았습니다."),
-    UNAUTHORIZED_FIGMA_ACCESS(HttpStatus.BAD_REQUEST, "해당 사용자와 피그마 계정이 연결되지 않았습니다.");
+    UNAUTHORIZED_FIGMA_ACCESS(HttpStatus.BAD_REQUEST, "해당 사용자와 피그마 계정이 연결되지 않았습니다."),
+
+    IMAGE_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류, 관리자에게 문의하세요");
 
     private final HttpStatus status;
     private final String message;

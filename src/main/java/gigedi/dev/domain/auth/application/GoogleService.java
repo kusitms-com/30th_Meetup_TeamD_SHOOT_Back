@@ -40,7 +40,7 @@ public class GoogleService {
 
             return restClient
                     .post()
-                    .uri(GET_ID_TOKEN_URL)
+                    .uri(GOOGLE_ID_TOKEN_URL)
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                     .body(formData)
                     .retrieve()
