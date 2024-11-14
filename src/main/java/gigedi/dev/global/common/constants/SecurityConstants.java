@@ -22,6 +22,8 @@ public final class SecurityConstants {
     public static final String DISCORD_CREATE_DM_CHANNEL_URL =
             "https://discord.com/api/v9/users/@me/channels";
     public static final String DISCORD_GUILD_URL = "https://discord.com/api/v10/guilds";
+    public static final String DISCORD_DISCONNECT_URL =
+            "https://discord.com/api/oauth2/token/revoke";
 
     public static final String FIGMA_GET_ID_TOKEN_URL = "https://www.figma.com/api/oauth/token";
     public static final String FIGMA_GET_USER_INFO_URL = "https://api.figma.com/v1/me";

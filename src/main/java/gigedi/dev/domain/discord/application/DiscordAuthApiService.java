@@ -99,4 +99,32 @@ public class DiscordAuthApiService {
             throw new CustomException(ErrorCode.DISCORD_TOKEN_REISSUE_FAILED);
         }
     }
+
+    public void disconnectDiscordAccount(String accessToken) {
+        try {
+            MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+            formData.add(CLIENT_ID_KEY, discordProperties.id());
+            formData.add(CLIENT_ID_SECRET, discordProperties.secret());
+            formData.add("token", accessToken);
+
+            restClient
+                    .post()
+                    .uri(DISCORD_DISCONNECT_URL)
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .body(formData)
+                    .retrieve()
+                    .onStatus(
+                            status -> !status.is2xxSuccessful(),
+                            (request, response) -> {
+                                log.error("Discord 연결 해제 실패: {}", response.getStatusCode());
+                                throw new CustomException(ErrorCode.DISCORD_DISCONNECT_FAILED);
+                            })
+                    .toBodilessEntity();
+
+            log.info("Discord 연결 해제 성공");
+        } catch (Exception e) {
+            log.error("Discord 연결 해제 중 예외 발생: {}", e.getMessage(), e);
+            throw new CustomException(ErrorCode.DISCORD_DISCONNECT_FAILED);
+        }
+    }
 }

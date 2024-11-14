@@ -83,4 +83,8 @@ public class Discord extends BaseTimeEntity {
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
+
+    public void disconnectDiscordAccount() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }

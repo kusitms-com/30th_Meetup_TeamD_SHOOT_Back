@@ -56,6 +56,9 @@ public class DiscordAuthService {
         ReissueDiscordTokenResponse tokenResponse =
                 discordAuthApiService.reissueDiscordToken(discordById.getRefreshToken());
         discordById.updateRefreshToken(tokenResponse.refreshToken());
+
+        discordAuthApiService.disconnectDiscordAccount(tokenResponse.accessToken());
+        discordById.disconnectDiscordAccount();
     }
 
     private Discord findDiscordById(Long discordId) {
