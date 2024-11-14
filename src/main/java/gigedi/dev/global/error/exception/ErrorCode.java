@@ -55,6 +55,9 @@ public enum ErrorCode {
     DISCORD_USER_INFO_FAILED(HttpStatus.BAD_REQUEST, "디스코드 사용자 정보 조회에 실패했습니다."),
     DISCORD_DM_CHANNEL_CREATION_FAILED(HttpStatus.BAD_REQUEST, "디스코드 DM 채널 생성에 실패했습니다."),
     DISCORD_GUILD_UPDATE_FAILED(HttpStatus.BAD_REQUEST, "디스코드 길드 설정에 실패했습니다."),
+    DISCORD_ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 디스코드 계정이 존재하지 않습니다."),
+    DISCORD_ACCOUNT_NOT_OWNER(HttpStatus.NOT_FOUND, "해당 디스코드 계정의 소유자가 아닙니다."),
+    DISCORD_TOKEN_REISSUE_FAILED(HttpStatus.BAD_REQUEST, "디스코드 토큰 재발급 과정에서 오류가 발생했습니다."),
 
     // 추가
     GOOGLE_LOGIN_FAILED(HttpStatus.BAD_REQUEST, "구글 로그인 과정에서 오류가 발생했습니다."),
