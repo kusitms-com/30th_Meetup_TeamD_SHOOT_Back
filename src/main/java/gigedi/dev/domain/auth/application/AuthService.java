@@ -1,5 +1,7 @@
 package gigedi.dev.domain.auth.application;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
@@ -36,7 +38,9 @@ public class AuthService {
     private final MemberUtil memberUtil;
 
     public TokenPairResponse googleSocialLogin(String code) {
-        GoogleLoginResponse response = googleService.getIdTokenByGoogleLogin(code);
+        GoogleLoginResponse response =
+                googleService.getIdTokenByGoogleLogin(
+                        URLDecoder.decode(code, StandardCharsets.UTF_8));
         OidcUser user = idTokenVerifier.getOidcUser(response.getIdToken());
         Member member = getOrCreateMember(user);
         googleService.saveGoogleRefreshToken(member.getId(), response.getRefreshToken());
