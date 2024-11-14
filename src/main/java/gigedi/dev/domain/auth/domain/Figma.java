@@ -38,8 +38,7 @@ public class Figma extends BaseTimeEntity {
     @Column(nullable = false)
     private String figmaUserId;
 
-    @Column(nullable = true)
-    private LocalDateTime deletedAt;
+    @Column private LocalDateTime deletedAt;
 
     private String accessToken;
     private String refreshToken;
