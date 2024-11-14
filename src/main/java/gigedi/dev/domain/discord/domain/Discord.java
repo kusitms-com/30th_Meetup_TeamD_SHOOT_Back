@@ -79,4 +79,12 @@ public class Discord extends BaseTimeEntity {
                 .guildId(guildId)
                 .build();
     }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void disconnectDiscordAccount() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }

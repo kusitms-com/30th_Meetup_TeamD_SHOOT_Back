@@ -5,11 +5,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import gigedi.dev.domain.discord.dao.DiscordRepository;
 import gigedi.dev.domain.discord.domain.Discord;
-import gigedi.dev.domain.discord.dto.response.CreateDMChannelResponse;
-import gigedi.dev.domain.discord.dto.response.DiscordInfoResponse;
-import gigedi.dev.domain.discord.dto.response.DiscordLoginResponse;
-import gigedi.dev.domain.discord.dto.response.DiscordUserResponse;
+import gigedi.dev.domain.discord.dto.response.*;
 import gigedi.dev.domain.member.domain.Member;
+import gigedi.dev.global.error.exception.CustomException;
+import gigedi.dev.global.error.exception.ErrorCode;
 import gigedi.dev.global.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 
@@ -50,5 +49,28 @@ public class DiscordAuthService {
                         dmChannel.id(),
                         loginResponse.getGuildId());
         return DiscordInfoResponse.from(discordRepository.save(discord));
+    }
+
+    public void discordDisconnect(Long discordId) {
+        Discord discordById = findDiscordById(discordId);
+        ReissueDiscordTokenResponse tokenResponse =
+                discordAuthApiService.reissueDiscordToken(discordById.getRefreshToken());
+        discordById.updateRefreshToken(tokenResponse.refreshToken());
+
+        discordAuthApiService.disconnectDiscordAccount(tokenResponse.accessToken());
+        discordById.disconnectDiscordAccount();
+    }
+
+    private Discord findDiscordById(Long discordId) {
+        Member currentMember = memberUtil.getCurrentMember();
+        Discord discord =
+                discordRepository
+                        .findById(discordId)
+                        .orElseThrow(
+                                () -> new CustomException(ErrorCode.DISCORD_ACCOUNT_NOT_FOUND));
+        if (!discord.getMember().equals(currentMember)) {
+            throw new CustomException(ErrorCode.DISCORD_ACCOUNT_NOT_OWNER);
+        }
+        return discord;
     }
 }

@@ -1,9 +1,6 @@
 package gigedi.dev.domain.discord.api;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import gigedi.dev.domain.discord.application.DiscordAuthService;
 import gigedi.dev.domain.discord.dto.response.DiscordInfoResponse;
@@ -22,5 +19,11 @@ public class DiscordAuthController {
     @GetMapping("/code/discord")
     public DiscordInfoResponse discordSocialLogin(@RequestParam String code) {
         return discordAuthService.discordConnect(code);
+    }
+
+    @Operation(summary = "디스코드 연결 해제", description = "디스코드 연결을 해제하는 API")
+    @GetMapping("/discord/disconnect/{discordId}")
+    public void discordSocialLogin(@PathVariable Long discordId) {
+        discordAuthService.discordDisconnect(discordId);
     }
 }
