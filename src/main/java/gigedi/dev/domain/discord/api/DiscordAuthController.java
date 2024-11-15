@@ -22,8 +22,8 @@ public class DiscordAuthController {
     }
 
     @Operation(summary = "디스코드 연결 해제", description = "디스코드 연결을 해제하는 API")
-    @GetMapping("/discord/disconnect/{discordId}")
-    public void discordSocialLogin(@PathVariable Long discordId) {
-        discordAuthService.discordDisconnect(discordId);
+    @GetMapping("/discord/disconnect")
+    public void discordSocialLogin() {
+        discordAuthService.discordDisconnect();
     }
 }

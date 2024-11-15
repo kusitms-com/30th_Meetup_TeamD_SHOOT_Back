@@ -1,14 +1,14 @@
 package gigedi.dev.domain.discord.application;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gigedi.dev.domain.discord.dao.DiscordRepository;
 import gigedi.dev.domain.discord.domain.Discord;
 import gigedi.dev.domain.discord.dto.response.*;
 import gigedi.dev.domain.member.domain.Member;
-import gigedi.dev.global.error.exception.CustomException;
-import gigedi.dev.global.error.exception.ErrorCode;
 import gigedi.dev.global.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 
@@ -18,13 +18,15 @@ import lombok.RequiredArgsConstructor;
 public class DiscordAuthService {
     private final MemberUtil memberUtil;
     private final ImageConverter converter;
+    private final DiscordService discordService;
     private final DiscordAuthApiService discordAuthApiService;
     private final DiscordGuildApiService discordGuildApiService;
     private final DiscordDmApiService discordDmApiService;
-    private final DiscordRepository discordRepository;
 
     public DiscordInfoResponse discordConnect(String code) {
-        DiscordLoginResponse loginResponse = discordAuthApiService.discordLogin(code);
+        discordService.validateDiscordExistsForMember();
+        DiscordLoginResponse loginResponse =
+                discordAuthApiService.discordLogin(URLDecoder.decode(code, StandardCharsets.UTF_8));
         DiscordUserResponse userInfo =
                 discordAuthApiService.getDiscordUserInfo(loginResponse.accessToken());
 
@@ -48,29 +50,16 @@ public class DiscordAuthService {
                         userInfo.id(),
                         dmChannel.id(),
                         loginResponse.getGuildId());
-        return DiscordInfoResponse.from(discordRepository.save(discord));
+        return DiscordInfoResponse.from(discordService.saveDiscord(discord));
     }
 
-    public void discordDisconnect(Long discordId) {
-        Discord discordById = findDiscordById(discordId);
+    public void discordDisconnect() {
+        Discord discord = discordService.findConnectedDiscord();
         ReissueDiscordTokenResponse tokenResponse =
-                discordAuthApiService.reissueDiscordToken(discordById.getRefreshToken());
-        discordById.updateRefreshToken(tokenResponse.refreshToken());
+                discordAuthApiService.reissueDiscordToken(discord.getRefreshToken());
+        discord.updateRefreshToken(tokenResponse.refreshToken());
 
         discordAuthApiService.disconnectDiscordAccount(tokenResponse.accessToken());
-        discordById.disconnectDiscordAccount();
-    }
-
-    private Discord findDiscordById(Long discordId) {
-        Member currentMember = memberUtil.getCurrentMember();
-        Discord discord =
-                discordRepository
-                        .findById(discordId)
-                        .orElseThrow(
-                                () -> new CustomException(ErrorCode.DISCORD_ACCOUNT_NOT_FOUND));
-        if (!discord.getMember().equals(currentMember)) {
-            throw new CustomException(ErrorCode.DISCORD_ACCOUNT_NOT_OWNER);
-        }
-        return discord;
+        discordService.deleteDiscord(discord);
     }
 }

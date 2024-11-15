@@ -1,15 +1,6 @@
 package gigedi.dev.domain.discord.domain;
 
-import java.time.LocalDateTime;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import gigedi.dev.domain.config.BaseTimeEntity;
 import gigedi.dev.domain.member.domain.Member;
@@ -29,8 +20,6 @@ public class Discord extends BaseTimeEntity {
     @Column(nullable = false)
     private String email;
 
-    private LocalDateTime deletedAt;
-
     @Column(nullable = false)
     private String dmChannel;
 
@@ -43,7 +32,7 @@ public class Discord extends BaseTimeEntity {
     @Column(nullable = false)
     private String guildId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -82,9 +71,5 @@ public class Discord extends BaseTimeEntity {
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
-    }
-
-    public void disconnectDiscordAccount() {
-        this.deletedAt = LocalDateTime.now();
     }
 }
