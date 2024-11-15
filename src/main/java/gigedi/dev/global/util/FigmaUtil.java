@@ -70,7 +70,7 @@ public class FigmaUtil {
 
         Figma figma =
                 figmaRepository
-                        .findByFigmaUserId(figmaId)
+                        .findByFigmaUserIdAndDeletedAtIsNull(figmaId)
                         .orElseThrow(() -> new CustomException(ErrorCode.FIGMA_NOT_CONNECTED));
 
         if (!figma.getMember().equals(currentMember)) {

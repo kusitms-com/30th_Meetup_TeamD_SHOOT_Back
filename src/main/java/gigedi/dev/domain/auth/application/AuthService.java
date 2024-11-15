@@ -32,6 +32,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final FigmaRepository figmaRepository;
     private final JwtTokenService jwtTokenService;
+    private final FigmaService figmaService;
     private final MemberUtil memberUtil;
 
     public TokenPairResponse googleSocialLogin(String code) {
@@ -48,6 +49,7 @@ public class AuthService {
         final Member currentMember = memberUtil.getCurrentMember();
         FigmaTokenResponse tokenResponse =
                 figmaApiService.getAccessToken(URLDecoder.decode(code, StandardCharsets.UTF_8));
+        figmaService.validateFigmaAccountAlreadyExists(tokenResponse.userId().toString());
         UserInfoResponse userInfo = figmaApiService.getUserInfo(tokenResponse.accessToken());
         saveFigmaAccountInfo(currentMember, userInfo, tokenResponse);
         return userInfo;
