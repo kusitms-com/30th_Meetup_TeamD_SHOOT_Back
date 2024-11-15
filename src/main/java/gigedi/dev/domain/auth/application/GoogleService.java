@@ -34,7 +34,7 @@ public class GoogleService {
             MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
             formData.add(CODE_KEY, code);
             formData.add(CLIENT_ID_KEY, googleProperties.getId());
-            formData.add(CLIENT_ID_SECRET, googleProperties.getSecret());
+            formData.add(CLIENT_SECRET_KEY, googleProperties.getSecret());
             formData.add(REDIRECT_URI_KEY, googleProperties.getRedirectUri());
             formData.add(GRANT_TYPE_KEY, googleProperties.getGrantType());
 
@@ -77,7 +77,7 @@ public class GoogleService {
             formData.add(GRANT_TYPE_KEY, REISSUE_GRANT_TYPE_VALUE);
             formData.add(REFRESH_TOKEN, refreshToken);
             formData.add(CLIENT_ID_KEY, googleProperties.getId());
-            formData.add(CLIENT_ID_SECRET, googleProperties.getSecret());
+            formData.add(CLIENT_SECRET_KEY, googleProperties.getSecret());
 
             return restClient
                     .post()

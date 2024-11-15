@@ -1,7 +1,6 @@
 package gigedi.dev.domain.auth.application;
 
-import static gigedi.dev.global.common.constants.SecurityConstants.FIGMA_GET_ID_TOKEN_URL;
-import static gigedi.dev.global.common.constants.SecurityConstants.FIGMA_GET_USER_INFO_URL;
+import static gigedi.dev.global.common.constants.SecurityConstants.*;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -24,19 +23,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class FigmaService {
+public class FigmaApiService {
 
     private final FigmaProperties figmaProperties;
     private final RestClient restClient;
 
-    public String getAccessToken(String code) {
+    public FigmaTokenResponse getAccessToken(String code) {
         try {
             MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-            formData.add("client_id", figmaProperties.id());
-            formData.add("client_secret", figmaProperties.secret());
-            formData.add("redirect_uri", figmaProperties.redirectUri());
-            formData.add("code", code);
-            formData.add("grant_type", "authorization_code");
+            formData.add(CLIENT_ID_KEY, figmaProperties.id());
+            formData.add(CLIENT_SECRET_KEY, figmaProperties.secret());
+            formData.add(REDIRECT_URI_KEY, figmaProperties.redirectUri());
+            formData.add(CODE_KEY, code);
+            formData.add(GRANT_TYPE_KEY, LOGIN_GRANT_TYPE_VALUE);
 
             String responseBody =
                     restClient
@@ -58,11 +57,7 @@ public class FigmaService {
                             .body(String.class);
 
             ObjectMapper objectMapper = new ObjectMapper();
-            FigmaTokenResponse figmaTokenResponse =
-                    objectMapper.readValue(responseBody, FigmaTokenResponse.class);
-
-            return figmaTokenResponse.accessToken();
-
+            return objectMapper.readValue(responseBody, FigmaTokenResponse.class);
         } catch (Exception e) {
             log.error("Figma 로그인 중 예외 발생 : {}", e.getMessage(), e);
             throw new CustomException(ErrorCode.FIGMA_LOGIN_FAILED);
@@ -70,16 +65,12 @@ public class FigmaService {
     }
 
     public UserInfoResponse getUserInfo(String accessToken) {
-        String userInfoUrl = FIGMA_GET_USER_INFO_URL;
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(accessToken);
-
         try {
             FigmaUserResponse figmaUserResponse =
                     restClient
                             .get()
-                            .uri(userInfoUrl)
-                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                            .uri(FIGMA_GET_USER_INFO_URL)
+                            .header(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + accessToken)
                             .retrieve()
                             .onStatus(
                                     status -> !status.is2xxSuccessful(),
