@@ -60,6 +60,7 @@ public enum ErrorCode {
     DISCORD_ACCOUNT_NOT_OWNER(HttpStatus.NOT_FOUND, "해당 디스코드 계정의 소유자가 아닙니다."),
     DISCORD_TOKEN_REISSUE_FAILED(HttpStatus.BAD_REQUEST, "디스코드 토큰 재발급 과정에서 오류가 발생했습니다."),
     DISCORD_DISCONNECT_FAILED(HttpStatus.BAD_REQUEST, "디스코드 연결 해제 과정에서 오류가 발생했습니다."),
+    DISCORD_ACCOUNT_ALREADY_EXISTS(HttpStatus.NOT_FOUND, "연결된 디스코드 계정이 이미 존재합니다."),
 
     // 추가
     GOOGLE_LOGIN_FAILED(HttpStatus.BAD_REQUEST, "구글 로그인 과정에서 오류가 발생했습니다."),
