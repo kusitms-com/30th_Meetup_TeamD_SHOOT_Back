@@ -45,7 +45,8 @@ public enum ErrorCode {
     BLOCK_EXCEED_LIMIT(HttpStatus.BAD_REQUEST, "아카이브 내 블록 개수는 최대 20개입니다."),
 
     // Shoot
-    SHOOT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 샷을 찾을 수 없습니다."),
+    SHOOT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 슛을 찾을 수 없습니다."),
+    SHOOT_STATUS_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 슛 상태를 찾을 수 없습니다."),
 
     // Figma
     FIGMA_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 Figma 정보를 찾을 수 없습니다."),

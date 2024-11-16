@@ -11,6 +11,7 @@ import gigedi.dev.domain.auth.domain.Figma;
 import gigedi.dev.domain.shoot.dao.ShootRepository;
 import gigedi.dev.domain.shoot.dao.ShootStatusRepository;
 import gigedi.dev.domain.shoot.domain.Shoot;
+import gigedi.dev.domain.shoot.domain.ShootStatus;
 import gigedi.dev.domain.shoot.domain.Status;
 import gigedi.dev.domain.shoot.dto.response.GetShootResponse;
 import gigedi.dev.global.error.exception.CustomException;
@@ -22,10 +23,10 @@ import lombok.RequiredArgsConstructor;
 public class ShootService {
     private final ShootRepository shootRepository;
     private final ShootStatusRepository shootStatusRepository;
+    private final ShootStatusService shootStatusService;
 
     public List<GetShootResponse> getShoot(Long blockId) {
         List<Shoot> shoots = shootRepository.findAllByBlock_BlockIdAndDeletedAtIsNull(blockId);
-
         return shoots.stream()
                 .map(
                         shoot -> {
@@ -55,10 +56,21 @@ public class ShootService {
 
     @Transactional
     public void deleteShoot(Long shootId) {
-        Shoot shoot =
-                shootRepository
-                        .findByShootIdAndDeletedAtIsNull(shootId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.SHOOT_NOT_FOUND));
+        Shoot shoot = findValidShoot(shootId);
         shoot.deleteShoot();
+    }
+
+    @Transactional
+    public void updateShootStatus(Long shootId, Status newStatus) {
+        Shoot shoot = findValidShoot(shootId);
+        ShootStatus shootStatus = shootStatusService.getShootStatusByShootId(shoot.getShootId());
+        shootStatus.updateStatus(newStatus);
+    }
+
+    @Transactional
+    public Shoot findValidShoot(Long shootId) {
+        return shootRepository
+                .findByShootIdAndDeletedAtIsNull(shootId)
+                .orElseThrow(() -> new CustomException(ErrorCode.SHOOT_NOT_FOUND));
     }
 }

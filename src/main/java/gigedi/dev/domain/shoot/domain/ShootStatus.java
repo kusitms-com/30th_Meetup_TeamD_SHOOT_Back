@@ -38,6 +38,10 @@ public class ShootStatus extends BaseTimeEntity {
     @JoinColumn(name = "shoot_id")
     private Shoot shoot;
 
+    public void updateStatus(Status newStatus) {
+        this.status = newStatus;
+    }
+
     @Builder(access = AccessLevel.PRIVATE)
     private ShootStatus(Status status, Figma figma, Shoot shoot) {
         this.status = status;
