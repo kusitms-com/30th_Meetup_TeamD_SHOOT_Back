@@ -2,6 +2,7 @@ package gigedi.dev.domain.shoot.api;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,5 +25,11 @@ public class ShootController {
     @GetMapping("/{blockId}")
     public List<GetShootResponse> getBlocksByArchiveId(@PathVariable Long blockId) {
         return shootService.getShoot(blockId);
+    }
+
+    @Operation(summary = "특정 Shoot 삭제 API", description = "하나의 Shoot을 삭제하는 API")
+    @DeleteMapping("/{shootId}")
+    public void deleteShoot(@PathVariable Long shootId) {
+        shootService.deleteShoot(shootId);
     }
 }

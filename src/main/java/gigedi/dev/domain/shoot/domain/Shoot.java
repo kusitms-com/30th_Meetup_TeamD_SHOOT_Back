@@ -40,6 +40,10 @@ public class Shoot extends BaseTimeEntity {
     @JoinColumn(name = "block_id")
     private Block block;
 
+    public void deleteShoot() {
+        this.deletedAt = LocalDateTime.now();
+    }
+
     @Builder(access = AccessLevel.PRIVATE)
     private Shoot(String content, Figma figma, Block block) {
         this.content = content;
