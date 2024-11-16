@@ -1,18 +1,13 @@
 package gigedi.dev.domain.member.dto.response;
 
 import gigedi.dev.domain.member.domain.Member;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
-public class MemberInfoResponse {
-
-    private Long id;
-    private String username;
-
-    public MemberInfoResponse(Member member) {
-        this.id = member.getId();
-        this.username = member.getOauthInfo().getUsername();
+public record MemberInfoResponse(Long userId, String username, String profileImg, String email) {
+    public static MemberInfoResponse from(Member member) {
+        return new MemberInfoResponse(
+                member.getId(),
+                member.getOauthInfo().getUsername(),
+                member.getOauthInfo().getProfileImg(),
+                member.getOauthInfo().getGoogleEmail());
     }
 }

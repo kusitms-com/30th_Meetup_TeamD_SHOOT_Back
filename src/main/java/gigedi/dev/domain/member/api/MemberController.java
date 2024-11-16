@@ -1,7 +1,5 @@
 package gigedi.dev.domain.member.api;
 
-import java.util.List;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,14 +18,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    // 예시
-    @Operation(summary = "회원 정보 조회", description = "회원 정보를 조회하는 API")
-    @GetMapping("/info")
-    public List<MemberInfoResponse> memberInfo() {
-        return memberService.findMemberInfo();
-    }
-
-    @Operation(summary = "회원 개인 정보 조회", description = "회원 개인 정보를 조회하는 API")
+    @Operation(summary = "웹사이트 프로필 조회", description = "웹사이트 헤더 프로필을 조회하는 API")
     @GetMapping
     public MemberInfoResponse getMember() {
         return memberService.findMember();
