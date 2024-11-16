@@ -44,6 +44,11 @@ public enum ErrorCode {
     BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 블록을 찾을 수 없습니다."),
     BLOCK_EXCEED_LIMIT(HttpStatus.BAD_REQUEST, "아카이브 내 블록 개수는 최대 20개입니다."),
 
+    // Shoot
+    SHOOT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 슛을 찾을 수 없습니다."),
+    SHOOT_STATUS_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 슛 상태를 찾을 수 없습니다."),
+    INVALID_STATUS(HttpStatus.BAD_REQUEST, "유효하지 않은 상태입니다."),
+
     // Figma
     FIGMA_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 Figma 정보를 찾을 수 없습니다."),
     FIGMA_LOGIN_FAILED(HttpStatus.BAD_REQUEST, "Figma 로그인 과정에서 오류가 발생했습니다."),
