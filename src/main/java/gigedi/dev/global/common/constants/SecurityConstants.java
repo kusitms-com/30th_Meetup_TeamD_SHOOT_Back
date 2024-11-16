@@ -3,7 +3,7 @@ package gigedi.dev.global.common.constants;
 public final class SecurityConstants {
     public static final String CODE_KEY = "code";
     public static final String CLIENT_ID_KEY = "client_id";
-    public static final String CLIENT_ID_SECRET = "client_secret";
+    public static final String CLIENT_SECRET_KEY = "client_secret";
     public static final String REDIRECT_URI_KEY = "redirect_uri";
     public static final String GRANT_TYPE_KEY = "grant_type";
     public static final String REISSUE_GRANT_TYPE_VALUE = "refresh_token";
@@ -25,12 +25,17 @@ public final class SecurityConstants {
     public static final String DISCORD_DISCONNECT_URL =
             "https://discord.com/api/oauth2/token/revoke";
 
+    public static final String FIGMA_HOST = "api.figma.com";
     public static final String FIGMA_GET_ID_TOKEN_URL = "https://www.figma.com/api/oauth/token";
     public static final String FIGMA_GET_USER_INFO_URL = "https://api.figma.com/v1/me";
+    public static final String FIGMA_TOKEN_REISSUE_URL = "/v1/oauth/refresh";
+    public static final String FIGMA_FILE_INFO_URL = "/v1/files/{fileId}";
 
     public static final String TOKEN_ROLE_NAME = "role";
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String BOT_TOKEN_PREFIX = "Bot ";
+    public static final String BASIC_TOKEN_PREFIX = "Basic ";
+    public static final String HTTPS_SCHEME = "https";
     public static final String NONE = "";
 
     private SecurityConstants() {

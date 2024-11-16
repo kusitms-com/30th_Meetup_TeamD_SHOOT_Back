@@ -40,7 +40,7 @@ public class Figma extends BaseTimeEntity {
 
     @Column private LocalDateTime deletedAt;
 
-    private String accessToken;
+    @Column(nullable = false)
     private String refreshToken;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -57,14 +57,12 @@ public class Figma extends BaseTimeEntity {
             String email,
             String figmaProfile,
             String figmaUserId,
-            String accessToken,
             String refreshToken,
             Member member) {
         this.figmaName = figmaName;
         this.email = email;
         this.figmaProfile = figmaProfile;
         this.figmaUserId = figmaUserId;
-        this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.member = member;
     }
@@ -74,13 +72,15 @@ public class Figma extends BaseTimeEntity {
             String email,
             String figmaProfile,
             String figmaUserId,
-            Member member) {
+            Member member,
+            String refreshToken) {
         return Figma.builder()
                 .figmaName(figmaName)
                 .email(email)
                 .figmaProfile(figmaProfile)
                 .figmaUserId(figmaUserId)
                 .member(member)
+                .refreshToken(refreshToken)
                 .build();
     }
 }

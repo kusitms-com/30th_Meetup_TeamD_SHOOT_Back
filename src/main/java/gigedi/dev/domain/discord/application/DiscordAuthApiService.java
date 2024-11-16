@@ -30,7 +30,7 @@ public class DiscordAuthApiService {
             MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
             formData.add(CODE_KEY, code);
             formData.add(CLIENT_ID_KEY, discordProperties.id());
-            formData.add(CLIENT_ID_SECRET, discordProperties.secret());
+            formData.add(CLIENT_SECRET_KEY, discordProperties.secret());
             formData.add(REDIRECT_URI_KEY, discordProperties.redirectUri());
             formData.add(GRANT_TYPE_KEY, LOGIN_GRANT_TYPE_VALUE);
 
@@ -77,7 +77,7 @@ public class DiscordAuthApiService {
         try {
             MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
             formData.add(CLIENT_ID_KEY, discordProperties.id());
-            formData.add(CLIENT_ID_SECRET, discordProperties.secret());
+            formData.add(CLIENT_SECRET_KEY, discordProperties.secret());
             formData.add(GRANT_TYPE_KEY, REISSUE_GRANT_TYPE_VALUE);
             formData.add(REFRESH_TOKEN, refreshToken);
 
@@ -104,7 +104,7 @@ public class DiscordAuthApiService {
         try {
             MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
             formData.add(CLIENT_ID_KEY, discordProperties.id());
-            formData.add(CLIENT_ID_SECRET, discordProperties.secret());
+            formData.add(CLIENT_SECRET_KEY, discordProperties.secret());
             formData.add("token", accessToken);
 
             restClient

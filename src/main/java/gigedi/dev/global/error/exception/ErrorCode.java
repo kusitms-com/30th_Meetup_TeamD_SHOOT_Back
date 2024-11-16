@@ -50,6 +50,12 @@ public enum ErrorCode {
     FIGMA_USER_INFO_FAILED(HttpStatus.BAD_REQUEST, "피그마 유저 정보를 불러오는 데 실패했습니다."),
     FIGMA_USER_INFO_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 피그마 유저 정보가 없습니다."),
     FIGMA_ACCOUNT_NOT_FOUND(HttpStatus.BAD_REQUEST, "피그마 계정을 찾을 수 없습니다."),
+    FIGMA_INFO_NOT_FOUND(HttpStatus.BAD_REQUEST, "피그마 정보가 포함되지 않았습니다."),
+    FIGMA_NOT_CONNECTED(HttpStatus.BAD_REQUEST, "피그마 계정이 연결되지 않았습니다."),
+    UNAUTHORIZED_FIGMA_ACCESS(HttpStatus.BAD_REQUEST, "해당 사용자와 피그마 계정이 연결되지 않았습니다."),
+    FIGMA_ACCOUNT_ALREADY_CONNECTED(HttpStatus.BAD_REQUEST, "해당 피그마 계정은 이미 연결되었습니다."),
+    FIGMA_TOKEN_REISSUE_FAILED(HttpStatus.BAD_REQUEST, "피그마 토큰 재발급에 실패했습니다."),
+    GETTING_FIGMA_FILE_INFO_FAILED(HttpStatus.BAD_REQUEST, "피그마 파일 정보를 가져오는데 실패했습니다."),
 
     // Discord
     DISCORD_LOGIN_FAILED(HttpStatus.BAD_REQUEST, "디스코드 로그인에 실패하였습니다."),
@@ -67,10 +73,6 @@ public enum ErrorCode {
     GOOGLE_AUTH_NOT_FOUND(HttpStatus.BAD_REQUEST, "구글 리프레시 토큰이 존재하지 않습니다."),
     GOOGLE_TOKEN_REISSUE_FAILED(HttpStatus.BAD_REQUEST, "구글 토큰 재발급에 실패했습니다."),
     GOOGLE_WITHDRAWAL_FAILED(HttpStatus.BAD_REQUEST, "구글 회원탈퇴에 실패했습니다."),
-
-    FIGMA_INFO_NOT_FOUND(HttpStatus.BAD_REQUEST, "피그마 정보가 포함되지 않았습니다."),
-    FIGMA_NOT_CONNECTED(HttpStatus.BAD_REQUEST, "피그마 계정이 연결되지 않았습니다."),
-    UNAUTHORIZED_FIGMA_ACCESS(HttpStatus.BAD_REQUEST, "해당 사용자와 피그마 계정이 연결되지 않았습니다."),
 
     IMAGE_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류, 관리자에게 문의하세요");
 

@@ -13,10 +13,8 @@ import gigedi.dev.domain.auth.domain.Figma;
 import gigedi.dev.domain.auth.dto.AccessTokenDto;
 import gigedi.dev.domain.auth.dto.RefreshTokenDto;
 import gigedi.dev.domain.auth.dto.request.TokenRefreshRequest;
-import gigedi.dev.domain.auth.dto.response.FigmaAccountResponse;
-import gigedi.dev.domain.auth.dto.response.GoogleLoginResponse;
-import gigedi.dev.domain.auth.dto.response.TokenPairResponse;
-import gigedi.dev.domain.auth.dto.response.UserInfoResponse;
+import gigedi.dev.domain.auth.dto.response.*;
+import gigedi.dev.domain.figma.application.FigmaService;
 import gigedi.dev.domain.member.dao.MemberRepository;
 import gigedi.dev.domain.member.domain.Member;
 import gigedi.dev.domain.member.domain.OauthInfo;
@@ -30,11 +28,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService {
     private final GoogleService googleService;
-    private final FigmaService figmaService;
+    private final FigmaApiService figmaApiService;
     private final IdTokenVerifier idTokenVerifier;
     private final MemberRepository memberRepository;
     private final FigmaRepository figmaRepository;
     private final JwtTokenService jwtTokenService;
+    private final FigmaService figmaService;
     private final MemberUtil memberUtil;
 
     public TokenPairResponse googleSocialLogin(String code) {
@@ -49,20 +48,24 @@ public class AuthService {
 
     public UserInfoResponse figmaSocialLogin(String code) {
         final Member currentMember = memberUtil.getCurrentMember();
-        String accessToken = figmaService.getAccessToken(code);
-        UserInfoResponse userInfo = figmaService.getUserInfo(accessToken);
-        saveFigmaAccountInfo(currentMember, userInfo);
+        FigmaTokenResponse tokenResponse =
+                figmaApiService.getAccessToken(URLDecoder.decode(code, StandardCharsets.UTF_8));
+        figmaService.validateFigmaAccountAlreadyExists(tokenResponse.userId().toString());
+        UserInfoResponse userInfo = figmaApiService.getUserInfo(tokenResponse.accessToken());
+        saveFigmaAccountInfo(currentMember, userInfo, tokenResponse);
         return userInfo;
     }
 
-    private void saveFigmaAccountInfo(Member member, UserInfoResponse userInfo) {
+    private void saveFigmaAccountInfo(
+            Member member, UserInfoResponse userInfo, FigmaTokenResponse tokenResponse) {
         Figma figma =
                 Figma.createFigma(
                         userInfo.userName(),
                         userInfo.email(),
                         userInfo.ImgUrl(),
                         userInfo.userId(),
-                        member);
+                        member,
+                        tokenResponse.refreshToken());
         figmaRepository.save(figma);
     }
 
