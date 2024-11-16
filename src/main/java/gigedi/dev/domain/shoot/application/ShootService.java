@@ -62,11 +62,16 @@ public class ShootService {
     }
 
     @Transactional
-    public void updateShootStatus(Long shootId, Status newStatus) {
+    public GetShootResponse updateShootStatus(Long shootId, Status newStatus) {
         validateStatus(newStatus);
         Shoot shoot = findValidShoot(shootId);
         ShootStatus shootStatus = shootStatusService.getShootStatusByShootId(shoot.getShootId());
         shootStatus.updateStatus(newStatus);
+        return GetShootResponse.from(
+                shoot,
+                getUsersByStatus(shoot, Status.YET),
+                getUsersByStatus(shoot, Status.DOING),
+                getUsersByStatus(shoot, Status.DONE));
     }
 
     private void validateStatus(Status status) {

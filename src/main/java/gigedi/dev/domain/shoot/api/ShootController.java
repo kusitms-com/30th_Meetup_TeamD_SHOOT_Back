@@ -38,8 +38,8 @@ public class ShootController {
 
     @Operation(summary = "Shoot 상태 변경 API", description = "Shoot의 상태(yet, doing, done)를 변경하는 API")
     @PatchMapping("/status/{shootId}")
-    public void updateShootStatus(
+    public GetShootResponse updateShootStatus(
             @PathVariable Long shootId, @RequestBody UpdateShootStatusRequest request) {
-        shootService.updateShootStatus(shootId, request.status());
+        return shootService.updateShootStatus(shootId, request.status());
     }
 }
