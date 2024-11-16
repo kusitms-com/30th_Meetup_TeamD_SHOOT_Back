@@ -23,16 +23,20 @@ public class File {
     private String fileKey;
 
     @Column(nullable = false)
+    private String fileName;
+
+    @Column(nullable = false)
     private Integer archiveCount;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private File(String fileKey, Integer archiveCount) {
+    private File(String fileKey, Integer archiveCount, String fileName) {
         this.fileKey = fileKey;
         this.archiveCount = archiveCount;
+        this.fileName = fileName;
     }
 
-    public static File createFile(String fileKey) {
-        return File.builder().fileKey(fileKey).archiveCount(0).build();
+    public static File createFile(String fileKey, String fileName) {
+        return File.builder().fileKey(fileKey).fileName(fileName).archiveCount(0).build();
     }
 
     public void increaseArchiveCount() {

@@ -14,6 +14,7 @@ import gigedi.dev.domain.auth.dto.AccessTokenDto;
 import gigedi.dev.domain.auth.dto.RefreshTokenDto;
 import gigedi.dev.domain.auth.dto.request.TokenRefreshRequest;
 import gigedi.dev.domain.auth.dto.response.*;
+import gigedi.dev.domain.figma.application.FigmaService;
 import gigedi.dev.domain.member.dao.MemberRepository;
 import gigedi.dev.domain.member.domain.Member;
 import gigedi.dev.domain.member.domain.OauthInfo;

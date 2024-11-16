@@ -2,6 +2,8 @@ package gigedi.dev.domain.auth.application;
 
 import static gigedi.dev.global.common.constants.SecurityConstants.*;
 
+import java.util.Base64;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gigedi.dev.domain.auth.dto.response.FigmaTokenResponse;
 import gigedi.dev.domain.auth.dto.response.FigmaUserResponse;
 import gigedi.dev.domain.auth.dto.response.UserInfoResponse;
+import gigedi.dev.domain.file.dto.response.FigmaTokenReissueResponse;
+import gigedi.dev.domain.file.dto.response.GetFileInfoResponse;
 import gigedi.dev.global.error.exception.CustomException;
 import gigedi.dev.global.error.exception.ErrorCode;
 import gigedi.dev.infra.config.oauth.FigmaProperties;
@@ -94,6 +98,70 @@ public class FigmaApiService {
         } catch (Exception e) {
             log.error("Figma 유저 정보 조회 중 예외 발생 : " + e.getMessage(), e);
             throw new CustomException(ErrorCode.FIGMA_USER_INFO_FAILED);
+        }
+    }
+
+    public FigmaTokenReissueResponse reissueAccessToken(String refreshToken) {
+        try {
+            String figmaInfo = figmaProperties.id() + ":" + figmaProperties.secret();
+
+            MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+            formData.add(REFRESH_TOKEN, refreshToken);
+
+            return restClient
+                    .post()
+                    .uri(
+                            uriBuilder ->
+                                    uriBuilder
+                                            .scheme(HTTPS_SCHEME)
+                                            .host(FIGMA_HOST)
+                                            .path(FIGMA_TOKEN_REISSUE_URL)
+                                            .build())
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                    .header(
+                            HttpHeaders.AUTHORIZATION,
+                            BASIC_TOKEN_PREFIX
+                                    + Base64.getEncoder().encodeToString(figmaInfo.getBytes()))
+                    .body(formData)
+                    .retrieve()
+                    .onStatus(
+                            status -> !status.is2xxSuccessful(),
+                            (request, response) -> {
+                                log.error("Figma 토큰 재발급 요청 실패: {}", response.getStatusCode());
+                                throw new CustomException(ErrorCode.FIGMA_TOKEN_REISSUE_FAILED);
+                            })
+                    .body(FigmaTokenReissueResponse.class);
+        } catch (Exception e) {
+            log.error("Figma 토큰 재발급 중 예외 발생 : {}", e.getMessage(), e);
+            throw new CustomException(ErrorCode.FIGMA_TOKEN_REISSUE_FAILED);
+        }
+    }
+
+    public GetFileInfoResponse getFileInfo(String fileId, String accessToken) {
+        try {
+            return restClient
+                    .get()
+                    .uri(
+                            uriBuilder ->
+                                    uriBuilder
+                                            .scheme(HTTPS_SCHEME)
+                                            .host(FIGMA_HOST)
+                                            .path(FIGMA_FILE_INFO_URL)
+                                            .queryParam("depth", "1")
+                                            .build(fileId))
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .header(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + accessToken)
+                    .retrieve()
+                    .onStatus(
+                            status -> !status.is2xxSuccessful(),
+                            (request, response) -> {
+                                log.error("Figma 토큰 재발급 요청 실패: {}", response.getStatusCode());
+                                throw new CustomException(ErrorCode.GETTING_FIGMA_FILE_INFO_FAILED);
+                            })
+                    .body(GetFileInfoResponse.class);
+        } catch (Exception e) {
+            log.error("Figma 토큰 재발급 중 예외 발생 : {}", e.getMessage(), e);
+            throw new CustomException(ErrorCode.GETTING_FIGMA_FILE_INFO_FAILED);
         }
     }
 }

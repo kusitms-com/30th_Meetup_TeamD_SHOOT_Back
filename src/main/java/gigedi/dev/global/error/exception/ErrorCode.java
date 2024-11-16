@@ -54,6 +54,8 @@ public enum ErrorCode {
     FIGMA_NOT_CONNECTED(HttpStatus.BAD_REQUEST, "피그마 계정이 연결되지 않았습니다."),
     UNAUTHORIZED_FIGMA_ACCESS(HttpStatus.BAD_REQUEST, "해당 사용자와 피그마 계정이 연결되지 않았습니다."),
     FIGMA_ACCOUNT_ALREADY_CONNECTED(HttpStatus.BAD_REQUEST, "해당 피그마 계정은 이미 연결되었습니다."),
+    FIGMA_TOKEN_REISSUE_FAILED(HttpStatus.BAD_REQUEST, "피그마 토큰 재발급에 실패했습니다."),
+    GETTING_FIGMA_FILE_INFO_FAILED(HttpStatus.BAD_REQUEST, "피그마 파일 정보를 가져오는데 실패했습니다."),
 
     // Discord
     DISCORD_LOGIN_FAILED(HttpStatus.BAD_REQUEST, "디스코드 로그인에 실패하였습니다."),

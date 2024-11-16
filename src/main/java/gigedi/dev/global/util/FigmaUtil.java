@@ -8,10 +8,10 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import gigedi.dev.domain.auth.dao.FigmaRepository;
 import gigedi.dev.domain.auth.domain.Figma;
+import gigedi.dev.domain.figma.application.FigmaService;
+import gigedi.dev.domain.file.application.FileService;
 import gigedi.dev.domain.file.dao.AuthorityRepository;
-import gigedi.dev.domain.file.dao.FileRepository;
 import gigedi.dev.domain.file.domain.Authority;
 import gigedi.dev.domain.file.domain.File;
 import gigedi.dev.domain.member.domain.Member;
@@ -22,8 +22,8 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class FigmaUtil {
-    private final FigmaRepository figmaRepository;
-    private final FileRepository fileRepository;
+    private final FigmaService figmaService;
+    private final FileService fileService;
     private final AuthorityRepository authorityRepository;
     private final MemberUtil memberUtil;
 
@@ -34,14 +34,11 @@ public class FigmaUtil {
     }
 
     public File getCurrentFile() {
-        String fileId = getCurrentAttribute(FILE_ID_ATTRIBUTE);
-        validateId(fileId);
+        String fileKey = getCurrentAttribute(FILE_ID_ATTRIBUTE);
+        validateId(fileKey);
         Figma currentFigma = getCurrentFigma();
 
-        File currentFile =
-                fileRepository
-                        .findByFileKey(fileId)
-                        .orElseGet(() -> fileRepository.save(File.createFile(fileId)));
+        File currentFile = fileService.getFileByFileId(fileKey, currentFigma);
 
         if (authorityRepository.findByFigmaAndFile(currentFigma, currentFile).isEmpty()) {
             authorityRepository.save(Authority.createAuthority(currentFigma, currentFile));
@@ -68,10 +65,7 @@ public class FigmaUtil {
     private Figma findAndValidateFigmaId(String figmaId) {
         final Member currentMember = memberUtil.getCurrentMember();
 
-        Figma figma =
-                figmaRepository
-                        .findByFigmaUserIdAndDeletedAtIsNull(figmaId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.FIGMA_NOT_CONNECTED));
+        Figma figma = figmaService.getFigmaByFigmaId(figmaId);
 
         if (!figma.getMember().equals(currentMember)) {
             throw new CustomException(ErrorCode.UNAUTHORIZED_FIGMA_ACCESS);
