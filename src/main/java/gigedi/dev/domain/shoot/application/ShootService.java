@@ -1,5 +1,6 @@
 package gigedi.dev.domain.shoot.application;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,9 +63,16 @@ public class ShootService {
 
     @Transactional
     public void updateShootStatus(Long shootId, Status newStatus) {
+        validateStatus(newStatus);
         Shoot shoot = findValidShoot(shootId);
         ShootStatus shootStatus = shootStatusService.getShootStatusByShootId(shoot.getShootId());
         shootStatus.updateStatus(newStatus);
+    }
+
+    private void validateStatus(Status status) {
+        if (status == null || !EnumSet.allOf(Status.class).contains(status)) {
+            throw new CustomException(ErrorCode.INVALID_STATUS);
+        }
     }
 
     @Transactional

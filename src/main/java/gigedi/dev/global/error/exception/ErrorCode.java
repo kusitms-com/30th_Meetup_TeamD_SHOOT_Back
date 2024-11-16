@@ -47,6 +47,7 @@ public enum ErrorCode {
     // Shoot
     SHOOT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 슛을 찾을 수 없습니다."),
     SHOOT_STATUS_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 슛 상태를 찾을 수 없습니다."),
+    INVALID_STATUS(HttpStatus.BAD_REQUEST, "유효하지 않은 상태입니다."),
 
     // Figma
     FIGMA_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 Figma 정보를 찾을 수 없습니다."),
