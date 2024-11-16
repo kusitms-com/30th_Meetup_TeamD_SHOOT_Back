@@ -17,7 +17,7 @@ public record GetShootResponse(
         String createdAt) {
     public record User(Long userId, String username, String profileImg) {}
 
-    public static GetShootResponse from(
+    public static GetShootResponse of(
             Shoot shoot, List<User> yetUsers, List<User> doingUsers, List<User> doneUsers) {
         return new GetShootResponse(
                 shoot.getShootId(),

@@ -4,9 +4,8 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import jakarta.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import gigedi.dev.domain.auth.domain.Figma;
 import gigedi.dev.domain.shoot.dao.ShootRepository;
@@ -26,12 +25,13 @@ public class ShootService {
     private final ShootStatusRepository shootStatusRepository;
     private final ShootStatusService shootStatusService;
 
+    @Transactional(readOnly = true)
     public List<GetShootResponse> getShoot(Long blockId) {
         List<Shoot> shoots = shootRepository.findAllByBlock_BlockIdAndDeletedAtIsNull(blockId);
         return shoots.stream()
                 .map(
                         shoot -> {
-                            return GetShootResponse.from(
+                            return GetShootResponse.of(
                                     shoot,
                                     getUsersByStatus(shoot, Status.YET),
                                     getUsersByStatus(shoot, Status.DOING),
@@ -67,7 +67,7 @@ public class ShootService {
         Shoot shoot = findValidShoot(shootId);
         ShootStatus shootStatus = shootStatusService.getShootStatusByShootId(shoot.getShootId());
         shootStatus.updateStatus(newStatus);
-        return GetShootResponse.from(
+        return GetShootResponse.of(
                 shoot,
                 getUsersByStatus(shoot, Status.YET),
                 getUsersByStatus(shoot, Status.DOING),
