@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import gigedi.dev.domain.auth.domain.Figma;
+import gigedi.dev.domain.figma.application.FigmaService;
 import gigedi.dev.domain.shoot.dao.ShootRepository;
 import gigedi.dev.domain.shoot.dao.ShootStatusRepository;
 import gigedi.dev.domain.shoot.domain.Shoot;
@@ -16,14 +17,19 @@ import gigedi.dev.domain.shoot.domain.Status;
 import gigedi.dev.domain.shoot.dto.response.GetShootResponse;
 import gigedi.dev.global.error.exception.CustomException;
 import gigedi.dev.global.error.exception.ErrorCode;
+import gigedi.dev.global.util.FigmaUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ShootService {
     private final ShootRepository shootRepository;
     private final ShootStatusRepository shootStatusRepository;
     private final ShootStatusService shootStatusService;
+    private final FigmaService figmaService;
+    private final FigmaUtil figmaUtil;
 
     @Transactional(readOnly = true)
     public List<GetShootResponse> getShoot(Long blockId) {
@@ -63,10 +69,22 @@ public class ShootService {
 
     @Transactional
     public GetShootResponse updateShootStatus(Long shootId, Status newStatus) {
+        final Figma figma = figmaUtil.getCurrentFigma();
         validateStatus(newStatus);
         Shoot shoot = findValidShoot(shootId);
-        ShootStatus shootStatus = shootStatusService.getShootStatusByShootId(shoot.getShootId());
-        shootStatus.updateStatus(newStatus);
+        ShootStatus shootStatus =
+                shootStatusRepository
+                        .findByShoot_ShootIdAndFigma_FigmaId(shootId, figma.getFigmaId())
+                        .orElseGet(
+                                () -> {
+                                    ShootStatus newShootStatus =
+                                            ShootStatus.createShootStatus(newStatus, figma, shoot);
+                                    return shootStatusRepository.save(newShootStatus);
+                                });
+
+        if (shootStatus.getStatus() != newStatus) {
+            shootStatus.updateStatus(newStatus);
+        }
         return GetShootResponse.of(
                 shoot,
                 getUsersByStatus(shoot, Status.YET),
