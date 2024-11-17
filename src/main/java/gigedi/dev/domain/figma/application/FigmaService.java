@@ -13,17 +13,18 @@ import gigedi.dev.global.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class FigmaService {
     private final FigmaRepository figmaRepository;
 
+    @Transactional(readOnly = true)
     public void validateFigmaAccountAlreadyExists(String figmaId) {
         if (figmaRepository.findByFigmaUserIdAndDeletedAtIsNull(figmaId).isPresent()) {
             throw new CustomException(ErrorCode.FIGMA_ACCOUNT_ALREADY_CONNECTED);
         }
     }
 
+    @Transactional(readOnly = true)
     public Figma getFigmaByFigmaId(String figmaId) {
         return figmaRepository
                 .findByFigmaUserIdAndDeletedAtIsNull(figmaId)
