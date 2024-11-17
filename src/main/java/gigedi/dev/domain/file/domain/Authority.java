@@ -44,4 +44,12 @@ public class Authority {
     public static Authority createAuthority(Figma figma, File file) {
         return Authority.builder().alarm(true).figma(figma).file(file).build();
     }
+
+    public void updateAlarmActive() {
+        this.alarm = true;
+    }
+
+    public void updateAlarmInactive() {
+        this.alarm = false;
+    }
 }

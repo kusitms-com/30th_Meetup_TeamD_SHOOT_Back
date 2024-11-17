@@ -1,10 +1,13 @@
 package gigedi.dev.domain.figma.application;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import gigedi.dev.domain.auth.dao.FigmaRepository;
 import gigedi.dev.domain.auth.domain.Figma;
+import gigedi.dev.domain.member.domain.Member;
 import gigedi.dev.global.error.exception.CustomException;
 import gigedi.dev.global.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +28,10 @@ public class FigmaService {
         return figmaRepository
                 .findByFigmaUserIdAndDeletedAtIsNull(figmaId)
                 .orElseThrow(() -> new CustomException(ErrorCode.FIGMA_NOT_CONNECTED));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Figma> getFigmaListByMember(Member member) {
+        return figmaRepository.findByMemberAndDeletedAtIsNull(member);
     }
 }
