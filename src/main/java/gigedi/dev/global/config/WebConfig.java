@@ -14,8 +14,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns(
-                        "https://localhost:5173/**",
-                        "http://localhost:5173/**",
+                        "http://localhost:5173",
                         "https://www.figma.com/**")
                 .allowedMethods("GET", "POST", "PATCH", "DELETE")
                 .allowedHeaders("*")
