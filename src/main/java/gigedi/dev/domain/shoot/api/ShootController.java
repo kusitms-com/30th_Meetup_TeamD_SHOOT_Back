@@ -42,4 +42,10 @@ public class ShootController {
             @PathVariable Long shootId, @RequestBody UpdateShootStatusRequest request) {
         return shootService.updateShootStatus(shootId, request.status());
     }
+
+    @Operation(summary = "Our Shoot 조회 API", description = "내 shoot status들을 조회하는 API")
+    @GetMapping("/status")
+    public List<GetShootResponse> getOurShoot() {
+        return shootService.getOurShoot();
+    }
 }
