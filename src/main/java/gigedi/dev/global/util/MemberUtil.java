@@ -1,6 +1,7 @@
 package gigedi.dev.global.util;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import gigedi.dev.domain.member.dao.MemberRepository;
 import gigedi.dev.domain.member.domain.Member;
@@ -15,6 +16,7 @@ public class MemberUtil {
     private final SecurityUtil securityUtil;
     private final MemberRepository memberRepository;
 
+    @Transactional(readOnly = true)
     public Member getCurrentMember() {
         return memberRepository
                 .findById(securityUtil.getCurrentMemberId())

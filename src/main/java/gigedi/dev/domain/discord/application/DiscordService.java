@@ -12,16 +12,17 @@ import gigedi.dev.global.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class DiscordService {
     private final MemberUtil memberUtil;
     private final DiscordRepository discordRepository;
 
+    @Transactional
     public Discord saveDiscord(Discord discord) {
         return discordRepository.save(discord);
     }
 
+    @Transactional(readOnly = true)
     public Discord findConnectedDiscord() {
         Member currentMember = memberUtil.getCurrentMember();
         return discordRepository
@@ -29,10 +30,12 @@ public class DiscordService {
                 .orElseThrow(() -> new CustomException(ErrorCode.DISCORD_ACCOUNT_NOT_FOUND));
     }
 
+    @Transactional
     public void deleteDiscord(Discord discord) {
         discordRepository.delete(discord);
     }
 
+    @Transactional(readOnly = true)
     public void validateDiscordExistsForMember() {
         Member currentMember = memberUtil.getCurrentMember();
         if (discordRepository.findByMember(currentMember).isPresent()) {
