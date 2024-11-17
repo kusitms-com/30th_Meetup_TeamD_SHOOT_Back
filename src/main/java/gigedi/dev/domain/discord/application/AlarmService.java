@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import gigedi.dev.domain.discord.domain.Discord;
 import gigedi.dev.domain.discord.dto.response.AlarmFileResponse;
@@ -15,7 +14,6 @@ import gigedi.dev.global.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class AlarmService {
     private final DiscordService discordService;
