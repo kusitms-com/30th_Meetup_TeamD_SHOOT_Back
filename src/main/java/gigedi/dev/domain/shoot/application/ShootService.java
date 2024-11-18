@@ -1,6 +1,5 @@
 package gigedi.dev.domain.shoot.application;
 
-import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,7 +12,6 @@ import gigedi.dev.domain.block.domain.Block;
 import gigedi.dev.domain.shoot.dao.ShootRepository;
 import gigedi.dev.domain.shoot.dao.ShootStatusRepository;
 import gigedi.dev.domain.shoot.domain.Shoot;
-import gigedi.dev.domain.shoot.domain.ShootStatus;
 import gigedi.dev.domain.shoot.domain.Status;
 import gigedi.dev.domain.shoot.dto.response.GetShootResponse;
 import gigedi.dev.global.error.exception.CustomException;
@@ -48,7 +46,29 @@ public class ShootService {
                 .toList();
     }
 
-    private List<GetShootResponse.User> getUsersByStatus(Shoot shoot, Status status) {
+    @Transactional
+    public void deleteShoot(Long shootId) {
+        Shoot shoot = findValidShoot(shootId);
+        shoot.deleteShoot();
+    }
+
+    @Transactional
+    public GetShootResponse createShoot(Long blockId, String content) {
+        Block block = blockService.getBlockById(blockId);
+        final Figma figma = figmaUtil.getCurrentFigma();
+        Shoot shoot = Shoot.createShoot(content, figma, block);
+        shootRepository.save(shoot);
+        processTags(content, shoot);
+
+        return GetShootResponse.of(shoot, null, null, null);
+    }
+
+    private void processTags(String content, Shoot shoot) {
+        List<String> tags = ShootUtil.extractTags(content);
+        shootTagService.createShootTags(shoot, tags);
+    }
+
+    public List<GetShootResponse.User> getUsersByStatus(Shoot shoot, Status status) {
         return shootStatusRepository
                 .findByShoot_ShootIdAndStatus(shoot.getShootId(), status)
                 .stream()
@@ -63,66 +83,9 @@ public class ShootService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public void deleteShoot(Long shootId) {
-        Shoot shoot = findValidShoot(shootId);
-        shoot.deleteShoot();
-    }
-
-    @Transactional
-    public GetShootResponse updateShootStatus(Long shootId, Status newStatus) {
-        final Figma figma = figmaUtil.getCurrentFigma();
-        validateStatus(newStatus);
-        Shoot shoot = findValidShoot(shootId);
-        ShootStatus shootStatus =
-                shootStatusRepository
-                        .findByShoot_ShootIdAndFigma_FigmaId(shootId, figma.getFigmaId())
-                        .orElseGet(
-                                () -> {
-                                    ShootStatus newShootStatus =
-                                            ShootStatus.createShootStatus(newStatus, figma, shoot);
-                                    return shootStatusRepository.save(newShootStatus);
-                                });
-
-        if (shootStatus.getStatus() != newStatus) {
-            shootStatus.updateStatus(newStatus);
-        }
-        return GetShootResponse.of(
-                shoot,
-                getUsersByStatus(shoot, Status.YET),
-                getUsersByStatus(shoot, Status.DOING),
-                getUsersByStatus(shoot, Status.DONE));
-    }
-
-    private void validateStatus(Status status) {
-        if (status == null || !EnumSet.allOf(Status.class).contains(status)) {
-            throw new CustomException(ErrorCode.INVALID_STATUS);
-        }
-    }
-
-    @Transactional
     public Shoot findValidShoot(Long shootId) {
         return shootRepository
                 .findByShootIdAndDeletedAtIsNull(shootId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SHOOT_NOT_FOUND));
-    }
-
-    public GetShootResponse createShoot(Long blockId, String content) {
-        Block block = blockService.getBlockById(blockId);
-        final Figma figma = figmaUtil.getCurrentFigma();
-        Shoot shoot = Shoot.createShoot(content, figma, block);
-        shootRepository.save(shoot);
-        processTags(content, shoot);
-
-        return GetShootResponse.of(
-                shoot,
-                getUsersByStatus(shoot, Status.YET),
-                getUsersByStatus(shoot, Status.DOING),
-                getUsersByStatus(shoot, Status.DONE));
-    }
-
-    private void processTags(String content, Shoot shoot) {
-        List<String> tags = ShootUtil.extractTags(content);
-        shootTagService.createShootTags(shoot, tags);
     }
 }
