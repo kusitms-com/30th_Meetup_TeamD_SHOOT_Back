@@ -28,6 +28,10 @@ dependencies {
 
 	// QueryDSL
 	implementation "com.querydsl:querydsl-jpa:${querydslVersion}:jakarta"
+	implementation "com.querydsl:querydsl-apt:${querydslVersion}:jakarta"
+	annotationProcessor "com.querydsl:querydsl-apt:${querydslVersion}:jakarta"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -137,6 +141,7 @@ spotless {
 		removeUnusedImports()
 		trimTrailingWhitespace()
 		endWithNewline()
+		targetExclude("src/main/generated/**/*.java")
 	}
 }
 
@@ -161,4 +166,18 @@ tasks.register('makeGitHooksExecutable', Exec) {
 
 tasks.withType(JavaCompile) {
 	dependsOn("makeGitHooksExecutable")
+}
+
+def querydslDir = 'src/main/generated'
+
+sourceSets {
+	main.java.srcDirs += [ querydslDir ]
+}
+
+tasks.withType(JavaCompile) {
+	options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+}
+
+clean {
+	delete file(querydslDir)
 }

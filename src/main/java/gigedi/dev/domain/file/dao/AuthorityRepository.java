@@ -10,6 +10,7 @@ import gigedi.dev.domain.file.domain.Authority;
 import gigedi.dev.domain.file.domain.File;
 
 @Repository
-public interface AuthorityRepository extends JpaRepository<Authority, Long> {
+public interface AuthorityRepository
+        extends JpaRepository<Authority, Long>, AuthorityRepositoryCustom {
     Optional<Authority> findByFigmaAndFile(Figma figma, File file);
 }
