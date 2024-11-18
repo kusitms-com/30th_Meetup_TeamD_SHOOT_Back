@@ -26,4 +26,10 @@ public class FigmaService {
                 .findByFigmaUserIdAndDeletedAtIsNull(figmaId)
                 .orElseThrow(() -> new CustomException(ErrorCode.FIGMA_NOT_CONNECTED));
     }
+
+    public Figma findByTag(String tag) {
+        return figmaRepository
+                .findByFigmaName(tag)
+                .orElseThrow(() -> new CustomException(ErrorCode.FIGMA_USER_INFO_NOT_FOUND));
+    }
 }

@@ -18,4 +18,6 @@ public interface FigmaRepository extends JpaRepository<Figma, Long> {
     Optional<Figma> findByFigmaIdAndDeletedAtIsNull(Long figmaId);
 
     Optional<Figma> findByFigmaUserIdAndDeletedAtIsNull(String figmaUserId);
+
+    Optional<Figma> findByFigmaName(String name);
 }
