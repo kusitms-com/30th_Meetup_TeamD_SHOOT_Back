@@ -31,6 +31,12 @@ public class FigmaService {
                 .orElseThrow(() -> new CustomException(ErrorCode.FIGMA_NOT_CONNECTED));
     }
 
+    public Figma findByTag(String tag) {
+        return figmaRepository
+                .findByFigmaName(tag)
+                .orElseThrow(() -> new CustomException(ErrorCode.FIGMA_USER_INFO_NOT_FOUND));
+    }
+
     @Transactional(readOnly = true)
     public List<Figma> getFigmaListByMember(Member member) {
         return figmaRepository.findByMemberAndDeletedAtIsNull(member);

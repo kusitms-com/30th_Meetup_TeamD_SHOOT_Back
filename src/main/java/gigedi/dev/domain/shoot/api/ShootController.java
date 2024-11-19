@@ -6,11 +6,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gigedi.dev.domain.shoot.application.ShootService;
+import gigedi.dev.domain.shoot.application.ShootStatusService;
+import gigedi.dev.domain.shoot.dto.request.CreateShootRequest;
 import gigedi.dev.domain.shoot.dto.request.UpdateShootStatusRequest;
 import gigedi.dev.domain.shoot.dto.response.GetShootResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ShootController {
     private final ShootService shootService;
+    private final ShootStatusService shootStatusService;
 
     @Operation(summary = "Block 별 Shoot 조회 API", description = "Block 별 Shoot을 조회하는 API")
     @GetMapping("/{blockId}")
@@ -36,10 +40,17 @@ public class ShootController {
         shootService.deleteShoot(shootId);
     }
 
+    @Operation(summary = "Shoot 생성 API", description = "Shoot을 생성하는 API")
+    @PostMapping("/{blockId}")
+    public GetShootResponse createShoot(
+            @PathVariable Long blockId, @RequestBody CreateShootRequest request) {
+        return shootService.createShoot(blockId, request.content());
+    }
+
     @Operation(summary = "Shoot 상태 변경 API", description = "Shoot의 상태(yet, doing, done)를 변경하는 API")
     @PatchMapping("/status/{shootId}")
     public GetShootResponse updateShootStatus(
             @PathVariable Long shootId, @RequestBody UpdateShootStatusRequest request) {
-        return shootService.updateShootStatus(shootId, request.status());
+        return shootStatusService.updateShootStatus(shootId, request.status());
     }
 }

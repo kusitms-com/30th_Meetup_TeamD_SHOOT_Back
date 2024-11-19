@@ -13,5 +13,5 @@ import gigedi.dev.domain.shoot.domain.Status;
 public interface ShootStatusRepository extends JpaRepository<ShootStatus, Long> {
     List<ShootStatus> findByShoot_ShootIdAndStatus(Long shootId, Status status);
 
-    Optional<ShootStatus> findByShoot_ShootId(Long shootId);
+    Optional<ShootStatus> findByShoot_ShootIdAndFigma_FigmaId(Long shootId, Long figmaId);
 }
