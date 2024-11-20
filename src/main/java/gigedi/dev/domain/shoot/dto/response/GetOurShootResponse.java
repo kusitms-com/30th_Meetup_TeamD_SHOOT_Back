@@ -5,7 +5,7 @@ import gigedi.dev.global.util.TimeUtil;
 
 public record GetOurShootResponse(
         Long shootId, String BlockTitle, String authorName, String content, String timeAgo) {
-    public static GetOurShootResponse of(Shoot shoot) {
+    public static GetOurShootResponse from(Shoot shoot) {
         return new GetOurShootResponse(
                 shoot.getShootId(),
                 shoot.getBlock().getTitle(),

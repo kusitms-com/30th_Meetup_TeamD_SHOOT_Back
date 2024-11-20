@@ -95,13 +95,13 @@ public class ShootService {
 
     private List<GetOurShootResponse> getShootByStatus(Figma figma, Status status) {
         return shootRepository.findByFigmaAndStatusAndDeletedAtIsNull(figma, status).stream()
-                .map(shoot -> GetOurShootResponse.of(shoot))
+                .map(shoot -> GetOurShootResponse.from(shoot))
                 .toList();
     }
 
     private List<GetOurShootResponse> getMentionedShoot(Figma figma) {
         return shootRepository.findMentionedShootsByFigma(figma).stream()
-                .map(shoot -> GetOurShootResponse.of(shoot))
+                .map(shoot -> GetOurShootResponse.from(shoot))
                 .toList();
     }
 
