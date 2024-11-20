@@ -6,22 +6,17 @@ import static gigedi.dev.domain.shoot.domain.QShootTag.shootTag;
 
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
-
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import gigedi.dev.domain.auth.domain.Figma;
 import gigedi.dev.domain.shoot.domain.Shoot;
 import gigedi.dev.domain.shoot.domain.Status;
+import lombok.RequiredArgsConstructor;
 
-@Repository
+@RequiredArgsConstructor
 public class ShootRepositoryImpl implements ShootRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
-
-    public ShootRepositoryImpl(JPAQueryFactory queryFactory) {
-        this.queryFactory = queryFactory;
-    }
 
     @Override
     public List<Shoot> findByFigmaAndStatusAndDeletedAtIsNull(Figma figma, Status status) {
@@ -41,10 +36,7 @@ public class ShootRepositoryImpl implements ShootRepositoryCustom {
         return queryFactory
                 .select(shootTag.shoot)
                 .from(shootTag)
-                .where(
-                        shootTag.figma.eq(figma),
-                        shootTag.isRead.isFalse(),
-                        shootTag.shoot.deletedAt.isNull())
+                .where(shootTag.figma.eq(figma), shootTag.shoot.deletedAt.isNull())
                 .fetch();
     }
 }
