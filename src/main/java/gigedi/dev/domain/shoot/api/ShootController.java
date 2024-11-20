@@ -58,7 +58,7 @@ public class ShootController {
 
     @Operation(
             summary = "Our Shoot 조회 API",
-            description = "쿼리 파라미터로 yet, doing, done, mentioned Shoot을 조회하는 API")
+            description = "쿼리 파라미터로 yet, doing, done, mentioned을 구분해 Shoot을 조회하는 API")
     @GetMapping("/status")
     public List<GetOurShootResponse> getOurShoot(@RequestParam String tab) {
         return shootService.getOurShoot(tab);

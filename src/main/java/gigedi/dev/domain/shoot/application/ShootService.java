@@ -72,6 +72,9 @@ public class ShootService {
     @Transactional(readOnly = true)
     public List<GetOurShootResponse> getOurShoot(String tab) {
         final Figma figma = figmaUtil.getCurrentFigma();
+        if (tab == null || tab.isBlank()) {
+            tab = "yet";
+        }
         if (tab.equals("yet")) {
             return getShootByStatus(figma, Status.YET);
         } else if (tab.equals("doing")) {
