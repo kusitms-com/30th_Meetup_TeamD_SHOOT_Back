@@ -32,6 +32,11 @@ public class ShootService {
     private final BlockService blockService;
     private final ShootTagService shootTagService;
 
+    private static final String YET = "yet";
+    private static final String DOING = "doing";
+    private static final String DONE = "done";
+    private static final String MENTIONED = "mentioned";
+
     @Transactional(readOnly = true)
     public List<GetShootResponse> getShoot(Long blockId) {
         List<Shoot> shoots = shootRepository.findAllByBlock_BlockIdAndDeletedAtIsNull(blockId);
@@ -73,15 +78,15 @@ public class ShootService {
     public List<GetOurShootResponse> getOurShoot(String tab) {
         final Figma figma = figmaUtil.getCurrentFigma();
         if (tab == null || tab.isBlank()) {
-            tab = "yet";
+            tab = YET;
         }
-        if (tab.equals("yet")) {
+        if (tab.equals(YET)) {
             return getShootByStatus(figma, Status.YET);
-        } else if (tab.equals("doing")) {
+        } else if (tab.equals(DOING)) {
             return getShootByStatus(figma, Status.DOING);
-        } else if (tab.equals("done")) {
+        } else if (tab.equals(DONE)) {
             return getShootByStatus(figma, Status.DONE);
-        } else if (tab.equals("mentioned")) {
+        } else if (tab.equals(MENTIONED)) {
             return getMentionedShoot(figma);
         } else {
             throw new CustomException(ErrorCode.INVALID_TAB);
