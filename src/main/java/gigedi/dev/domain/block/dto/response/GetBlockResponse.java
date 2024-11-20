@@ -1,27 +1,23 @@
 package gigedi.dev.domain.block.dto.response;
 
 import gigedi.dev.domain.block.domain.Block;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-@Getter
-@AllArgsConstructor
-public class GetBlockResponse {
-    private Long blockId;
-    private String title;
-    private int shootCount;
-    private double xCoordinate;
-    private double yCoordinate;
-    private double height;
-    private double width;
-
-    public GetBlockResponse(Block block) {
-        this.blockId = block.getBlockId();
-        this.title = block.getTitle();
-        this.shootCount = block.getShootCount();
-        this.xCoordinate = block.getXCoordinate();
-        this.yCoordinate = block.getYCoordinate();
-        this.height = block.getHeight();
-        this.width = block.getWidth();
+public record GetBlockResponse(
+        Long blockId,
+        String title,
+        int shootCount,
+        double xCoordinate,
+        double yCoordinate,
+        double height,
+        double width) {
+    public static GetBlockResponse from(Block block) {
+        return new GetBlockResponse(
+                block.getBlockId(),
+                block.getTitle(),
+                block.getShootCount(),
+                block.getXCoordinate(),
+                block.getYCoordinate(),
+                block.getHeight(),
+                block.getWidth());
     }
 }
