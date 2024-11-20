@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import gigedi.dev.domain.shoot.application.ShootService;
 import gigedi.dev.domain.shoot.application.ShootStatusService;
 import gigedi.dev.domain.shoot.dto.request.CreateShootRequest;
 import gigedi.dev.domain.shoot.dto.request.UpdateShootStatusRequest;
+import gigedi.dev.domain.shoot.dto.response.GetOurShootResponse;
 import gigedi.dev.domain.shoot.dto.response.GetShootResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -52,5 +54,13 @@ public class ShootController {
     public GetShootResponse updateShootStatus(
             @PathVariable Long shootId, @RequestBody UpdateShootStatusRequest request) {
         return shootStatusService.updateShootStatus(shootId, request.status());
+    }
+
+    @Operation(
+            summary = "Our Shoot 조회 API",
+            description = "쿼리 파라미터로 yet, doing, done, mentioned Shoot을 조회하는 API")
+    @GetMapping("/status")
+    public List<GetOurShootResponse> getOurShoot(@RequestParam String tab) {
+        return shootService.getOurShoot(tab);
     }
 }

@@ -13,6 +13,7 @@ import gigedi.dev.domain.shoot.dao.ShootRepository;
 import gigedi.dev.domain.shoot.dao.ShootStatusRepository;
 import gigedi.dev.domain.shoot.domain.Shoot;
 import gigedi.dev.domain.shoot.domain.Status;
+import gigedi.dev.domain.shoot.dto.response.GetOurShootResponse;
 import gigedi.dev.domain.shoot.dto.response.GetShootResponse;
 import gigedi.dev.global.error.exception.CustomException;
 import gigedi.dev.global.error.exception.ErrorCode;
@@ -66,6 +67,34 @@ public class ShootService {
     private void processTags(String content, Shoot shoot) {
         List<String> tags = ShootUtil.extractTags(content);
         shootTagService.createShootTags(shoot, tags);
+    }
+
+    @Transactional(readOnly = true)
+    public List<GetOurShootResponse> getOurShoot(String tab) {
+        final Figma figma = figmaUtil.getCurrentFigma();
+        if (tab.equals("yet")) {
+            return getShootByStatus(figma, Status.YET);
+        } else if (tab.equals("doing")) {
+            return getShootByStatus(figma, Status.DOING);
+        } else if (tab.equals("done")) {
+            return getShootByStatus(figma, Status.DONE);
+        } else if (tab.equals("mentioned")) {
+            return getMentionedShoot(figma);
+        } else {
+            throw new CustomException(ErrorCode.INVALID_TAB);
+        }
+    }
+
+    private List<GetOurShootResponse> getShootByStatus(Figma figma, Status status) {
+        return shootRepository.findByFigmaAndStatusAndDeletedAtIsNull(figma, status).stream()
+                .map(shoot -> GetOurShootResponse.of(shoot))
+                .toList();
+    }
+
+    private List<GetOurShootResponse> getMentionedShoot(Figma figma) {
+        return shootRepository.findMentionedShootsByFigma(figma).stream()
+                .map(shoot -> GetOurShootResponse.of(shoot))
+                .toList();
     }
 
     public List<GetShootResponse.User> getUsersByStatus(Shoot shoot, Status status) {
