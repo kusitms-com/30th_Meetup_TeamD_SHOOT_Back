@@ -1,6 +1,8 @@
 package gigedi.dev.domain.shoot.application;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -80,17 +82,21 @@ public class ShootService {
         if (tab == null || tab.isBlank()) {
             tab = YET;
         }
-        if (tab.equals(YET)) {
-            return getShootByStatus(figma, Status.YET);
-        } else if (tab.equals(DOING)) {
-            return getShootByStatus(figma, Status.DOING);
-        } else if (tab.equals(DONE)) {
-            return getShootByStatus(figma, Status.DONE);
-        } else if (tab.equals(MENTIONED)) {
-            return getMentionedShoot(figma);
-        } else {
-            throw new CustomException(ErrorCode.INVALID_TAB);
-        }
+
+        Map<String, Function<Figma, List<GetOurShootResponse>>> tabMapping =
+                Map.of(
+                        YET, f -> getShootByStatus(f, Status.YET),
+                        DOING, f -> getShootByStatus(f, Status.DOING),
+                        DONE, f -> getShootByStatus(f, Status.DONE),
+                        MENTIONED, this::getMentionedShoot);
+
+        return tabMapping
+                .getOrDefault(
+                        tab,
+                        f -> {
+                            throw new CustomException(ErrorCode.INVALID_TAB);
+                        })
+                .apply(figma);
     }
 
     private List<GetOurShootResponse> getShootByStatus(Figma figma, Status status) {
