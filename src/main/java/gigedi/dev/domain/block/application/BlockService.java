@@ -39,7 +39,7 @@ public class BlockService {
             throw new CustomException(ErrorCode.BLOCK_EXCEED_LIMIT);
         }
 
-        String title = request.getTitle();
+        String title = request.title();
         if (title == null || title.trim().isEmpty()) {
             title = FigmaConstants.NEW_BLOCK_NAME;
         }
@@ -51,26 +51,26 @@ public class BlockService {
                 blockRepository.save(
                         Block.createBlock(
                                 title,
-                                request.getXCoordinate(),
-                                request.getYCoordinate(),
-                                request.getHeight(),
-                                request.getWidth(),
+                                request.xCoordinate(),
+                                request.yCoordinate(),
+                                request.height(),
+                                request.width(),
                                 archive,
                                 figma));
 
-        return new CreateBlockResponse(block);
+        return CreateBlockResponse.from(block);
     }
 
     public List<GetBlockResponse> getBlock(Long archiveId) {
         return blockRepository.findByArchive_ArchiveIdAndDeletedAtIsNull(archiveId).stream()
-                .map(GetBlockResponse::new)
+                .map(GetBlockResponse::from)
                 .collect(Collectors.toList());
     }
 
     public CreateBlockResponse updateBlockTitle(Long blockId, UpdateBlockRequest request) {
         Block block = getBlockById(blockId);
-        block.setTitle(request.getTitle());
-        return new CreateBlockResponse(block);
+        block.setTitle(request.title());
+        return CreateBlockResponse.from(block);
     }
 
     public void deleteBlock(Long blockId) {
