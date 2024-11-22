@@ -1,6 +1,8 @@
 package gigedi.dev.domain.shoot.application;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import gigedi.dev.domain.shoot.dao.ShootRepository;
 import gigedi.dev.domain.shoot.dao.ShootStatusRepository;
 import gigedi.dev.domain.shoot.domain.Shoot;
 import gigedi.dev.domain.shoot.domain.Status;
+import gigedi.dev.domain.shoot.dto.response.GetOurShootResponse;
 import gigedi.dev.domain.shoot.dto.response.GetShootResponse;
 import gigedi.dev.global.error.exception.CustomException;
 import gigedi.dev.global.error.exception.ErrorCode;
@@ -30,6 +33,11 @@ public class ShootService {
     private final FigmaUtil figmaUtil;
     private final BlockService blockService;
     private final ShootTagService shootTagService;
+
+    private static final String YET = "yet";
+    private static final String DOING = "doing";
+    private static final String DONE = "done";
+    private static final String MENTIONED = "mentioned";
 
     @Transactional(readOnly = true)
     public List<GetShootResponse> getShoot(Long blockId) {
@@ -66,6 +74,41 @@ public class ShootService {
     private void processTags(String content, Shoot shoot) {
         List<String> tags = ShootUtil.extractTags(content);
         shootTagService.createShootTags(shoot, tags);
+    }
+
+    @Transactional(readOnly = true)
+    public List<GetOurShootResponse> getOurShoot(String tab) {
+        final Figma figma = figmaUtil.getCurrentFigma();
+        if (tab == null || tab.isBlank()) {
+            tab = YET;
+        }
+
+        Map<String, Function<Figma, List<GetOurShootResponse>>> tabMapping =
+                Map.of(
+                        YET, f -> getShootByStatus(f, Status.YET),
+                        DOING, f -> getShootByStatus(f, Status.DOING),
+                        DONE, f -> getShootByStatus(f, Status.DONE),
+                        MENTIONED, this::getMentionedShoot);
+
+        return tabMapping
+                .getOrDefault(
+                        tab,
+                        f -> {
+                            throw new CustomException(ErrorCode.INVALID_TAB);
+                        })
+                .apply(figma);
+    }
+
+    private List<GetOurShootResponse> getShootByStatus(Figma figma, Status status) {
+        return shootRepository.findByFigmaAndStatusAndDeletedAtIsNull(figma, status).stream()
+                .map(shoot -> GetOurShootResponse.from(shoot))
+                .toList();
+    }
+
+    private List<GetOurShootResponse> getMentionedShoot(Figma figma) {
+        return shootRepository.findMentionedShootsByFigma(figma).stream()
+                .map(shoot -> GetOurShootResponse.from(shoot))
+                .toList();
     }
 
     public List<GetShootResponse.User> getUsersByStatus(Shoot shoot, Status status) {

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import gigedi.dev.domain.shoot.domain.Shoot;
 
 @Repository
-public interface ShootRepository extends JpaRepository<Shoot, Long> {
+public interface ShootRepository extends JpaRepository<Shoot, Long>, ShootRepositoryCustom {
     List<Shoot> findAllByBlock_BlockIdAndDeletedAtIsNull(Long blockId);
 
     Optional<Shoot> findByShootIdAndDeletedAtIsNull(Long shootId);
