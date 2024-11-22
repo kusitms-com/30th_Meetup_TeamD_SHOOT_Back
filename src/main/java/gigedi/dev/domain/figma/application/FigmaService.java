@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import gigedi.dev.domain.auth.dao.FigmaRepository;
 import gigedi.dev.domain.auth.domain.Figma;
+import gigedi.dev.domain.file.domain.File;
 import gigedi.dev.domain.member.domain.Member;
 import gigedi.dev.global.error.exception.CustomException;
 import gigedi.dev.global.error.exception.ErrorCode;
@@ -31,9 +32,9 @@ public class FigmaService {
                 .orElseThrow(() -> new CustomException(ErrorCode.FIGMA_NOT_CONNECTED));
     }
 
-    public Figma findByTag(String tag) {
+    public Figma findByTag(String tag, File file) {
         return figmaRepository
-                .findByFigmaName(tag)
+                .findByFigmaNameAndFile(tag, file)
                 .orElseThrow(() -> new CustomException(ErrorCode.FIGMA_USER_INFO_NOT_FOUND));
     }
 

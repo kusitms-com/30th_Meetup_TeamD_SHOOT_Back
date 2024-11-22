@@ -10,6 +10,7 @@ import gigedi.dev.domain.auth.domain.Figma;
 import gigedi.dev.domain.block.application.BlockService;
 import gigedi.dev.domain.block.domain.Block;
 import gigedi.dev.domain.discord.application.AlarmService;
+import gigedi.dev.domain.file.domain.File;
 import gigedi.dev.domain.shoot.dao.ShootRepository;
 import gigedi.dev.domain.shoot.dao.ShootStatusRepository;
 import gigedi.dev.domain.shoot.domain.Shoot;
@@ -67,8 +68,9 @@ public class ShootService {
     }
 
     private List<String> processTags(String content, Shoot shoot) {
+        File currentFile = figmaUtil.getCurrentFile();
         List<String> tags = ShootUtil.extractTags(content);
-        shootTagService.createShootTags(shoot, tags);
+        shootTagService.createShootTags(shoot, tags, currentFile);
         return tags;
     }
 
