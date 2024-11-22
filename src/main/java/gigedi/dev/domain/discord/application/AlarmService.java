@@ -67,7 +67,6 @@ public class AlarmService {
         File currentFile = block.getArchive().getFile();
         List<Figma> receiverList =
                 authorityService.getAlarmTargetListByFigmaName(currentFile, tags);
-        String content = ShootUtil.highlightMentions(message);
 
         receiverList.forEach(
                 receiver -> {
@@ -79,7 +78,7 @@ public class AlarmService {
                                 receiver.getFigmaName(),
                                 ShootUtil.highlightText(archiveTitle),
                                 ShootUtil.highlightText(blockTitle),
-                                content);
+                                ShootUtil.highlightMentions(message));
                     }
                 });
     }
