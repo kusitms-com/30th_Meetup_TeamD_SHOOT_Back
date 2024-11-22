@@ -11,6 +11,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import gigedi.dev.domain.auth.domain.Figma;
 import gigedi.dev.domain.file.domain.Authority;
+import gigedi.dev.domain.file.domain.File;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -44,5 +45,19 @@ public class AuthorityRepositoryImpl implements AuthorityRepositoryCustom {
                                         .and(authority.figma.in(figmaList))
                                         .and(authority.figma.deletedAt.isNull()))
                         .fetchOne());
+    }
+
+    @Override
+    public List<Figma> getFigmaNamesWithActiveAlarmByFile(File file, List<String> figmaNames) {
+        return queryFactory
+                .selectFrom(figma)
+                .join(authority)
+                .on(authority.figma.eq(figma))
+                .where(
+                        authority.file.eq(file),
+                        figma.figmaName.in(figmaNames),
+                        authority.alarm.isTrue(),
+                        figma.deletedAt.isNull())
+                .fetch();
     }
 }

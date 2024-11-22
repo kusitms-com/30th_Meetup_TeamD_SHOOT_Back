@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import gigedi.dev.domain.auth.domain.Figma;
 import gigedi.dev.domain.block.application.BlockService;
 import gigedi.dev.domain.block.domain.Block;
+import gigedi.dev.domain.discord.application.AlarmService;
 import gigedi.dev.domain.shoot.dao.ShootRepository;
 import gigedi.dev.domain.shoot.dao.ShootStatusRepository;
 import gigedi.dev.domain.shoot.domain.Shoot;
@@ -30,6 +31,7 @@ public class ShootService {
     private final FigmaUtil figmaUtil;
     private final BlockService blockService;
     private final ShootTagService shootTagService;
+    private final AlarmService alarmService;
 
     @Transactional(readOnly = true)
     public List<GetShootResponse> getShoot(Long blockId) {
@@ -58,14 +60,16 @@ public class ShootService {
         final Figma figma = figmaUtil.getCurrentFigma();
         Shoot shoot = Shoot.createShoot(content, figma, block);
         shootRepository.save(shoot);
-        processTags(content, shoot);
+        List<String> tags = processTags(content, shoot);
+        alarmService.sendAlarmToDiscord(tags, block, figma, content);
 
         return GetShootResponse.of(shoot, null, null, null);
     }
 
-    private void processTags(String content, Shoot shoot) {
+    private List<String> processTags(String content, Shoot shoot) {
         List<String> tags = ShootUtil.extractTags(content);
         shootTagService.createShootTags(shoot, tags);
+        return tags;
     }
 
     public List<GetShootResponse.User> getUsersByStatus(Shoot shoot, Status status) {
