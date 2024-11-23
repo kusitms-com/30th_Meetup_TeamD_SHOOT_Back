@@ -73,6 +73,7 @@ public enum ErrorCode {
     DISCORD_TOKEN_REISSUE_FAILED(HttpStatus.BAD_REQUEST, "디스코드 토큰 재발급 과정에서 오류가 발생했습니다."),
     DISCORD_DISCONNECT_FAILED(HttpStatus.BAD_REQUEST, "디스코드 연결 해제 과정에서 오류가 발생했습니다."),
     DISCORD_ACCOUNT_ALREADY_EXISTS(HttpStatus.NOT_FOUND, "연결된 디스코드 계정이 이미 존재합니다."),
+    DISCORD_DM_MESSAGE_SEND_FAILED(HttpStatus.BAD_REQUEST, "디스코드 DM 전송에 실패했습니다."),
 
     // Authority
     AUTHORITY_NOT_FOUND(HttpStatus.NOT_FOUND, "피그마 계정과 파일의 연관 정보가 존재하지 않습니다."),

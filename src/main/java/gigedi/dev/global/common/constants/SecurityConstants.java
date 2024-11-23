@@ -17,6 +17,7 @@ public final class SecurityConstants {
     public static final String GOOGLE_WITHDRAWAL_URL =
             "https://accounts.google.com/o/oauth2/revoke?token=";
 
+    public static final String DISCORD_HOST = "discord.com";
     public static final String DISCORD_TOKEN_URL = "https://discord.com/api/oauth2/token";
     public static final String DISCORD_USER_INFO_URL = "https://discord.com/api/users/@me";
     public static final String DISCORD_CREATE_DM_CHANNEL_URL =
@@ -24,6 +25,7 @@ public final class SecurityConstants {
     public static final String DISCORD_GUILD_URL = "https://discord.com/api/v10/guilds";
     public static final String DISCORD_DISCONNECT_URL =
             "https://discord.com/api/oauth2/token/revoke";
+    public static final String DISCORD_SEND_DM_URL = "/api/channels/{channelId}/messages";
 
     public static final String FIGMA_HOST = "api.figma.com";
     public static final String FIGMA_GET_ID_TOKEN_URL = "https://www.figma.com/api/oauth/token";

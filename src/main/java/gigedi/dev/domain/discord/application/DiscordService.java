@@ -42,4 +42,9 @@ public class DiscordService {
             throw new CustomException(ErrorCode.DISCORD_ACCOUNT_ALREADY_EXISTS);
         }
     }
+
+    @Transactional(readOnly = true)
+    public String getDmChannelByMember(Member member) {
+        return discordRepository.findByMember(member).map(Discord::getDmChannel).orElse(null);
+    }
 }
