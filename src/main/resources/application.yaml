@@ -6,3 +6,4 @@ spring:
       dev: "dev, datasource, log"
     include:
       - security
+      - redis
