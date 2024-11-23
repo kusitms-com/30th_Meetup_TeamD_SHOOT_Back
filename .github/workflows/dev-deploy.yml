@@ -2,7 +2,7 @@ name: Dev Deploy to AWS
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "feature/#71" ]
 
 jobs:
 
