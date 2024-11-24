@@ -88,7 +88,10 @@ public class JwtUtil {
         try {
             Jws<Claims> claims = getClaims(token, getRefreshTokenKey());
 
-            return new RefreshTokenDto(Long.parseLong(claims.getBody().getSubject()), token);
+            return new RefreshTokenDto(
+                    Long.parseLong(claims.getBody().getSubject()),
+                    token,
+                    jwtProperties.getRefreshTokenExpirationTime());
         } catch (ExpiredJwtException e) {
             throw e;
         } catch (Exception e) {
@@ -109,7 +112,8 @@ public class JwtUtil {
         Date expiredAt =
                 new Date(issuedAt.getTime() + jwtProperties.refreshTokenExpirationMilliTime());
         String tokenValue = buildRefreshToken(memberId, issuedAt, expiredAt);
-        return new RefreshTokenDto(memberId, tokenValue);
+        return new RefreshTokenDto(
+                memberId, tokenValue, jwtProperties.getRefreshTokenExpirationTime());
     }
 
     private Jws<Claims> getClaims(String token, Key key) {
@@ -118,5 +122,9 @@ public class JwtUtil {
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token);
+    }
+
+    public long getRefreshTokenExpirationTime() {
+        return jwtProperties.getRefreshTokenExpirationTime();
     }
 }
