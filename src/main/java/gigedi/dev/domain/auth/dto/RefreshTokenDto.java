@@ -8,4 +8,5 @@ import lombok.Getter;
 public class RefreshTokenDto {
     private Long memberId;
     private String token;
+    private Long ttl;
 }
