@@ -84,8 +84,11 @@ class AuthServiceTest {
             // given
             TokenRefreshRequest request = new TokenRefreshRequest();
             request.setRefreshToken("oldRefreshToken");
-            RefreshTokenDto oldRefreshTokenDto = new RefreshTokenDto(1L, "oldRefreshToken");
-            RefreshTokenDto newRefreshTokenDto = new RefreshTokenDto(1L, "newRefreshToken");
+            Long testTtl = 100L;
+            RefreshTokenDto oldRefreshTokenDto =
+                    new RefreshTokenDto(1L, "oldRefreshToken", testTtl);
+            RefreshTokenDto newRefreshTokenDto =
+                    new RefreshTokenDto(1L, "newRefreshToken", testTtl);
             AccessTokenDto accessTokenDto =
                     new AccessTokenDto(1L, MemberRole.USER, "newAccessToken");
             Member member = mock(Member.class);
