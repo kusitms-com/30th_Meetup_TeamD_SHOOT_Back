@@ -73,7 +73,7 @@ public class AuthService {
         final Member currentMember = memberUtil.getCurrentMember();
         List<Figma> figmaList = figmaRepository.findByMemberAndDeletedAtIsNull(currentMember);
         return figmaList.stream()
-                .map(figma -> new FigmaAccountResponse(figma.getFigmaUserId(), figma.getEmail()))
+                .map(figma -> new FigmaAccountResponse(figma.getFigmaId(), figma.getEmail()))
                 .toList();
     }
 
