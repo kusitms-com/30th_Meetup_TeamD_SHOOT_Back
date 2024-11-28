@@ -479,7 +479,7 @@ feat : 구현한 내용
 
 ### Directory Structure
 
-```json
+```
 src
 ├── main
 │   ├── java
