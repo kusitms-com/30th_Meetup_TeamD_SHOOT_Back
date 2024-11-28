@@ -1,6 +1,6 @@
 # 🚀 서로 다른 우리가 결합되는 곳 ‘SHOOT’
 
-> 🔗 Link : [https://shoot-manage.](https://shoot-manage.com)
+> 🔗 Link : [https://shoot-manage.com](https://shoot-manage.com)
 > 
 
 ![https://github.com/user-attachments/assets/950c288d-1a52-46e5-97e3-9a9fe95ea3da](https://github.com/user-attachments/assets/950c288d-1a52-46e5-97e3-9a9fe95ea3da)
